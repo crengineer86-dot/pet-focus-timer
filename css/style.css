@@ -1245,8 +1245,8 @@ button {
 
 .mini-placed-row-name {
   font-size: 11.5px;
-  font-weight: 700;
-  color: var(--ink-black);
+  font-weight: 600;
+  color: #5C564F;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
