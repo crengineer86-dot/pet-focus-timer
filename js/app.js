@@ -286,7 +286,7 @@
       this.btnDndRepeatSwitchEl = document.getElementById("btn-dnd-repeat-switch");
 
       this.miniTopToastEl = document.getElementById("mini-top-toast");
-      this.wakeLockToastEl = document.getElementById("wakelock-bottom-toast");
+      this.wakeLockToastEl = document.getElementById("wakelock-tooltip");
     }
 
     initScene() {
@@ -1151,7 +1151,7 @@
         }
         this.isWakeLockEnabled = false;
         this.dotWakeLockEl?.classList.remove("on");
-        this.showWakeLockToast("화면 켜짐 유지가 해제되었어요");
+        this.showWakeLockToast("🌙 화면 켜짐 해제");
         return;
       }
 
@@ -1161,11 +1161,11 @@
         }
         this.isWakeLockEnabled = true;
         this.dotWakeLockEl?.classList.add("on");
-        this.showWakeLockToast("☀️ 집중하는 동안 화면 켜짐을 유지해요");
+        this.showWakeLockToast("☀️ 화면 켜짐 유지");
       } catch (_) {
         this.isWakeLockEnabled = true;
         this.dotWakeLockEl?.classList.add("on");
-        this.showWakeLockToast("☀️ 집중하는 동안 화면 켜짐을 유지해요");
+        this.showWakeLockToast("☀️ 화면 켜짐 유지");
       }
     }
 
@@ -3050,7 +3050,7 @@
       if (this.wakeLockToastTimer) clearTimeout(this.wakeLockToastTimer);
       this.wakeLockToastTimer = setTimeout(() => {
         this.wakeLockToastEl.classList.remove("show");
-      }, 2400);
+      }, 1800);
     }
   }
 
