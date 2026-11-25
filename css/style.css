@@ -1109,7 +1109,7 @@ button {
   justify-content: center;
   padding: 6px;
   margin: -6px 0 -6px -1px;
-  color: #ACA59C;
+  color: #7D766E;
   background: transparent;
   border: none;
   border-radius: 8px;
@@ -1120,7 +1120,7 @@ button {
 
 .btn-shop-reset-placed:hover:not(:disabled),
 .btn-shop-reset-placed:active:not(:disabled) {
-  color: #6B655E;
+  color: #4A443E;
 }
 
 .btn-shop-reset-placed:active:not(:disabled) {
@@ -1128,7 +1128,7 @@ button {
 }
 
 .btn-shop-reset-placed:disabled {
-  opacity: 0.3;
+  opacity: 0.52;
   cursor: default;
 }
 
