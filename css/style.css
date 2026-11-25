@@ -706,6 +706,12 @@ button {
   max-height: none;
   display: block;
   overflow: visible;
+  touch-action: none;
+}
+
+.draggable-prop,
+.extra-instance-prop {
+  touch-action: none;
 }
 
 .lamp-light-effect {

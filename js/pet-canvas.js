@@ -2125,7 +2125,8 @@
     bindDragAndTapEvents() {
       if (!this.svg) return;
 
-      this.svg.querySelectorAll(".draggable-prop").forEach((el) => {
+      // 1번 원본 개체만 바인딩 (.extra-instance-prop 복제 개체는 bindExtraInstanceDrag에서 instanceId 기준으로 단독 처리)
+      this.svg.querySelectorAll(".draggable-prop:not(.extra-instance-prop)").forEach((el) => {
         el.addEventListener("pointerdown", (e) => {
           if (e.button && e.button !== 0) return;
           e.stopPropagation();
@@ -2143,6 +2144,7 @@
           this.dragState = {
             pointerId: e.pointerId,
             itemId,
+            isExtraInstance: false,
             el,
             startClientX: e.clientX,
             startClientY: e.clientY,
@@ -2160,7 +2162,14 @@
         });
 
         el.addEventListener("pointermove", (e) => {
-          if (!this.dragState || this.dragState.pointerId !== e.pointerId) return;
+          if (
+            !this.dragState ||
+            this.dragState.isExtraInstance ||
+            this.dragState.el !== el ||
+            this.dragState.pointerId !== e.pointerId
+          ) {
+            return;
+          }
 
           const distPx = Math.hypot(
             e.clientX - this.dragState.startClientX,
@@ -2229,7 +2238,14 @@
         });
 
         const finishPointer = (e) => {
-          if (!this.dragState || this.dragState.pointerId !== e.pointerId) return;
+          if (
+            !this.dragState ||
+            this.dragState.isExtraInstance ||
+            this.dragState.el !== el ||
+            this.dragState.pointerId !== e.pointerId
+          ) {
+            return;
+          }
           const state = this.dragState;
           this.dragState = null;
 
@@ -2567,13 +2583,25 @@
         groupEl.setAttribute("data-instance-id", inst.instanceId);
         groupEl.setAttribute("transform", `translate(${inst.x}, ${inst.y})`);
         groupEl.style.cursor = "grab";
+        groupEl.style.touchAction = "none";
+        groupEl.style.pointerEvents = "all";
         groupEl.dataset.lampLit = String(isLit);
+
+        // 모바일 손가락 터치 시 얇은 선화 소품도 안정적으로 잡히도록 투명 히트 영역 추가
+        const hitAreaEl = document.createElementNS(SVG_NS, "circle");
+        hitAreaEl.setAttribute("class", "extra-hit-area");
+        hitAreaEl.setAttribute("cx", "0");
+        hitAreaEl.setAttribute("cy", "-6");
+        hitAreaEl.setAttribute("r", "22");
+        hitAreaEl.setAttribute("fill", "rgba(0,0,0,0)");
+        hitAreaEl.setAttribute("pointer-events", "all");
 
         const innerEl = document.createElementNS(SVG_NS, "g");
         innerEl.setAttribute("class", `extra-instance-inner ${isPet ? "extra-pet-bob" : ""}`);
         innerEl.setAttribute("style", `--inst-flip:${flipSign}; animation-delay:-${delaySec}s;`);
         innerEl.innerHTML = innerMarkup;
 
+        groupEl.appendChild(hitAreaEl);
         groupEl.appendChild(innerEl);
         layer.appendChild(groupEl);
         this.bindExtraInstanceDrag(groupEl);
@@ -2581,6 +2609,9 @@
     }
 
     bindExtraInstanceDrag(el) {
+      if (!el || el.dataset.extraDragBound === "1") return;
+      el.dataset.extraDragBound = "1";
+
       el.addEventListener("pointerdown", (e) => {
         if (e.button && e.button !== 0) return;
         e.stopPropagation();
@@ -2618,7 +2649,15 @@
       });
 
       el.addEventListener("pointermove", (e) => {
-        if (!this.dragState || !this.dragState.isExtraInstance || this.dragState.pointerId !== e.pointerId) return;
+        const instanceId = el.getAttribute("data-instance-id");
+        if (
+          !this.dragState ||
+          !this.dragState.isExtraInstance ||
+          this.dragState.instanceId !== instanceId ||
+          this.dragState.pointerId !== e.pointerId
+        ) {
+          return;
+        }
 
         const distPx = Math.hypot(
           e.clientX - this.dragState.startClientX,
@@ -2646,7 +2685,15 @@
       });
 
       const finishExtraPointer = (e) => {
-        if (!this.dragState || !this.dragState.isExtraInstance || this.dragState.pointerId !== e.pointerId) return;
+        const instanceId = el.getAttribute("data-instance-id");
+        if (
+          !this.dragState ||
+          !this.dragState.isExtraInstance ||
+          this.dragState.instanceId !== instanceId ||
+          this.dragState.pointerId !== e.pointerId
+        ) {
+          return;
+        }
         const state = this.dragState;
         this.dragState = null;
 
