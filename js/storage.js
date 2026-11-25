@@ -482,13 +482,15 @@
       }
     }
 
-    save() {
+    save(options = {}) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
       } catch (e) {
         console.warn("[AppStorage] localStorage 저장 실패:", e);
       }
-      this.notify();
+      if (!options.silent) {
+        this.notify();
+      }
     }
 
     subscribe(listener) {
@@ -680,7 +682,8 @@
         firstInst.x = rx;
         firstInst.y = ry;
       }
-      this.save();
+      // 드래그·드롭 좌표 저장은 캔버스가 이미 해당 객체만 직접 갱신했으므로 전체 리렌더링(notify) 생략
+      this.save({ silent: true });
     }
 
     setInstancePosition(instanceId, x, y) {
@@ -698,7 +701,7 @@
         }
         this.state.itemPositions[inst.itemId] = { x: rx, y: ry };
       }
-      this.save();
+      this.save({ silent: true });
     }
 
     getInstancePosition(instanceId) {

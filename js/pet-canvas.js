@@ -1554,6 +1554,7 @@
       };
 
       this.dragState = null;
+      this.initializedAnimalPositions = new Set();
       this.ballBounce = 0;
       this.duckSqueakTimer = 0;
       this.wheelSpinTimer = 0;
@@ -2382,23 +2383,36 @@
 
         if (this.animals[id]) {
           const a = this.animals[id];
-          if ((a.userHoldTimer || 0) <= 0 && !this.dragState) {
+          const isPlacedNow = this.placedItems.has(id);
+          if (!isPlacedNow) {
+            this.initializedAnimalPositions.delete(id);
+          } else if (!this.initializedAnimalPositions.has(id)) {
+            this.initializedAnimalPositions.add(id);
             a.x = pos.x;
             a.y = pos.y;
             if (a.targetX !== undefined) a.targetX = pos.x;
             if (a.targetY !== undefined) a.targetY = pos.y;
+            el.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
           }
+          return;
+        }
+        if (this.dragState && this.dragState.isDragging && this.dragState.itemId === id) {
+          return;
         }
         el.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
       });
 
-      const rawDogPos = appStorage.getItemPosition("living_room_dog");
-      const dogPos = this.resolveValidLandingPosition(
-        rawDogPos.x,
-        rawDogPos.y,
-        "living_room_dog"
-      );
-      if (!this.dragState && this.dog.userHoldTimer <= 0) {
+      const hasDog = this.placedItems.has("living_room_dog");
+      if (!hasDog) {
+        this.initializedAnimalPositions.delete("living_room_dog");
+      } else if (!this.initializedAnimalPositions.has("living_room_dog")) {
+        const rawDogPos = appStorage.getItemPosition("living_room_dog");
+        const dogPos = this.resolveValidLandingPosition(
+          rawDogPos.x,
+          rawDogPos.y,
+          "living_room_dog"
+        );
+        this.initializedAnimalPositions.add("living_room_dog");
         this.dog.x = dogPos.x;
         this.dog.baseY = dogPos.y;
         this.dog.y = dogPos.y;
@@ -2490,45 +2504,79 @@
         }
       });
 
-      if (extraInstances.length === 0) {
-        layer.innerHTML = "";
-        return;
-      }
+      // 기존 DOM 노드를 불변 instanceId 키로 인덱싱해 애니메이션 초기화(innerHTML 전체 재생성) 방지
+      const existingById = new Map();
+      Array.from(layer.children).forEach((child) => {
+        const id = child.getAttribute("data-instance-id");
+        if (id) existingById.set(id, child);
+      });
 
-      layer.innerHTML = extraInstances
-        .map(({ inst, copyIndex }) => {
-          const isPet = ALL_LIVING_PETS.has(inst.itemId);
-          const isLit = appStorage.getLampLit(inst.itemId);
-          const flipSign = isPet && inst.flipX ? -1 : 1;
-          const delaySec = Number.isFinite(Number(inst.animDelay))
-            ? Number(inst.animDelay)
-            : Number((copyIndex * 1.15).toFixed(2));
-          const innerMarkup =
-            inst.itemId === "living_room_dog"
-              ? this.getDuplicateDogMarkup()
-              : getItemLocalSVGMarkup(inst.itemId, false, isLit);
+      const activeIds = new Set(extraInstances.map(({ inst }) => inst.instanceId));
+      existingById.forEach((node, id) => {
+        if (!activeIds.has(id)) {
+          node.remove();
+          existingById.delete(id);
+        }
+      });
 
-          return `
-            <g
-              class="draggable-prop extra-instance-prop"
-              data-item-id="${inst.itemId}"
-              data-instance-id="${inst.instanceId}"
-              transform="translate(${inst.x}, ${inst.y})"
-              style="cursor:grab;"
-            >
-              <g
-                class="extra-instance-inner ${isPet ? "extra-pet-bob" : ""}"
-                style="--inst-flip:${flipSign}; animation-delay:-${delaySec}s;"
-              >
-                ${innerMarkup}
-              </g>
-            </g>
-          `;
-        })
-        .join("");
+      const SVG_NS = "http://www.w3.org/2000/svg";
 
-      layer.querySelectorAll(".extra-instance-prop").forEach((el) => {
-        this.bindExtraInstanceDrag(el);
+      extraInstances.forEach(({ inst, copyIndex }) => {
+        const isPet = ALL_LIVING_PETS.has(inst.itemId);
+        const isLit = appStorage.getLampLit(inst.itemId);
+        const isCurrentlyDragging =
+          this.dragState &&
+          this.dragState.isExtraInstance &&
+          this.dragState.isDragging &&
+          this.dragState.instanceId === inst.instanceId;
+
+        const existingEl = existingById.get(inst.instanceId);
+        if (existingEl) {
+          if (!isCurrentlyDragging) {
+            const nextTransform = `translate(${inst.x}, ${inst.y})`;
+            if (existingEl.getAttribute("transform") !== nextTransform) {
+              existingEl.setAttribute("transform", nextTransform);
+            }
+          }
+          // 조명 점등 상태가 바뀐 경우에만 내부 마크업 갱신
+          if (existingEl.dataset.lampLit !== String(isLit)) {
+            existingEl.dataset.lampLit = String(isLit);
+            const innerEl = existingEl.querySelector(".extra-instance-inner");
+            if (innerEl) {
+              innerEl.innerHTML =
+                inst.itemId === "living_room_dog"
+                  ? this.getDuplicateDogMarkup()
+                  : getItemLocalSVGMarkup(inst.itemId, false, isLit);
+            }
+          }
+          return;
+        }
+
+        const flipSign = isPet && inst.flipX ? -1 : 1;
+        const delaySec = Number.isFinite(Number(inst.animDelay))
+          ? Number(inst.animDelay)
+          : Number((copyIndex * 1.15).toFixed(2));
+        const innerMarkup =
+          inst.itemId === "living_room_dog"
+            ? this.getDuplicateDogMarkup()
+            : getItemLocalSVGMarkup(inst.itemId, false, isLit);
+
+        const groupEl = document.createElementNS(SVG_NS, "g");
+        groupEl.setAttribute("class", "draggable-prop extra-instance-prop");
+        groupEl.setAttribute("data-item-id", inst.itemId);
+        groupEl.setAttribute("data-instance-id", inst.instanceId);
+        groupEl.setAttribute("transform", `translate(${inst.x}, ${inst.y})`);
+        groupEl.style.cursor = "grab";
+        groupEl.dataset.lampLit = String(isLit);
+
+        const innerEl = document.createElementNS(SVG_NS, "g");
+        innerEl.setAttribute("class", `extra-instance-inner ${isPet ? "extra-pet-bob" : ""}`);
+        innerEl.setAttribute("style", `--inst-flip:${flipSign}; animation-delay:-${delaySec}s;`);
+        innerEl.innerHTML = innerMarkup;
+
+        groupEl.appendChild(innerEl);
+        layer.appendChild(groupEl);
+        this.bindExtraInstanceDrag(groupEl);
       });
     }
 
@@ -3616,7 +3664,9 @@
      */
     updateCompanionPets(dt, elapsedSec) {
       const isDraggingId =
-        this.dragState && this.dragState.isDragging ? this.dragState.itemId : null;
+        this.dragState && this.dragState.isDragging && !this.dragState.isExtraInstance
+          ? this.dragState.itemId
+          : null;
 
       // -------------------------------------------------------------------------
       // 1. 어항 속 금붕어 (goldfish_bowl): 8자 곡선 유영 + 꼬리지느러미 살랑임 + 수면 뻐끔 물방울
@@ -4500,7 +4550,12 @@
       const dogEye = this.svg.querySelector("#dog-eye");
       const tailEl = this.svg.querySelector("#dog-tail");
 
-      if (this.dragState && this.dragState.itemId === "living_room_dog" && this.dragState.isDragging) {
+      if (
+        this.dragState &&
+        !this.dragState.isExtraInstance &&
+        this.dragState.itemId === "living_room_dog" &&
+        this.dragState.isDragging
+      ) {
         return;
       }
 
