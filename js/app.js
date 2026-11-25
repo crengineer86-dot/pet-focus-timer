@@ -25,19 +25,19 @@
     return num.toLocaleString("en-US");
   }
 
-  const DEFAULT_FOCUS_STATUS_QUOTE = "조용한 거실에서 나만의 속도로 몰입하는 중";
+  const DEFAULT_FOCUS_STATUS_QUOTE = "조용한 거실에서 나만의 속도로 몰입하는 중 🌿";
 
   const WINDOW_VIEW_FOCUS_QUOTES = {
-    view_sunny_clouds: "창가에 스미는 햇살과 함께 몰입하는 중",
-    view_gentle_rain: "창밖 빗줄기와 함께 차분히 몰입하는 중",
-    view_cozy_snow: "창밖 눈송이를 보며 포근하게 몰입하는 중",
-    view_starry_night: "고요한 밤하늘 아래 깊이 집중하는 중",
-    view_pink_dawn: "잔잔한 새벽빛과 함께 몰입하는 중",
-    view_summer_leaves: "살랑이는 여름 잎새와 함께 몰입하는 중",
-    view_cherry_blossom: "흩날리는 벚꽃잎과 함께 몰입하는 중",
-    view_autumn_sunset: "따뜻한 노을빛 아래 차분히 몰입하는 중",
-    view_after_rain_rainbow: "맑게 갠 하늘 아래 기분 좋게 몰입하는 중",
-    view_firefly_night: "반딧불이 불빛 아래 고요히 집중하는 중"
+    view_sunny_clouds: "창가에 스미는 햇살과 함께 몰입하는 중 ☀️",
+    view_gentle_rain: "창밖 빗줄기와 함께 차분히 몰입하는 중 🌧️",
+    view_cozy_snow: "창밖 눈송이를 보며 포근하게 몰입하는 중 ❄️",
+    view_starry_night: "고요한 밤하늘 아래 깊이 집중하는 중 🌙",
+    view_pink_dawn: "잔잔한 새벽빛과 함께 몰입하는 중 🌅",
+    view_summer_leaves: "살랑이는 여름 잎새와 함께 몰입하는 중 🍃",
+    view_cherry_blossom: "흩날리는 벚꽃잎과 함께 몰입하는 중 🌸",
+    view_autumn_sunset: "따뜻한 노을빛 아래 차분히 몰입하는 중 🍂",
+    view_after_rain_rainbow: "맑게 갠 하늘 아래 기분 좋게 몰입하는 중 🌈",
+    view_firefly_night: "반딧불이 불빛 아래 고요히 집중하는 중 ✨"
   };
 
   const DIARY_QUOTES_IDLE = [
