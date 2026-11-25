@@ -4079,12 +4079,12 @@ button {
   transform: translateY(0);
 }
 
-/* 하단 창밖 풍경 ↔ 어울리는 소리 제안 토스트 (자동 변경 OFF 시) */
+/* 상단 창밖 풍경 ↔ 어울리는 소리 제안 배너 (자동 변경 OFF 시, 상단 토스트와 겹침 방지) */
 .sound-suggest-toast {
   position: absolute;
   left: 50%;
-  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%) translateY(16px);
+  top: calc(60px + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%) translateY(-14px);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -4095,9 +4095,13 @@ button {
   box-shadow: 0 8px 22px rgba(31, 30, 29, 0.22);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: opacity 0.22s ease, transform 0.22s ease, top 0.22s ease;
   z-index: 62;
   max-width: calc(100% - 32px);
+}
+
+#mini-top-toast.show ~ .sound-suggest-toast {
+  top: calc(98px + env(safe-area-inset-top, 0px));
 }
 
 .sound-suggest-toast.show {
