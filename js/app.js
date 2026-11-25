@@ -1262,7 +1262,7 @@
         audioEngine.startAsmr(soundId);
         this.dotSoundEl?.classList.toggle("on", audioEngine.isPlayingAsmr);
         this.updateSoundPopoverActiveUI(audioEngine.currentModeId);
-        this.showMiniToast(`🪟 '${viewLabel}' 적용 · ${soundMode.label} 재생`);
+        this.showMiniToast(`🪟 '${viewLabel}' 적용 · ${soundMode.label} ASMR 재생`);
         return true;
       }
 
