@@ -538,15 +538,6 @@
 
       this.initEquippedStripDragScroll();
 
-      document.getElementById("btn-unlock-all-demo")?.addEventListener("click", () => {
-        appStorage.unlockAllForSlotTest();
-        this.showMiniToast(`전종(${ITEMS_CATALOG.length}종) 해금 완료! 10/10 슬롯과 드래그 이동을 테스트해 보세요 ✨`);
-      });
-
-      document.getElementById("btn-reset-initial-state")?.addEventListener("click", () => {
-        this.resetToInitialEmptyRoom();
-      });
-
       document.getElementById("btn-close-purchase-modal")?.addEventListener("click", () => {
         this.closePurchaseModal();
       });

@@ -475,10 +475,12 @@ button {
 
 /* 카운터 숫자 바로 밑 중앙 정렬 + 우측 박스 없는 순수 부스터 표시(🔥 +N) 행 */
 .timer-reward-badges-row {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 180px;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .timer-reward-badge {
