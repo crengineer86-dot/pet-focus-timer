@@ -3913,33 +3913,6 @@ button {
   flex-shrink: 0;
 }
 
-.diary-sub-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 11.5px;
-  color: var(--ink-muted);
-}
-
-.diary-bonus-link,
-.diary-close-link {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--ink-muted);
-  padding: 2px 4px;
-}
-
-.diary-bonus-link:hover,
-.diary-close-link:hover {
-  color: var(--ink-black);
-  text-decoration: underline;
-}
-
-.sub-divider {
-  color: var(--border-line);
-}
-
 /* ==========================================================================
    [방해금지 설정 미니 팝업 모달 (미니멀 2단 토글)]
    ========================================================================== */

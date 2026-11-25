@@ -666,14 +666,6 @@
         this.closeReceiptModal();
       });
 
-      document.getElementById("btn-receipt-ok")?.addEventListener("click", () => {
-        this.closeReceiptModal();
-      });
-
-      document.getElementById("btn-history-close")?.addEventListener("click", () => {
-        this.closeReceiptModal();
-      });
-
       // [1. 상단 메인 탭 전환 (📊 집중 내역 | 📔 오늘의 그림일기)]
       this.recordsMainTabsEl?.addEventListener("click", (e) => {
         const btn = e.target.closest(".record-main-tab");
@@ -725,12 +717,6 @@
       this.btnResetDateFilterEl?.addEventListener("click", () => {
         this.selectedFilterDate = null;
         this.renderReceiptModalContent();
-      });
-
-      document.getElementById("btn-receipt-bonus-bones")?.addEventListener("click", () => {
-        appStorage.addBonusBones(100);
-        this.renderReceiptModalContent();
-        this.showMiniToast("🦴 테스트용 뼈다귀 +100개가 충전되었어요!");
       });
 
       document.getElementById("btn-shuffle-diary-quote")?.addEventListener("click", () => {
