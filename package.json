@@ -10,7 +10,7 @@
     "cap:sync": "npm run build && npx cap sync android && node scripts/configure-android.js"
   },
   "dependencies": {
-    "@capacitor-community/keep-awake": "^6.0.0",
+    "@capacitor-community/keep-awake": "^5.0.0",
     "@capacitor/android": "^6.2.0",
     "@capacitor/core": "^6.2.0",
     "@capacitor/local-notifications": "^6.1.1",
