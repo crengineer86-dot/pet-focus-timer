@@ -358,9 +358,19 @@
             ? parsed.activeWindowView
             : null;
 
+        const urlParams =
+          typeof window !== "undefined" && window.location
+            ? new URLSearchParams(window.location.search)
+            : null;
+        const shouldResetSlots = Boolean(urlParams && urlParams.get("resetSlots") === "1");
+        if (shouldResetSlots && window.history && typeof window.history.replaceState === "function") {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         const rawMaxSlots = Number(parsed.maxPlacementSlots);
-        const resolvedMaxSlots =
-          Number.isFinite(rawMaxSlots) && rawMaxSlots >= MAX_PLACED_SLOTS
+        const resolvedMaxSlots = shouldResetSlots
+          ? MAX_PLACED_SLOTS
+          : Number.isFinite(rawMaxSlots) && rawMaxSlots >= MAX_PLACED_SLOTS
             ? Math.min(ABSOLUTE_MAX_SLOTS, Math.floor(rawMaxSlots / 2) * 2)
             : MAX_PLACED_SLOTS;
 
