@@ -57,6 +57,8 @@ function patchMainActivity() {
 
   const desiredSource = `package com.petfocustimer.app;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -72,17 +74,36 @@ import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     @Override
+    protected void attachBaseContext(Context newBase) {
+        // OS 글자 크기 설정이 앱 레이아웃으로 유입되지 않도록 fontScale을 1.0f로 원천 고정
+        Configuration config = new Configuration(newBase.getResources().getConfiguration());
+        config.fontScale = 1.0f;
+        Context fixedContext = newBase.createConfigurationContext(config);
+        super.attachBaseContext(fixedContext);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig != null && newConfig.fontScale != 1.0f) {
+            newConfig.fontScale = 1.0f;
+        }
+        super.onConfigurationChanged(newConfig);
+        configureSystemBars();
+        configureWebView();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configureSystemBars();
-        configureWebViewAudio();
+        configureWebView();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         configureSystemBars();
-        configureWebViewAudio();
+        configureWebView();
     }
 
     private void configureSystemBars() {
@@ -118,9 +139,11 @@ public class MainActivity extends BridgeActivity {
         }
     }
 
-    private void configureWebViewAudio() {
+    private void configureWebView() {
         if (getBridge() != null && getBridge().getWebView() != null) {
             WebSettings settings = getBridge().getWebView().getSettings();
+            // 시스템 글자 배율 원천 차단
+            settings.setTextZoom(100);
             settings.setMediaPlaybackRequiresUserGesture(false);
             settings.setDomStorageEnabled(true);
         }
@@ -140,7 +163,7 @@ public class MainActivity extends BridgeActivity {
 `;
 
   fs.writeFileSync(mainActivityPath, desiredSource, "utf8");
-  console.log("[configure-android] MainActivity.java 시스템 바 인셋 및 백그라운드 오디오 설정 적용 완료");
+  console.log("[configure-android] MainActivity.java fontScale=1.0, textZoom=100, 시스템 바 인셋 및 백그라운드 오디오 설정 적용 완료");
 }
 
 patchAndroidManifest();

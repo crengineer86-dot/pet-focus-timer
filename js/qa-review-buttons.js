@@ -17,12 +17,12 @@
     style.textContent = `
       .qa-review-dock {
         position: absolute;
-        left: 14px;
-        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        left: 0.875rem;
+        bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
         z-index: 75;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 0.375rem;
         pointer-events: auto;
       }
 
@@ -30,8 +30,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        height: 24px;
-        padding: 0 8px;
+        height: 1.5rem;
+        padding: 0 0.5rem;
         border-radius: 999px;
         border: 1px solid rgba(31, 30, 29, 0.14);
         background: rgba(255, 253, 248, 0.78);
@@ -39,7 +39,7 @@
         -webkit-backdrop-filter: blur(4px);
         color: #5C564F;
         font-family: inherit;
-        font-size: 11px;
+        font-size: 0.6875rem;
         font-weight: 700;
         line-height: 1;
         letter-spacing: -0.01em;
