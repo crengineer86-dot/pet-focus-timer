@@ -57,22 +57,65 @@ function patchMainActivity() {
 
   const desiredSource = `package com.petfocustimer.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        configureSystemBars();
         configureWebViewAudio();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        configureSystemBars();
         configureWebViewAudio();
+    }
+
+    private void configureSystemBars() {
+        Window window = getWindow();
+        if (window == null) return;
+
+        // 밝은 아이보리 배경(#FEF9F1)에 맞춰 상태바·내비게이션바 배경과 어두운 시스템 아이콘 적용
+        int ivoryColor = Color.parseColor("#FEF9F1");
+        window.setStatusBarColor(ivoryColor);
+        window.setNavigationBarColor(ivoryColor);
+
+        // Edge-to-Edge 일관 처리 후 루트 컨테이너에 시스템 바·노치 인셋 패딩을 직접 부여해 헤더 가림 방지
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+        View decorView = window.getDecorView();
+        WindowInsetsControllerCompat insetsController =
+            WindowCompat.getInsetsController(window, decorView);
+        if (insetsController != null) {
+            insetsController.setAppearanceLightStatusBars(true);
+            insetsController.setAppearanceLightNavigationBars(true);
+        }
+
+        View contentRoot = findViewById(android.R.id.content);
+        if (contentRoot != null) {
+            contentRoot.setBackgroundColor(ivoryColor);
+            ViewCompat.setOnApplyWindowInsetsListener(contentRoot, (view, windowInsets) -> {
+                Insets bars = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
+                );
+                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                return WindowInsetsCompat.CONSUMED;
+            });
+            ViewCompat.requestApplyInsets(contentRoot);
+        }
     }
 
     private void configureWebViewAudio() {
@@ -97,7 +140,7 @@ public class MainActivity extends BridgeActivity {
 `;
 
   fs.writeFileSync(mainActivityPath, desiredSource, "utf8");
-  console.log("[configure-android] MainActivity.java 백그라운드 오디오 WebView 설정 적용 완료");
+  console.log("[configure-android] MainActivity.java 시스템 바 인셋 및 백그라운드 오디오 설정 적용 완료");
 }
 
 patchAndroidManifest();
