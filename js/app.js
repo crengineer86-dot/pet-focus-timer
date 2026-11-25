@@ -19,6 +19,12 @@
     renderPolaroidSceneSVG
   } = PetFocus;
 
+  function formatBones(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return String(value ?? 0);
+    return num.toLocaleString("en-US");
+  }
+
   const DIARY_QUOTES_IDLE = [
     "아직은 고요한 우리 거실,\n함께 보낼 시간이 기대돼요 🌱",
     "창가에 내려앉은 따스한 햇살,\n기분 좋게 몰입해 볼까요? ☀️"
@@ -962,7 +968,7 @@
     openGiveUpConfirmModal() {
       const breakdown = this.getRewardBreakdown(this.configuredMinutes);
       if (this.giveupLostBonesEl) {
-        this.giveupLostBonesEl.textContent = `🦴 +${breakdown.subtotal}개`;
+        this.giveupLostBonesEl.textContent = `🦴 +${formatBones(breakdown.subtotal)}개`;
       }
       this.modalGiveupConfirmEl?.classList.remove("hidden");
     }
@@ -1046,20 +1052,20 @@
       this.renderTimerHeader();
       this.updateMainBottomActionsUI();
       this.scene.triggerDogInteraction(
-        `와아! 집중 완주! 🦴 +${breakdown.totalWithExtras}개 받았어요!`
+        `와아! 집중 완주! 🦴 +${formatBones(breakdown.totalWithExtras)}개 받았어요!`
       );
 
       if (breakdown.welcomeBonus > 0) {
         this.showMiniToast(
-          `🎉 첫 집중 달성 웰컴 보너스(+30개) 포함 총 🦴 +${breakdown.totalWithExtras}개 획득!`
+          `🎉 첫 집중 달성 웰컴 보너스(+30개) 포함 총 🦴 +${formatBones(breakdown.totalWithExtras)}개 획득!`
         );
       } else if (breakdown.boostBones > 0) {
         this.showMiniToast(
-          `🎉 ${completedMins}분 집중 완료! 🦴 +${breakdown.totalWithExtras}개 획득 (부스트 +${breakdown.boostBones} 포함)`
+          `🎉 ${completedMins}분 집중 완료! 🦴 +${formatBones(breakdown.totalWithExtras)}개 획득 (부스트 +${formatBones(breakdown.boostBones)} 포함)`
         );
       } else {
         this.showMiniToast(
-          `🎉 ${completedMins}분 집중 완료! 뼈다귀 +${breakdown.totalWithExtras}개 획득`
+          `🎉 ${completedMins}분 집중 완료! 뼈다귀 +${formatBones(breakdown.totalWithExtras)}개 획득`
         );
       }
     }
@@ -1075,7 +1081,7 @@
 
       const breakdown = this.getRewardBreakdown(this.configuredMinutes);
       if (this.timerRewardTextEl) {
-        this.timerRewardTextEl.textContent = `+${breakdown.subtotal}개`;
+        this.timerRewardTextEl.textContent = `+${formatBones(breakdown.subtotal)}개`;
       }
 
       if (this.timerImmersionBadgeEl && this.timerImmersionTextEl) {
@@ -1338,7 +1344,7 @@
         btnEl.textContent = "+ 확장";
         btnEl.classList.remove("is-max");
         btnEl.disabled = false;
-        btnEl.title = `뼈다귀 ${nextTier.cost}개로 배치 한도 ${nextTier.to}칸(+${nextTier.delta}칸) 확장`;
+        btnEl.title = `뼈다귀 ${formatBones(nextTier.cost)}개로 배치 한도 ${nextTier.to}칸(+${nextTier.delta}칸) 확장`;
       }
     }
 
@@ -1350,8 +1356,8 @@
       const maxSlots = appStorage.getMaxPlacementSlots();
       const boostPct = getTotalBoostPercent(appStorage.getAllActiveBoostIds());
 
-      if (this.shopHeaderBonesEl) this.shopHeaderBonesEl.textContent = String(state.bones);
-      if (this.shopBannerBonesEl) this.shopBannerBonesEl.textContent = String(state.bones);
+      if (this.shopHeaderBonesEl) this.shopHeaderBonesEl.textContent = formatBones(state.bones);
+      if (this.shopBannerBonesEl) this.shopBannerBonesEl.textContent = formatBones(state.bones);
       if (this.shopPreviewSlotBadgeEl) {
         this.shopPreviewSlotBadgeEl.textContent = `배치 ${placedCount}/${maxSlots}`;
       }
@@ -1520,7 +1526,7 @@
             cardAction = "open-buy";
             buttonHtml = `
               <button type="button" class="shop-card-btn ${canAfford ? "btn-buy" : "btn-short"}" data-action="open-buy" data-id="${item.id}">
-                ${buyBtnBoneSvg}<span>${item.price} 구매하기</span>
+                ${buyBtnBoneSvg}<span>${formatBones(item.price)} 구매하기</span>
               </button>
             `;
           }
@@ -1584,18 +1590,18 @@
         this.purchaseModalDescEl.textContent = item.description;
       }
       if (this.purchaseCurBonesEl) {
-        this.purchaseCurBonesEl.textContent = `🦴 ${state.bones}개`;
+        this.purchaseCurBonesEl.textContent = `🦴 ${formatBones(state.bones)}개`;
       }
       if (this.purchaseNeedBonesEl) {
-        this.purchaseNeedBonesEl.textContent = `- ${item.price}개`;
+        this.purchaseNeedBonesEl.textContent = `- ${formatBones(item.price)}개`;
       }
       if (this.purchaseRemBonesEl) {
         this.purchaseRemBonesEl.textContent =
-          remain >= 0 ? `${remain}개` : `${Math.abs(remain)}개 부족`;
+          remain >= 0 ? `${formatBones(remain)}개` : `${formatBones(Math.abs(remain))}개 부족`;
         this.purchaseRemBonesEl.style.color = remain >= 0 ? "#1F1E1D" : "#E5484D";
       }
       if (this.purchaseBtnPriceEl) {
-        this.purchaseBtnPriceEl.textContent = String(item.price);
+        this.purchaseBtnPriceEl.textContent = formatBones(item.price);
       }
 
       this.updateAutoPlaceSwitchUI();
@@ -1733,7 +1739,7 @@
       const maxSlots = appStorage.getMaxPlacementSlots();
 
       if (this.invHeaderBonesEl) {
-        this.invHeaderBonesEl.textContent = String(state.bones);
+        this.invHeaderBonesEl.textContent = formatBones(state.bones);
       }
       if (this.invPanelSubEl) {
         this.invPanelSubEl.textContent = `최대 ${maxSlots}개 배치 · 거실에서 자유롭게 이동`;
@@ -1909,7 +1915,7 @@
         if (nextTier) {
           this.btnLimitExpandSlotsEl.classList.remove("hidden");
           if (this.slotLimitExpandCostEl) {
-            this.slotLimitExpandCostEl.textContent = `(🦴 ${nextTier.cost})`;
+            this.slotLimitExpandCostEl.textContent = `(🦴 ${formatBones(nextTier.cost)})`;
           }
         } else {
           this.btnLimitExpandSlotsEl.classList.add("hidden");
@@ -2031,7 +2037,7 @@
         if (canBuyMore) {
           this.itemManageBuyBoneEl?.classList.remove("hidden");
           if (this.itemManageBuyLabelEl) {
-            this.itemManageBuyLabelEl.textContent = `${effectivePrice} 추가 구매`;
+            this.itemManageBuyLabelEl.textContent = `${formatBones(effectivePrice)} 추가 구매`;
           }
           this.btnManageBuyMoreEl.disabled = !canAfford;
         } else {
@@ -2206,13 +2212,13 @@
         this.slotExpandBtnBoneEl?.classList.remove("hidden");
         if (this.slotExpandStatusTextEl) {
           if (canAfford) {
-            this.slotExpandStatusTextEl.textContent = `현재 보유 ${curBones}개`;
+            this.slotExpandStatusTextEl.textContent = `현재 보유 ${formatBones(curBones)}개`;
           } else {
-            this.slotExpandStatusTextEl.innerHTML = `보유 ${curBones}개<span class="slot-status-dot">·</span><span class="slot-status-need">${shortage}개 더 필요해요</span>`;
+            this.slotExpandStatusTextEl.innerHTML = `보유 ${formatBones(curBones)}개<span class="slot-status-dot">·</span><span class="slot-status-need">${formatBones(shortage)}개 더 필요해요</span>`;
           }
         }
         if (this.slotExpandConfirmLabelEl) {
-          this.slotExpandConfirmLabelEl.textContent = `${tier.cost} 확장하기`;
+          this.slotExpandConfirmLabelEl.textContent = `${formatBones(tier.cost)} 확장하기`;
         }
         if (this.btnConfirmSlotExpandEl) {
           this.btnConfirmSlotExpandEl.disabled = !canAfford;
@@ -2222,7 +2228,7 @@
         this.slotExpandStatusBoneEl?.classList.remove("hidden");
         this.slotExpandBtnBoneEl?.classList.add("hidden");
         if (this.slotExpandStatusTextEl) {
-          this.slotExpandStatusTextEl.textContent = `필요 뼈다귀 ${tier.cost}개 · 이전 단계 확장 후 열려요`;
+          this.slotExpandStatusTextEl.textContent = `필요 뼈다귀 ${formatBones(tier.cost)}개 · 이전 단계 확장 후 열려요`;
         }
         if (this.slotExpandConfirmLabelEl) {
           this.slotExpandConfirmLabelEl.textContent = "이전 단계 먼저 확장";
@@ -2262,7 +2268,7 @@
       const res = appStorage.expandPlacementSlots();
       if (!res.ok) {
         if (res.reason === "NOT_ENOUGH_BONES") {
-          this.showMiniToast(`🦴 뼈다귀가 ${res.shortage}개 부족해요!`);
+          this.showMiniToast(`🦴 뼈다귀가 ${formatBones(res.shortage)}개 부족해요!`);
         } else if (res.reason === "ALREADY_MAX") {
           this.showMiniToast("이미 최대 배치 한도(20칸)에 도달했어요 ✨");
         }
@@ -2465,7 +2471,7 @@
       }
 
       if (this.diaryFocusSummaryEl) {
-        this.diaryFocusSummaryEl.textContent = `오늘 총 ${totalMins}분 집중 · 🦴 +${totalBones}`;
+        this.diaryFocusSummaryEl.textContent = `오늘 총 ${totalMins}분 집중 · 🦴 +${formatBones(totalBones)}`;
       }
 
       if (this.diaryQuoteEditableEl) {
@@ -2750,7 +2756,7 @@
                 <span class="timeline-log-datetime">${md} ${log.time}</span>
                 <span class="timeline-log-label">${log.label || `${log.minutes}분 집중 완료`}</span>
               </div>
-              <span class="timeline-log-reward">🦴 +${log.reward}</span>
+              <span class="timeline-log-reward">🦴 +${formatBones(log.reward)}</span>
             </div>
           `;
         })
