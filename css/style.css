@@ -4079,29 +4079,25 @@ button {
   transform: translateY(0);
 }
 
-/* 상단 창밖 풍경 ↔ 어울리는 소리 제안 배너 (자동 변경 OFF 시, 상단 토스트와 겹침 방지) */
+/* 상단 창밖 풍경 적용 + 사운드 추천 통합 단일 바 (최대 1개 노출) */
 .sound-suggest-toast {
   position: absolute;
   left: 50%;
-  top: calc(60px + env(safe-area-inset-top, 0px));
+  top: calc(56px + env(safe-area-inset-top, 0px));
   transform: translateX(-50%) translateY(-14px);
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background-color: var(--ink-black);
   color: var(--bg-ivory);
-  padding: 8px 10px 8px 15px;
+  padding: 6px 8px 6px 13px;
   border-radius: 999px;
   box-shadow: 0 8px 22px rgba(31, 30, 29, 0.22);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease, top 0.22s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 62;
-  max-width: calc(100% - 32px);
-}
-
-#mini-top-toast.show ~ .sound-suggest-toast {
-  top: calc(98px + env(safe-area-inset-top, 0px));
+  max-width: calc(100% - 24px);
 }
 
 .sound-suggest-toast.show {
@@ -4111,18 +4107,20 @@ button {
 }
 
 .sound-suggest-text {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   letter-spacing: -0.02em;
 }
 
 .sound-suggest-btn {
   background-color: var(--accent-orange);
   color: #FFFFFF;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
-  padding: 4.5px 11px;
+  padding: 4.5px 10px;
   border-radius: 999px;
   white-space: nowrap;
   flex-shrink: 0;

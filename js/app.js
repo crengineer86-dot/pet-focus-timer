@@ -1227,35 +1227,57 @@
 
     handleWindowViewChanged(viewId) {
       const activeId = viewId !== undefined ? viewId : appStorage.getActiveWindowViewId();
-      if (!activeId) return;
+      if (!activeId) return false;
       const item = getItemById(activeId);
       const soundId = item?.recommendedSound;
       const soundMode = soundId ? PetFocus.SOUND_MODES?.[soundId] : null;
-      if (!soundId || !soundMode) return;
+      if (!soundId || !soundMode) {
+        this.hideSoundSuggestToast();
+        return false;
+      }
+
+      const viewLabel = item?.shortName || item?.name || "창밖 풍경";
 
       if (this.autoSyncSoundWithWindow) {
+        this.hideSoundSuggestToast();
         audioEngine.startAsmr(soundId);
         this.dotSoundEl?.classList.toggle("on", audioEngine.isPlayingAsmr);
         this.updateSoundPopoverActiveUI(audioEngine.currentModeId);
-        this.showMiniToast(`🪟 풍경에 맞춰 ${soundMode.label} 소리로 변경했어요`);
-      } else {
-        // 기본값은 완전 독립: 이미 같은 소리가 재생 중이 아니라면 하단에 가벼운 제안 토스트만 3.6초간 표시
-        if (!(audioEngine.isPlayingAsmr && audioEngine.currentModeId === soundId)) {
-          this.showSoundSuggestToast(soundId, soundMode.label);
-        }
+        this.showMiniToast(`🪟 '${viewLabel}' 적용 · ${soundMode.label} 재생`);
+        return true;
       }
+
+      // 기본값은 독립 모드: 해당 사운드가 꺼져 있거나 다른 사운드 재생 중이면 1개 통합 바로 안내
+      if (!(audioEngine.isPlayingAsmr && audioEngine.currentModeId === soundId)) {
+        this.showSoundSuggestToast(soundId, soundMode.label, viewLabel);
+        return true;
+      }
+
+      this.hideSoundSuggestToast();
+      return false;
     }
 
-    showSoundSuggestToast(soundId, soundLabel) {
+    showSoundSuggestToast(soundId, soundLabel, viewLabel = "") {
       if (!this.soundSuggestToastEl || !this.soundSuggestTextEl) return;
+      this.hideMiniToast();
       this.pendingSuggestedSound = soundId;
-      this.soundSuggestTextEl.textContent = `${soundLabel} 소리도 함께 켜볼까요?`;
+      this.soundSuggestTextEl.textContent = viewLabel
+        ? `'${viewLabel}' 적용 · ${soundLabel}도 켤까요?`
+        : `${soundLabel} 소리도 함께 켜볼까요?`;
       this.soundSuggestToastEl.classList.add("show");
 
       if (this.soundSuggestTimer) clearTimeout(this.soundSuggestTimer);
       this.soundSuggestTimer = setTimeout(() => {
         this.hideSoundSuggestToast();
       }, 3600);
+    }
+
+    hideMiniToast() {
+      this.miniTopToastEl?.classList.remove("show");
+      if (this.miniToastTimer) {
+        clearTimeout(this.miniToastTimer);
+        this.miniToastTimer = null;
+      }
     }
 
     hideSoundSuggestToast() {
@@ -1860,11 +1882,13 @@
       if (res.ok) {
         if (item?.category === "window_view") {
           if (res.action === "replaced" || res.action === "placed") {
-            this.showMiniToast(`🪟 창밖 풍경을 '${item.shortName}'(으)로 적용했어요 ✨`);
-            this.handleWindowViewChanged(item.id);
+            const handledWithUnifiedBar = this.handleWindowViewChanged(item.id);
+            if (!handledWithUnifiedBar) {
+              this.showMiniToast(`🪟 창밖 풍경을 '${item.shortName}'(으)로 적용했어요 ✨`);
+            }
           } else {
-            this.showMiniToast("🪟 창밖 풍경을 해제해 깨끗한 빈 창문으로 되돌렸어요");
             this.hideSoundSuggestToast();
+            this.showMiniToast("🪟 창밖 풍경을 해제해 깨끗한 빈 창문으로 되돌렸어요");
           }
         } else if (res.action === "placed") {
           this.showMiniToast(
@@ -3014,6 +3038,7 @@
 
     showMiniToast(message) {
       if (!this.miniTopToastEl) return;
+      this.hideSoundSuggestToast();
       this.miniTopToastEl.textContent = message;
       this.miniTopToastEl.classList.add("show");
 
