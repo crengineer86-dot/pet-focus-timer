@@ -516,16 +516,8 @@
         this.navigateTo("shop");
       });
 
-      document.getElementById("btn-inv-to-shop")?.addEventListener("click", () => {
-        this.navigateTo("shop");
-      });
-
-      document.getElementById("btn-inv-check-room")?.addEventListener("click", () => {
+      document.getElementById("btn-inv-to-room")?.addEventListener("click", () => {
         this.navigateTo("main");
-      });
-
-      document.getElementById("btn-inv-more-shop")?.addEventListener("click", () => {
-        this.navigateTo("shop");
       });
 
       document.getElementById("inv-category-tabs")?.addEventListener("click", (e) => {
