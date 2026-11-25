@@ -3957,16 +3957,16 @@ button {
 }
 
 .dnd-title-icon-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background-color: var(--bg-card-soft);
-  border: 1.3px solid var(--border-line);
+  border: 1.2px solid var(--border-line);
   color: var(--ink-black);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   transition: all 0.18s ease;
 }
 
@@ -3977,8 +3977,8 @@ button {
 }
 
 .dnd-title-icon-badge svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .dnd-options-box {

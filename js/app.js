@@ -842,8 +842,9 @@
 
     adjustTimerMinutes(deltaMinutes) {
       if (this.timerState === "idle") {
-        // 대기 중: 10분 ~ 60분(최대 120분) 5분 단위 자유 조절
-        const nextMins = Math.max(10, Math.min(120, this.configuredMinutes + deltaMinutes));
+        // 대기 중: 5분 ~ 120분 5분 단위 자유 조절
+        const nextMins = Math.max(5, Math.min(120, this.configuredMinutes + deltaMinutes));
+        if (nextMins === this.configuredMinutes) return;
         this.configuredMinutes = nextMins;
         this.remainingSeconds = nextMins * 60;
         appStorage.setTimerMinutes(nextMins);
@@ -862,7 +863,7 @@
 
         const deltaSecs = deltaMinutes * 60;
         const nextMins = Math.max(
-          this.initialStartedMinutes || 10,
+          this.initialStartedMinutes || 5,
           Math.min(120, this.configuredMinutes + deltaMinutes)
         );
         if (nextMins === this.configuredMinutes) return;
@@ -1109,12 +1110,15 @@
         this.lastImmersionBonus = bonus;
       }
 
-      // 집중 중 목표 시간 축소 불가 상태 시각적 표시
+      // 최소 시간(5분) 도달 또는 집중 중 목표 시간 축소 불가 상태 시각적 표시
       if (this.timerMinusBtnEl) {
-        const isLocked =
+        const isAtMinIdle = this.timerState === "idle" && this.configuredMinutes <= 5;
+        const isLockedRunning =
           this.timerState !== "idle" &&
           this.configuredMinutes <= (this.initialStartedMinutes || this.configuredMinutes);
+        const isLocked = isAtMinIdle || isLockedRunning;
         this.timerMinusBtnEl.classList.toggle("locked", isLocked);
+        this.timerMinusBtnEl.setAttribute("aria-disabled", String(isLocked));
       }
     }
 
