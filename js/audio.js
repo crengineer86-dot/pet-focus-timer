@@ -13,51 +13,51 @@
   const RENDER_DURATION_SEC = LOOP_DURATION_SEC + CROSSFADE_SEC;
   const SAMPLE_RATE = 44100;
   const FADE_RAMP_MS = 600;
-  const DEFAULT_MASTER_VOLUME = 0.68;
+  const DEFAULT_MASTER_VOLUME = 0.58;
 
   const SOUND_MODES = {
     white: {
       id: "white",
       label: "백색모드",
-      desc: "잔잔한 배경 소음",
+      desc: "부드러운 저음 위주 배경 소음",
       toastOn: "🎧 백색모드(잔잔한 배경 소음)를 재생해요",
-      targetRms: 0.088,
-      playbackVol: 0.62
+      targetRms: 0.072,
+      playbackVol: 0.58
     },
     rain: {
       id: "rain",
-      label: "보슬비",
-      toastOn: "🌧️ 보슬비 ASMR을 재생해요",
-      targetRms: 0.095,
-      playbackVol: 0.68
+      label: "빗소리",
+      toastOn: "🌧️ 빗소리 ASMR을 재생해요",
+      targetRms: 0.076,
+      playbackVol: 0.62
     },
     wind: {
       id: "wind",
       label: "바람",
       toastOn: "🍃 바람 ASMR을 재생해요",
-      targetRms: 0.092,
-      playbackVol: 0.66
+      targetRms: 0.072,
+      playbackVol: 0.6
     },
     fire: {
       id: "fire",
       label: "장작",
       toastOn: "🔥 장작 ASMR을 재생해요",
-      targetRms: 0.098,
-      playbackVol: 0.7
+      targetRms: 0.078,
+      playbackVol: 0.64
     },
     birds: {
       id: "birds",
       label: "새소리",
       toastOn: "🐦 숲속 새소리 ASMR을 재생해요",
-      targetRms: 0.082,
-      playbackVol: 0.66
+      targetRms: 0.068,
+      playbackVol: 0.6
     },
     cricket: {
       id: "cricket",
       label: "귀뚜라미",
-      toastOn: "🦗 고요한 밤 귀뚜라미 소리를 재생해요",
-      targetRms: 0.082,
-      playbackVol: 0.66
+      toastOn: "🦗 고요한 밤 귀뚜라미 ASMR을 재생해요",
+      targetRms: 0.066,
+      playbackVol: 0.6
     }
   };
 
@@ -246,30 +246,43 @@
 
   /**
    * 공통 마스터 웜스 체인:
-   * - 32Hz 이하 초저역 럼블 정리 + 4.5kHz 이상 날카로운 치찰음/고주파 부드럽게 감쇠
+   * - 36Hz 이하 초저역 정리 + 180Hz 따뜻한 저음 보강 + 2.8kHz 2단 로우패스로
+   *   디지털 지지직거림·치찰음·귀 아픈 고주파를 부드럽게 감쇠
    */
   function createMasterWarmthChain(ctx) {
     const subCut = ctx.createBiquadFilter();
     subCut.type = "highpass";
-    subCut.frequency.value = 32;
+    subCut.frequency.value = 36;
     subCut.Q.value = 0.7;
+
+    const warmLowShelf = ctx.createBiquadFilter();
+    warmLowShelf.type = "lowshelf";
+    warmLowShelf.frequency.value = 180;
+    warmLowShelf.gain.value = 2.0;
 
     const highShelf = ctx.createBiquadFilter();
     highShelf.type = "highshelf";
-    highShelf.frequency.value = 3600;
-    highShelf.gain.value = -5.5;
+    highShelf.frequency.value = 2200;
+    highShelf.gain.value = -7.5;
 
-    const warmthLp = ctx.createBiquadFilter();
-    warmthLp.type = "lowpass";
-    warmthLp.frequency.value = 4350;
-    warmthLp.Q.value = 0.65;
+    const warmthLp1 = ctx.createBiquadFilter();
+    warmthLp1.type = "lowpass";
+    warmthLp1.frequency.value = 2850;
+    warmthLp1.Q.value = 0.6;
+
+    const warmthLp2 = ctx.createBiquadFilter();
+    warmthLp2.type = "lowpass";
+    warmthLp2.frequency.value = 3100;
+    warmthLp2.Q.value = 0.6;
 
     const masterGain = ctx.createGain();
-    masterGain.gain.value = 0.92;
+    masterGain.gain.value = 0.88;
 
-    subCut.connect(highShelf);
-    highShelf.connect(warmthLp);
-    warmthLp.connect(masterGain);
+    subCut.connect(warmLowShelf);
+    warmLowShelf.connect(highShelf);
+    highShelf.connect(warmthLp1);
+    warmthLp1.connect(warmthLp2);
+    warmthLp2.connect(masterGain);
     masterGain.connect(ctx.destination);
 
     return subCut;
@@ -279,105 +292,142 @@
      [트랙별 24초 고품질 스테레오 신스 그래프 (OfflineAudioContext)]
      ========================================================================= */
 
+  // 0) 백색모드: 날카로운 화이트 노이즈 배제, 브라운(72%) + 핑크(28%) 저음 위주 포근한 잔잔함
   function buildWhiteTrack(ctx, masterIn) {
-    const pinkSrc = ctx.createBufferSource();
-    pinkSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
-
     const brownSrc = ctx.createBufferSource();
     brownSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
 
-    const pinkGain = ctx.createGain();
-    pinkGain.gain.value = 0.52;
-    const brownGain = ctx.createGain();
-    brownGain.gain.value = 0.42;
-
-    const hp = ctx.createBiquadFilter();
-    hp.type = "highpass";
-    hp.frequency.value = 110;
-    hp.Q.value = 0.6;
-
-    const lp = ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.value = 1280;
-    lp.Q.value = 0.65;
-
-    pinkSrc.connect(pinkGain);
-    brownSrc.connect(brownGain);
-    pinkGain.connect(hp);
-    brownGain.connect(hp);
-    hp.connect(lp);
-    lp.connect(masterIn);
-
-    pinkSrc.start(0);
-    brownSrc.start(0);
-  }
-
-  // 1) 보슬비: 핑크 노이즈 베이스(HP ~250Hz, LP ~2200Hz) + 좌우 불규칙 빗방울 톡톡 버스트
-  function buildRainTrack(ctx, masterIn) {
     const pinkSrc = ctx.createBufferSource();
     pinkSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
 
+    const brownGain = ctx.createGain();
+    brownGain.gain.value = 0.72;
+    const pinkGain = ctx.createGain();
+    pinkGain.gain.value = 0.28;
+
     const hp = ctx.createBiquadFilter();
     hp.type = "highpass";
-    hp.frequency.value = 250;
-    hp.Q.value = 0.7;
+    hp.frequency.value = 55;
+    hp.Q.value = 0.65;
+
+    const lp1 = ctx.createBiquadFilter();
+    lp1.type = "lowpass";
+    lp1.frequency.value = 680;
+    lp1.Q.value = 0.62;
+
+    const lp2 = ctx.createBiquadFilter();
+    lp2.type = "lowpass";
+    lp2.frequency.value = 820;
+    lp2.Q.value = 0.6;
+
+    brownSrc.connect(brownGain);
+    pinkSrc.connect(pinkGain);
+    brownGain.connect(hp);
+    pinkGain.connect(hp);
+    hp.connect(lp1);
+    lp1.connect(lp2);
+    lp2.connect(masterIn);
+
+    brownSrc.start(0);
+    pinkSrc.start(0);
+  }
+
+  // 1) 빗소리: 폭우·바람 노이즈 최소화 + 창문에 톡톡 떨어지는 잔잔하고 따뜻한 빗방울
+  function buildRainTrack(ctx, masterIn) {
+    // 얕고 포근한 원거리 빗줄기 배경 (브라운+핑크 혼합, LP 1100Hz로 치찰음 제거)
+    const brownSrc = ctx.createBufferSource();
+    brownSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
+    const pinkSrc = ctx.createBufferSource();
+    pinkSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
+
+    const bGain = ctx.createGain();
+    bGain.gain.value = 0.55;
+    const pGain = ctx.createGain();
+    pGain.gain.value = 0.36;
+
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 210;
+    hp.Q.value = 0.68;
 
     const lp = ctx.createBiquadFilter();
     lp.type = "lowpass";
-    lp.frequency.value = 2150;
-    lp.Q.value = 0.68;
+    lp.frequency.value = 1120;
+    lp.Q.value = 0.62;
 
-    // 아주 완만한 자연 호흡(빗줄기 강약 미세 변화)
     const bedGain = ctx.createGain();
-    bedGain.gain.setValueAtTime(0.68, 0);
+    bedGain.gain.setValueAtTime(0.42, 0);
     let t = 0;
     while (t < RENDER_DURATION_SEC) {
-      const step = 3.0 + Math.random() * 3.5;
+      const step = 3.6 + Math.random() * 3.8;
       t += step;
       bedGain.gain.linearRampToValueAtTime(
-        0.62 + Math.random() * 0.14,
+        0.38 + Math.random() * 0.09,
         Math.min(RENDER_DURATION_SEC, t)
       );
     }
 
-    pinkSrc.connect(hp);
+    brownSrc.connect(bGain);
+    pinkSrc.connect(pGain);
+    bGain.connect(hp);
+    pGain.connect(hp);
     hp.connect(lp);
     lp.connect(bedGain);
     bedGain.connect(masterIn);
+    brownSrc.start(0);
     pinkSrc.start(0);
 
-    // 창문·나뭇잎에 톡톡 떨어지는 입체 보슬비 방울 레이어 (1200~3000Hz 짧은 필터 버스트)
-    const dropNoiseBuf = createWhiteNoiseBuffer(ctx, 0.08);
-    const dropCount = 115;
+    // 창문·처마에 톡톡 떨어지는 따뜻한 빗방울 레이어 (핑크 노이즈 기반, 700~1550Hz 부드러운 감쇠)
+    const dropNoiseBuf = createPinkNoiseBuffer(ctx, 0.12);
+    const dropCount = 96;
     for (let i = 0; i < dropCount; i++) {
-      const startTime = Math.random() * (RENDER_DURATION_SEC - 0.12);
-      const dur = 0.012 + Math.random() * 0.026;
+      const startTime = Math.random() * (RENDER_DURATION_SEC - 0.15);
+      const dur = 0.022 + Math.random() * 0.036;
       const src = ctx.createBufferSource();
       src.buffer = dropNoiseBuf;
 
       const bp = ctx.createBiquadFilter();
       bp.type = "bandpass";
-      bp.frequency.value = 1250 + Math.random() * 1750;
-      bp.Q.value = 2.0 + Math.random() * 2.2;
+      bp.frequency.value = 720 + Math.random() * 820;
+      bp.Q.value = 1.5 + Math.random() * 1.4;
 
       const g = ctx.createGain();
-      const peak = 0.055 + Math.random() * 0.115;
+      const peak = 0.065 + Math.random() * 0.095;
       g.gain.setValueAtTime(0.0001, startTime);
-      g.gain.linearRampToValueAtTime(peak, startTime + 0.003);
+      g.gain.linearRampToValueAtTime(peak, startTime + 0.006);
       g.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
 
-      const pan = createStereoPanner(ctx, (Math.random() * 2 - 1) * 0.82);
+      const pan = createStereoPanner(ctx, (Math.random() * 2 - 1) * 0.78);
 
       src.connect(bp);
       bp.connect(g);
       g.connect(pan);
       pan.connect(masterIn);
 
-      src.start(startTime, Math.random() * 0.03, dur + 0.01);
+      src.start(startTime, Math.random() * 0.04, dur + 0.015);
+
+      // 간헐적인 창유리 톡- 물방울 공명 (38% 확률, 아주 부드러운 중저음)
+      if (Math.random() < 0.38) {
+        const tapOsc = ctx.createOscillator();
+        tapOsc.type = "sine";
+        const fTap = 430 + Math.random() * 290;
+        tapOsc.frequency.setValueAtTime(fTap * 1.12, startTime);
+        tapOsc.frequency.exponentialRampToValueAtTime(fTap * 0.85, startTime + 0.038);
+
+        const tapGain = ctx.createGain();
+        tapGain.gain.setValueAtTime(0.0001, startTime);
+        tapGain.gain.linearRampToValueAtTime(0.022 + Math.random() * 0.018, startTime + 0.004);
+        tapGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.042);
+
+        tapOsc.connect(tapGain);
+        tapGain.connect(pan);
+        tapOsc.start(startTime);
+        tapOsc.stop(startTime + 0.048);
+      }
     }
   }
 
-  // 2) 바람: 브라운/핑크 혼합 + 부드러운 밴드패스(Q 1.2~1.6) + 6~10초 비대칭 완만한 산들바람
+  // 2) 바람: 거친 쉭쉭 고음 제거, 멀리서 잔잔히 스치는 저중역(160~380Hz) 산들바람
   function buildWindTrack(ctx, masterIn) {
     const brownSrc = ctx.createBufferSource();
     brownSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
@@ -385,27 +435,32 @@
     pinkSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
 
     const bGain = ctx.createGain();
-    bGain.gain.value = 0.65;
+    bGain.gain.value = 0.85;
     const pGain = ctx.createGain();
-    pGain.gain.value = 0.38;
+    pGain.gain.value = 0.16;
 
     const bp = ctx.createBiquadFilter();
     bp.type = "bandpass";
-    bp.Q.value = 1.38;
-    bp.frequency.setValueAtTime(340, 0);
+    bp.Q.value = 1.05;
+    bp.frequency.setValueAtTime(220, 0);
+
+    const windLp = ctx.createBiquadFilter();
+    windLp.type = "lowpass";
+    windLp.frequency.value = 480;
+    windLp.Q.value = 0.6;
 
     const windGain = ctx.createGain();
-    windGain.gain.setValueAtTime(0.45, 0);
+    windGain.gain.setValueAtTime(0.36, 0);
 
-    // 6~10초 주기의 비대칭 바람결 곡선 (280Hz <-> 780Hz)
+    // 8~12초 주기의 완만하고 차분한 원거리 바람결 곡선 (160Hz <-> 380Hz)
     let cursor = 0;
     while (cursor < RENDER_DURATION_SEC) {
-      const riseDur = 2.6 + Math.random() * 2.2;
-      const fallDur = 3.4 + Math.random() * 2.8;
-      const peakFreq = 540 + Math.random() * 240; // ~540..780Hz
-      const troughFreq = 280 + Math.random() * 90; // ~280..370Hz
-      const peakAmp = 0.72 + Math.random() * 0.28;
-      const troughAmp = 0.34 + Math.random() * 0.14;
+      const riseDur = 3.6 + Math.random() * 2.4;
+      const fallDur = 4.4 + Math.random() * 2.8;
+      const peakFreq = 290 + Math.random() * 90; // ~290..380Hz
+      const troughFreq = 160 + Math.random() * 55; // ~160..215Hz
+      const peakAmp = 0.56 + Math.random() * 0.18;
+      const troughAmp = 0.24 + Math.random() * 0.1;
 
       const tPeak = Math.min(RENDER_DURATION_SEC, cursor + riseDur);
       bp.frequency.exponentialRampToValueAtTime(peakFreq, tPeak);
@@ -422,141 +477,126 @@
     pinkSrc.connect(pGain);
     bGain.connect(bp);
     pGain.connect(bp);
-    bp.connect(windGain);
+    bp.connect(windLp);
+    windLp.connect(windGain);
     windGain.connect(masterIn);
-
-    // 아주 옅은 나뭇잎 살랑임 보조 레이어 (쉭쉭거림 없이 부드럽게)
-    const leafSrc = ctx.createBufferSource();
-    leafSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
-    const leafBp = ctx.createBiquadFilter();
-    leafBp.type = "bandpass";
-    leafBp.frequency.value = 1150;
-    leafBp.Q.value = 1.3;
-    const leafGain = ctx.createGain();
-    leafGain.gain.value = 0.08;
-
-    leafSrc.connect(leafBp);
-    leafBp.connect(leafGain);
-    leafGain.connect(masterIn);
 
     brownSrc.start(0);
     pinkSrc.start(0);
-    leafSrc.start(0);
   }
 
-  // 3) 장작: ① 화로 울림(브라운 LP ~180Hz) + ② 불꽃 바람(BP ~480Hz) + ③ 불규칙 타닥·탁탁 크래클
+  // 3) 장작: 바람 같은 배경 노이즈 대폭 축소 + 따뜻한 저음 화로 울림 + 자연스러운 나무 타닥타닥 크래클
   function buildFireTrack(ctx, masterIn) {
-    // Layer 1: 낮고 포근한 화로 울림
+    // Layer 1: 낮고 포근한 화로 저음 울림 (LP 135Hz)
     const rumbleSrc = ctx.createBufferSource();
     rumbleSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
     const rumbleLp = ctx.createBiquadFilter();
     rumbleLp.type = "lowpass";
-    rumbleLp.frequency.value = 175;
-    rumbleLp.Q.value = 0.75;
+    rumbleLp.frequency.value = 135;
+    rumbleLp.Q.value = 0.7;
     const rumbleGain = ctx.createGain();
-    rumbleGain.gain.value = 0.72;
+    rumbleGain.gain.value = 0.62;
 
     rumbleSrc.connect(rumbleLp);
     rumbleLp.connect(rumbleGain);
     rumbleGain.connect(masterIn);
     rumbleSrc.start(0);
 
-    // Layer 2: 부드럽게 일렁이는 불꽃 바람 (BP ~480Hz 완만한 변동)
-    const flameSrc = ctx.createBufferSource();
-    flameSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
-    const flameBp = ctx.createBiquadFilter();
-    flameBp.type = "bandpass";
-    flameBp.frequency.setValueAtTime(460, 0);
-    flameBp.Q.value = 1.25;
-    const flameGain = ctx.createGain();
-    flameGain.gain.setValueAtTime(0.28, 0);
+    // Layer 2: 아주 미세한 불씨 일렁임 (바람 소리 느낌 제거)
+    const emberSrc = ctx.createBufferSource();
+    emberSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
+    const emberBp = ctx.createBiquadFilter();
+    emberBp.type = "bandpass";
+    emberBp.frequency.setValueAtTime(260, 0);
+    emberBp.Q.value = 1.1;
+    const emberGain = ctx.createGain();
+    emberGain.gain.setValueAtTime(0.06, 0);
 
     let ft = 0;
     while (ft < RENDER_DURATION_SEC) {
-      ft += 0.9 + Math.random() * 1.4;
+      ft += 1.4 + Math.random() * 1.8;
       const tNext = Math.min(RENDER_DURATION_SEC, ft);
-      flameBp.frequency.exponentialRampToValueAtTime(380 + Math.random() * 190, tNext);
-      flameGain.gain.linearRampToValueAtTime(0.2 + Math.random() * 0.16, tNext);
+      emberBp.frequency.exponentialRampToValueAtTime(210 + Math.random() * 110, tNext);
+      emberGain.gain.linearRampToValueAtTime(0.04 + Math.random() * 0.04, tNext);
     }
 
-    flameSrc.connect(flameBp);
-    flameBp.connect(flameGain);
-    flameGain.connect(masterIn);
-    flameSrc.start(0);
+    emberSrc.connect(emberBp);
+    emberBp.connect(emberGain);
+    emberGain.connect(masterIn);
+    emberSrc.start(0);
 
-    // Layer 3: 불규칙한 장작 타닥·탁탁 소리 (5~22ms 짧은 고역 임펄스 + 빠른 감쇠 + 랜덤 패닝)
-    const crackleBuf = createWhiteNoiseBuffer(ctx, 0.06);
-    let ct = 0.15;
-    while (ct < RENDER_DURATION_SEC - 0.15) {
-      // 클러스터형 랜덤 간격으로 일정한 박자감 배제
-      const clusterCount = Math.random() < 0.35 ? 2 + Math.floor(Math.random() * 2) : 1;
+    // Layer 3: 따뜻한 나무 타닥·탁탁 크래클 (핑크 노이즈 기반, 귀 찌르는 3kHz+ 고음 차단)
+    const crackleBuf = createPinkNoiseBuffer(ctx, 0.08);
+    let ct = 0.18;
+    while (ct < RENDER_DURATION_SEC - 0.18) {
+      const clusterCount = Math.random() < 0.42 ? 2 + Math.floor(Math.random() * 2) : 1;
       for (let k = 0; k < clusterCount; k++) {
-        const t0 = ct + k * (0.04 + Math.random() * 0.12);
-        if (t0 >= RENDER_DURATION_SEC - 0.08) break;
+        const t0 = ct + k * (0.045 + Math.random() * 0.11);
+        if (t0 >= RENDER_DURATION_SEC - 0.1) break;
 
-        const isDeepPop = Math.random() < 0.25;
-        const dur = isDeepPop ? 0.014 + Math.random() * 0.01 : 0.005 + Math.random() * 0.014;
+        const isDeepWoodPop = Math.random() < 0.34;
+        const dur = isDeepWoodPop ? 0.018 + Math.random() * 0.014 : 0.008 + Math.random() * 0.014;
         const src = ctx.createBufferSource();
         src.buffer = crackleBuf;
 
         const bp = ctx.createBiquadFilter();
         bp.type = "bandpass";
-        bp.frequency.value = isDeepPop
-          ? 700 + Math.random() * 550
-          : 1650 + Math.random() * 2150;
-        bp.Q.value = isDeepPop ? 1.8 : 1.4 + Math.random() * 1.8;
+        bp.frequency.value = isDeepWoodPop
+          ? 420 + Math.random() * 320
+          : 980 + Math.random() * 1080;
+        bp.Q.value = isDeepWoodPop ? 1.6 : 1.5 + Math.random() * 1.5;
 
         const g = ctx.createGain();
-        const amp = (isDeepPop ? 0.22 : 0.14) + Math.random() * 0.24;
+        const amp = (isDeepWoodPop ? 0.28 : 0.2) + Math.random() * 0.2;
         g.gain.setValueAtTime(0.0001, t0);
-        g.gain.linearRampToValueAtTime(amp, t0 + 0.0012);
+        g.gain.linearRampToValueAtTime(amp, t0 + 0.002);
         g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
-        const pan = createStereoPanner(ctx, (Math.random() * 2 - 1) * 0.72);
+        const pan = createStereoPanner(ctx, (Math.random() * 2 - 1) * 0.66);
         src.connect(bp);
         bp.connect(g);
         g.connect(pan);
         pan.connect(masterIn);
 
-        src.start(t0, Math.random() * 0.02, dur + 0.01);
+        src.start(t0, Math.random() * 0.03, dur + 0.015);
       }
 
-      ct += 0.22 + Math.random() * 0.95;
+      ct += 0.26 + Math.random() * 0.92;
     }
   }
 
-  // 4) 새소리: 편안한 음역대(1800~3300Hz) 2~3음절 부드러운 지저귐 + 3~6초 여백 + 잔향 + 옅은 숲바람
+  // 4) 새소리: 날카로운 고음 전자음 제거, 중음역대(1150~1900Hz) 부드러운 플루트 톤 + 여유로운 간격
   function buildBirdsTrack(ctx, masterIn) {
-    // 옅은 숲속 바람 배경 (공백이 휑하지 않게)
+    // 아주 잔잔한 숲속 저역 공기감 (바람 치찰음 없음)
     const airSrc = ctx.createBufferSource();
-    airSrc.buffer = createPinkNoiseBuffer(ctx, RENDER_DURATION_SEC);
-    const airBp = ctx.createBiquadFilter();
-    airBp.type = "bandpass";
-    airBp.frequency.value = 540;
-    airBp.Q.value = 0.85;
+    airSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
+    const airLp = ctx.createBiquadFilter();
+    airLp.type = "lowpass";
+    airLp.frequency.value = 380;
+    airLp.Q.value = 0.65;
     const airGain = ctx.createGain();
-    airGain.gain.value = 0.11;
-    airSrc.connect(airBp);
-    airBp.connect(airGain);
+    airGain.gain.value = 0.065;
+    airSrc.connect(airLp);
+    airLp.connect(airGain);
     airGain.connect(masterIn);
     airSrc.start(0);
 
-    // 창밖 거리감 + 은은한 잔향 버스
+    // 창밖 원거리감 + 따뜻한 잔향 버스 (2150Hz 이상 감쇠)
     const birdBus = ctx.createGain();
     birdBus.gain.value = 1.0;
 
     const birdLp = ctx.createBiquadFilter();
     birdLp.type = "lowpass";
-    birdLp.frequency.value = 3350;
+    birdLp.frequency.value = 2150;
     birdLp.Q.value = 0.65;
 
     const dryGain = ctx.createGain();
-    dryGain.gain.value = 0.62;
+    dryGain.gain.value = 0.48;
 
     const convolver = ctx.createConvolver();
-    convolver.buffer = createSoftReverbIR(ctx, 1.7, 2.7);
+    convolver.buffer = createSoftReverbIR(ctx, 1.85, 2.5);
     const wetGain = ctx.createGain();
-    wetGain.gain.value = 0.48;
+    wetGain.gain.value = 0.54;
 
     birdBus.connect(birdLp);
     birdLp.connect(dryGain);
@@ -565,97 +605,89 @@
     dryGain.connect(masterIn);
     wetGain.connect(masterIn);
 
-    // 3.5~5.8초 충분한 여백을 둔 4~5회의 자연스러운 새 지저귐
-    let cursor = 1.4 + Math.random() * 1.4;
-    while (cursor < RENDER_DURATION_SEC - 2.6) {
-      const baseFreq = 1900 + Math.random() * 1100; // 1900~3000Hz 편안한 음역
-      const noteCount = Math.random() < 0.55 ? 2 : 3;
-      const panVal = (Math.random() * 2 - 1) * 0.68;
+    // 4.5~7.2초의 여유로운 간격으로 부드러운 중음역 2~3음절 지저귐
+    let cursor = 1.8 + Math.random() * 1.4;
+    while (cursor < RENDER_DURATION_SEC - 3.2) {
+      const baseFreq = 1180 + Math.random() * 580; // 1180~1760Hz 편안한 중음역
+      const noteCount = Math.random() < 0.6 ? 2 : 3;
+      const panVal = (Math.random() * 2 - 1) * 0.62;
       const panNode = createStereoPanner(ctx, panVal);
       panNode.connect(birdBus);
 
       let noteTime = cursor;
       for (let n = 0; n < noteCount; n++) {
-        const noteDur = 0.11 + Math.random() * 0.06;
-        const pitchMult = n === 1 ? 1.08 + Math.random() * 0.1 : n === 2 ? 0.94 + Math.random() * 0.08 : 1.0;
-        const f0 = Math.min(3200, baseFreq * pitchMult);
-        const fPeak = Math.min(3300, f0 * (1.07 + Math.random() * 0.08));
-        const fEnd = Math.max(1750, f0 * (0.91 + Math.random() * 0.06));
+        const noteDur = 0.14 + Math.random() * 0.07;
+        const pitchMult =
+          n === 1 ? 1.06 + Math.random() * 0.08 : n === 2 ? 0.93 + Math.random() * 0.06 : 1.0;
+        const f0 = Math.min(1880, baseFreq * pitchMult);
+        const fPeak = Math.min(1980, f0 * (1.06 + Math.random() * 0.06));
+        const fEnd = Math.max(1060, f0 * (0.9 + Math.random() * 0.05));
 
-        const osc1 = ctx.createOscillator();
-        osc1.type = "sine";
-        osc1.frequency.setValueAtTime(f0, noteTime);
-        osc1.frequency.exponentialRampToValueAtTime(fPeak, noteTime + noteDur * 0.42);
-        osc1.frequency.exponentialRampToValueAtTime(fEnd, noteTime + noteDur);
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(f0, noteTime);
+        osc.frequency.exponentialRampToValueAtTime(fPeak, noteTime + noteDur * 0.45);
+        osc.frequency.exponentialRampToValueAtTime(fEnd, noteTime + noteDur);
 
-        // 아주 미세한 부드러운 2배음(자연스러운 목울림 질감)
-        const osc2 = ctx.createOscillator();
-        osc2.type = "sine";
-        osc2.frequency.setValueAtTime(f0 * 1.5, noteTime);
-        osc2.frequency.exponentialRampToValueAtTime(fPeak * 1.5, noteTime + noteDur * 0.42);
-        osc2.frequency.exponentialRampToValueAtTime(fEnd * 1.5, noteTime + noteDur);
+        // 삼각파의 부드러운 배음만 남기는 개별 로우패스
+        const toneLp = ctx.createBiquadFilter();
+        toneLp.type = "lowpass";
+        toneLp.frequency.value = f0 * 1.35;
+        toneLp.Q.value = 0.6;
 
-        const g1 = ctx.createGain();
-        const peakAmp = 0.12 + Math.random() * 0.06;
-        g1.gain.setValueAtTime(0.0001, noteTime);
-        g1.gain.linearRampToValueAtTime(peakAmp, noteTime + 0.024);
-        g1.gain.exponentialRampToValueAtTime(0.0001, noteTime + noteDur);
+        const g = ctx.createGain();
+        const peakAmp = 0.095 + Math.random() * 0.04;
+        g.gain.setValueAtTime(0.0001, noteTime);
+        g.gain.linearRampToValueAtTime(peakAmp, noteTime + 0.036);
+        g.gain.exponentialRampToValueAtTime(0.0001, noteTime + noteDur);
 
-        const g2 = ctx.createGain();
-        g2.gain.setValueAtTime(0.0001, noteTime);
-        g2.gain.linearRampToValueAtTime(peakAmp * 0.12, noteTime + 0.022);
-        g2.gain.exponentialRampToValueAtTime(0.0001, noteTime + noteDur * 0.85);
+        osc.connect(toneLp);
+        toneLp.connect(g);
+        g.connect(panNode);
 
-        osc1.connect(g1);
-        osc2.connect(g2);
-        g1.connect(panNode);
-        g2.connect(panNode);
+        osc.start(noteTime);
+        osc.stop(noteTime + noteDur + 0.025);
 
-        osc1.start(noteTime);
-        osc1.stop(noteTime + noteDur + 0.02);
-        osc2.start(noteTime);
-        osc2.stop(noteTime + noteDur + 0.02);
-
-        noteTime += noteDur + 0.055 + Math.random() * 0.06;
+        noteTime += noteDur + 0.075 + Math.random() * 0.065;
       }
 
-      // 3.5~6.0초의 여유로운 숲속 여백
-      cursor = noteTime + 3.5 + Math.random() * 2.5;
+      // 4.5~7.2초 여유로운 숲속 여백
+      cursor = noteTime + 4.5 + Math.random() * 2.7;
     }
   }
 
-  // 5) 귀뚜라미: 부드러운 사인파(3100~3600Hz) + 20~24Hz 매끄러운 AM 변조 3~4회 울음 + 밤공기 + 잔향
+  // 5) 귀뚜라미: 휘파람 같은 단조 사인파 제거, 멀리서 잔잔히 들리는 자연스러운 밤 풀벌레 펄스 리듬
   function buildCricketTrack(ctx, masterIn) {
-    // 고요한 밤공기 배경음 (낮고 부드러운 저역)
+    // 고요한 밤공기 저역 배경음
     const nightSrc = ctx.createBufferSource();
     nightSrc.buffer = createBrownNoiseBuffer(ctx, RENDER_DURATION_SEC);
     const nightLp = ctx.createBiquadFilter();
     nightLp.type = "lowpass";
-    nightLp.frequency.value = 340;
-    nightLp.Q.value = 0.7;
+    nightLp.frequency.value = 240;
+    nightLp.Q.value = 0.68;
     const nightGain = ctx.createGain();
-    nightGain.gain.value = 0.14;
+    nightGain.gain.value = 0.1;
     nightSrc.connect(nightLp);
     nightLp.connect(nightGain);
     nightGain.connect(masterIn);
     nightSrc.start(0);
 
-    // 먼 풀숲 거리감 + 잔향 버스
+    // 먼 풀숲 거리감 + 따뜻한 잔향 버스 (2500Hz 이상 감쇠해 귀 시림 제거)
     const cricketBus = ctx.createGain();
     cricketBus.gain.value = 1.0;
 
     const cricketLp = ctx.createBiquadFilter();
     cricketLp.type = "lowpass";
-    cricketLp.frequency.value = 3650;
-    cricketLp.Q.value = 0.7;
+    cricketLp.frequency.value = 2450;
+    cricketLp.Q.value = 0.65;
 
     const dryGain = ctx.createGain();
-    dryGain.gain.value = 0.6;
+    dryGain.gain.value = 0.36;
 
     const convolver = ctx.createConvolver();
-    convolver.buffer = createSoftReverbIR(ctx, 1.4, 2.9);
+    convolver.buffer = createSoftReverbIR(ctx, 1.65, 2.7);
     const wetGain = ctx.createGain();
-    wetGain.gain.value = 0.42;
+    wetGain.gain.value = 0.56;
 
     cricketBus.connect(cricketLp);
     cricketLp.connect(dryGain);
@@ -664,68 +696,64 @@
     dryGain.connect(masterIn);
     wetGain.connect(masterIn);
 
-    // 1.6~3.4초 자연스러운 휴지기를 두고 2마리가 먼 좌우에서 번갈아 우는 평온한 패턴
+    // 멀리 좌우 풀숲에서 번갈아 들리는 잔잔한 귀뚜라미 리듬 (2180~2420Hz 부드러운 음역)
     const crickets = [
-      { freq: 3240, pan: -0.52, amRate: 21.5 },
-      { freq: 3460, pan: 0.56, amRate: 23.0 }
+      { freq: 2220, pan: -0.56 },
+      { freq: 2380, pan: 0.58 }
     ];
 
-    let cursor = 1.0 + Math.random() * 0.9;
+    let cursor = 1.3 + Math.random() * 1.1;
     let voiceIdx = 0;
 
-    while (cursor < RENDER_DURATION_SEC - 2.2) {
+    while (cursor < RENDER_DURATION_SEC - 2.8) {
       const voice = crickets[voiceIdx % crickets.length];
       voiceIdx += 1;
 
-      const panNode = createStereoPanner(ctx, voice.pan + (Math.random() - 0.5) * 0.12);
+      const panNode = createStereoPanner(ctx, voice.pan + (Math.random() - 0.5) * 0.14);
       panNode.connect(cricketBus);
 
-      const chirpsInCall = 3 + (Math.random() < 0.45 ? 1 : 0); // 3~4회 '귀뚤-귀뚤-귀뚤'
-      const carrierFreq = voice.freq + (Math.random() - 0.5) * 60;
-      const amFreq = voice.amRate + (Math.random() - 0.5) * 1.2;
-      const baseAmp = 0.085 + Math.random() * 0.03;
+      const syllables = 3 + (Math.random() < 0.4 ? 1 : 0); // 3~4회 '귀뚤-귀뚤-귀뚤'
+      const baseFreq = voice.freq + (Math.random() - 0.5) * 55;
+      const baseAmp = 0.048 + Math.random() * 0.018;
 
-      let ct = cursor;
-      for (let c = 0; c < chirpsInCall; c++) {
-        const chirpDur = 0.145 + Math.random() * 0.035;
+      let st = cursor;
+      for (let s = 0; s < syllables; s++) {
+        // 각 음절을 3개의 부드러운 짧은 날개 마찰 펄스로 분절 (연속 휘파람 느낌 제거)
+        const pulses = 3;
+        for (let p = 0; p < pulses; p++) {
+          const pStart = st + p * 0.042;
+          const pDur = 0.024;
+          const pFreq = baseFreq + (p === 1 ? 18 : 0);
 
-        const carrier = ctx.createOscillator();
-        carrier.type = "sine";
-        carrier.frequency.setValueAtTime(carrierFreq, ct);
+          const oscA = ctx.createOscillator();
+          oscA.type = "sine";
+          oscA.frequency.setValueAtTime(pFreq, pStart);
 
-        // 20~24Hz 부드러운 사인 AM 변조
-        const amOsc = ctx.createOscillator();
-        amOsc.type = "sine";
-        amOsc.frequency.setValueAtTime(amFreq, ct);
+          const oscB = ctx.createOscillator();
+          oscB.type = "sine";
+          oscB.frequency.setValueAtTime(pFreq * 1.007, pStart); // 미세한 자연 코러스
 
-        const amDepth = ctx.createGain();
-        amDepth.gain.value = 0.42;
+          const g = ctx.createGain();
+          const pulseAmp = baseAmp * (p === 1 ? 1.0 : 0.78);
+          g.gain.setValueAtTime(0.0001, pStart);
+          g.gain.linearRampToValueAtTime(pulseAmp, pStart + 0.006);
+          g.gain.exponentialRampToValueAtTime(0.0001, pStart + pDur);
 
-        const modGain = ctx.createGain();
-        modGain.gain.value = 0.58;
-        amOsc.connect(amDepth);
-        amDepth.connect(modGain.gain);
+          oscA.connect(g);
+          oscB.connect(g);
+          g.connect(panNode);
 
-        const envGain = ctx.createGain();
-        envGain.gain.setValueAtTime(0.0001, ct);
-        envGain.gain.linearRampToValueAtTime(baseAmp, ct + 0.025);
-        envGain.gain.setValueAtTime(baseAmp, ct + chirpDur - 0.03);
-        envGain.gain.exponentialRampToValueAtTime(0.0001, ct + chirpDur);
+          oscA.start(pStart);
+          oscA.stop(pStart + pDur + 0.008);
+          oscB.start(pStart);
+          oscB.stop(pStart + pDur + 0.008);
+        }
 
-        carrier.connect(modGain);
-        modGain.connect(envGain);
-        envGain.connect(panNode);
-
-        carrier.start(ct);
-        carrier.stop(ct + chirpDur + 0.015);
-        amOsc.start(ct);
-        amOsc.stop(ct + chirpDur + 0.015);
-
-        ct += chirpDur + 0.055 + Math.random() * 0.025;
+        st += 0.195 + Math.random() * 0.035;
       }
 
-      // 1.5~3.5초 휴지기
-      cursor = ct + 1.6 + Math.random() * 1.9;
+      // 2.2~4.2초의 고요한 밤 휴지기
+      cursor = st + 2.2 + Math.random() * 2.0;
     }
   }
 
