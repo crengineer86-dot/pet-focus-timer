@@ -1555,6 +1555,7 @@
 
       this.dragState = null;
       this.initializedAnimalPositions = new Set();
+      this.extraAnimalStates = new Map();
       this.ballBounce = 0;
       this.duckSqueakTimer = 0;
       this.wheelSpinTimer = 0;
@@ -2532,13 +2533,32 @@
         if (!activeIds.has(id)) {
           node.remove();
           existingById.delete(id);
+          this.extraAnimalStates.delete(id);
         }
       });
+      this.extraAnimalStates.forEach((_, id) => {
+        if (!activeIds.has(id)) {
+          this.extraAnimalStates.delete(id);
+        }
+      });
+
+      const EXTRA_PET_SPEEDS = {
+        living_room_dog: 52,
+        window_cat: 34,
+        tuxedo_cat: 34,
+        hamster_friend: 50,
+        cockatiel_bird: 40,
+        welsh_corgi: 64,
+        little_turtle: 12,
+        hedgehog_friend: 30,
+        white_rabbit: 46
+      };
 
       const SVG_NS = "http://www.w3.org/2000/svg";
 
       extraInstances.forEach(({ inst, copyIndex }) => {
         const isPet = ALL_LIVING_PETS.has(inst.itemId);
+        const isAnimatedPet = isPet && inst.itemId !== "goldfish_bowl";
         const isLit = appStorage.getLampLit(inst.itemId);
         const isCurrentlyDragging =
           this.dragState &&
@@ -2548,7 +2568,8 @@
 
         const existingEl = existingById.get(inst.instanceId);
         if (existingEl) {
-          if (!isCurrentlyDragging) {
+          // 자율 이동 중인 복제 동물은 실시간 좌표를 유지하고, 정적 소품만 저장 좌표 동기화
+          if (!isCurrentlyDragging && !(isAnimatedPet && this.extraAnimalStates.has(inst.instanceId))) {
             const nextTransform = `translate(${inst.x}, ${inst.y})`;
             if (existingEl.getAttribute("transform") !== nextTransform) {
               existingEl.setAttribute("transform", nextTransform);
@@ -2577,11 +2598,15 @@
             ? this.getDuplicateDogMarkup()
             : getItemLocalSVGMarkup(inst.itemId, false, isLit);
 
+        const initPos = isAnimatedPet
+          ? this.resolveValidLandingPosition(inst.x, inst.y, inst.itemId)
+          : { x: inst.x, y: inst.y };
+
         const groupEl = document.createElementNS(SVG_NS, "g");
         groupEl.setAttribute("class", "draggable-prop extra-instance-prop");
         groupEl.setAttribute("data-item-id", inst.itemId);
         groupEl.setAttribute("data-instance-id", inst.instanceId);
-        groupEl.setAttribute("transform", `translate(${inst.x}, ${inst.y})`);
+        groupEl.setAttribute("transform", `translate(${initPos.x}, ${initPos.y})`);
         groupEl.style.cursor = "grab";
         groupEl.style.touchAction = "none";
         groupEl.style.pointerEvents = "all";
@@ -2597,14 +2622,31 @@
         hitAreaEl.setAttribute("pointer-events", "all");
 
         const innerEl = document.createElementNS(SVG_NS, "g");
-        innerEl.setAttribute("class", `extra-instance-inner ${isPet ? "extra-pet-bob" : ""}`);
-        innerEl.setAttribute("style", `--inst-flip:${flipSign}; animation-delay:-${delaySec}s;`);
+        innerEl.setAttribute("class", `extra-instance-inner ${isPet && !isAnimatedPet ? "extra-pet-bob" : ""}`);
+        if (!isAnimatedPet) {
+          innerEl.setAttribute("style", `--inst-flip:${flipSign}; animation-delay:-${delaySec}s;`);
+        }
         innerEl.innerHTML = innerMarkup;
 
         groupEl.appendChild(hitAreaEl);
         groupEl.appendChild(innerEl);
         layer.appendChild(groupEl);
         this.bindExtraInstanceDrag(groupEl);
+
+        // 복제 동물(instanceId) 전용 독립 AI·애니메이션 상태 초기화 (개체별 랜덤 오프셋으로 자연스러운 분산)
+        if (isAnimatedPet && !this.extraAnimalStates.has(inst.instanceId)) {
+          const speed = (EXTRA_PET_SPEEDS[inst.itemId] || 42) * (0.9 + Math.random() * 0.22);
+          const aiState = this.createAnimalState(initPos.x, initPos.y, flipSign, speed);
+          aiState.itemId = inst.itemId;
+          aiState.instanceId = inst.instanceId;
+          aiState.animSeed = Math.random() * Math.PI * 2 + copyIndex * 1.9;
+          aiState.stateTimer = 0.6 + copyIndex * 0.85 + Math.random() * 1.4;
+          aiState.userHoldTimer = 0;
+          aiState.reactTimer = 0;
+          aiState.el = groupEl;
+          aiState.innerEl = innerEl;
+          this.extraAnimalStates.set(inst.instanceId, aiState);
+        }
       });
     }
 
@@ -2624,7 +2666,10 @@
           el.setPointerCapture(e.pointerId);
         } catch (_) {}
 
-        const curPos = appStorage.getInstancePosition(instanceId);
+        const liveState = this.extraAnimalStates.get(instanceId);
+        const curPos = liveState
+          ? { x: liveState.x, y: liveState.y }
+          : appStorage.getInstancePosition(instanceId);
         const startSvg = this.clientToSvgPoint(e.clientX, e.clientY);
 
         this.dragState = {
@@ -2675,9 +2720,22 @@
           const rawY = this.dragState.originY + (curSvg.y - this.dragState.startSvgY);
           const snapped = this.snapAndClampSvgPosition(rawX, rawY, this.dragState.itemId);
 
+          const dx = snapped.x - this.dragState.currentX;
           this.dragState.currentX = snapped.x;
           this.dragState.currentY = snapped.y;
           this.dragState.snappedBar = snapped.snappedBar;
+
+          const liveState = this.extraAnimalStates.get(instanceId);
+          if (liveState) {
+            liveState.x = snapped.x;
+            liveState.y = snapped.y;
+            liveState.targetX = snapped.x;
+            liveState.targetY = snapped.y;
+            liveState.state = "idle";
+            if (Math.abs(dx) > 0.8) {
+              liveState.moveDir = dx > 0 ? 1 : -1;
+            }
+          }
 
           this.updateSnapGuidesVisual(snapped.snappedBar, snapped.x);
           el.setAttribute("transform", `translate(${snapped.x.toFixed(1)}, ${snapped.y.toFixed(1)})`);
@@ -2710,6 +2768,16 @@
               state.currentY,
               state.itemId
             );
+            const liveState = this.extraAnimalStates.get(state.instanceId);
+            if (liveState) {
+              liveState.x = landPos.x;
+              liveState.y = landPos.y;
+              liveState.targetX = landPos.x;
+              liveState.targetY = landPos.y;
+              liveState.userHoldTimer = 2.0;
+              liveState.state = "idle";
+              liveState.stateTimer = 2.0 + Math.random() * 2.0;
+            }
             el.setAttribute("transform", `translate(${landPos.x.toFixed(1)}, ${landPos.y.toFixed(1)})`);
             appStorage.setInstancePosition(state.instanceId, landPos.x, landPos.y);
           } else {
@@ -2754,7 +2822,8 @@
       audioEngine.playPetReactionSound("bark");
 
       const dogEl = targetEl || this.svg?.querySelector("#dog-character");
-      const isPrimaryDog = !dogEl || dogEl.id === "dog-character";
+      const instId = dogEl?.getAttribute?.("data-instance-id") || null;
+      const isPrimaryDog = !instId && (!dogEl || dogEl.id === "dog-character");
 
       if (this.focusMode === "running") {
         const quote =
@@ -2768,6 +2837,13 @@
         this.dog.state = "react";
         this.dog.reactTimer = 1.1;
         this.dog.stateTimer = 1.2;
+      } else if (instId) {
+        const extraState = this.extraAnimalStates.get(instId);
+        if (extraState) {
+          extraState.state = "react";
+          extraState.reactTimer = 1.1;
+          extraState.stateTimer = 1.25;
+        }
       }
 
       const quote =
@@ -2778,13 +2854,24 @@
 
     triggerPropInteraction(propId, targetEl) {
       const el = targetEl || this.svg?.querySelector(`#prop-${propId}`);
+      const instId = el?.getAttribute?.("data-instance-id") || null;
       const item = getItemById(propId);
-      const a = this.animals[propId];
 
-      if (a && propId !== "goldfish_bowl") {
-        a.state = "react";
-        a.reactTimer = propId === "little_turtle" ? 2.0 : 1.25;
-        a.stateTimer = a.reactTimer + 0.5;
+      if (instId) {
+        // 복제 개체 터치 시 해당 instanceId 개체에만 반응 애니메이션 적용
+        const extraState = this.extraAnimalStates.get(instId);
+        if (extraState && propId !== "goldfish_bowl") {
+          extraState.state = "react";
+          extraState.reactTimer = propId === "little_turtle" ? 1.8 : 1.2;
+          extraState.stateTimer = extraState.reactTimer + 0.5;
+        }
+      } else {
+        const a = this.animals[propId];
+        if (a && propId !== "goldfish_bowl") {
+          a.state = "react";
+          a.reactTimer = propId === "little_turtle" ? 2.0 : 1.25;
+          a.stateTimer = a.reactTimer + 0.5;
+        }
       }
 
       switch (propId) {
@@ -3707,6 +3794,166 @@
     }
 
     /**
+     * 복제 크로키 강아지(#2/#3) 전용 독립 목적지/휴식 선택
+     */
+    pickNextExtraDogState(a) {
+      const bounds = this.getStageSvgBounds();
+      const btn = this.getFocusButtonSvgMetrics();
+      const roll = Math.random();
+
+      if (this.focusMode === "running") {
+        if (roll < 0.72) {
+          a.state = "rest";
+          a.stateTimer = 4.5 + Math.random() * 3.5;
+          return;
+        }
+      }
+
+      if (roll < 0.64) {
+        const minX = Math.max(bounds.minX + 36, 48);
+        const maxX = Math.min(bounds.maxX - 36, 332);
+        const minY = 266;
+        const maxY = Math.max(minY + 24, Math.min(bounds.maxY - 30, btn.topY - 26));
+
+        let tx = minX + Math.random() * Math.max(20, maxX - minX);
+        let ty = minY + Math.random() * Math.max(16, maxY - minY);
+        const clamped = this.clampPositionForItem(tx, ty, "living_room_dog");
+        tx = clamped.x;
+        ty = clamped.y;
+
+        if (Math.hypot(tx - a.x, ty - a.y) < 18) {
+          tx = this.clampPositionForItem(a.x + (a.x > 190 ? -64 : 64), ty, "living_room_dog").x;
+        }
+        a.targetX = tx;
+        a.targetY = ty;
+        a.moveDir = tx >= a.x ? 1 : -1;
+        a.state = "walk";
+        a.stateTimer = 4.5 + Math.random() * 3.0;
+      } else if (roll < 0.86) {
+        a.state = "idle";
+        a.stateTimer = 2.0 + Math.random() * 2.4;
+      } else {
+        a.state = "rest";
+        a.stateTimer = 2.8 + Math.random() * 2.8;
+      }
+    }
+
+    /**
+     * 중복 배치된 복제 동물(#2/#3)들의 고유 instanceId 기반 독립 자율 이동·점프·터치 반응 루프
+     */
+    updateExtraPets(dt, elapsedSec) {
+      if (!this.extraAnimalStates || this.extraAnimalStates.size === 0) return;
+
+      this.extraAnimalStates.forEach((a, instanceId) => {
+        const el = a.el;
+        const innerEl = a.innerEl;
+        if (!el || !el.isConnected) return;
+
+        // 현재 이 instanceId 개체가 드래그 중이면 물리 루프 일시 정지
+        if (
+          this.dragState &&
+          this.dragState.isExtraInstance &&
+          this.dragState.isDragging &&
+          this.dragState.instanceId === instanceId
+        ) {
+          return;
+        }
+
+        if ((a.userHoldTimer || 0) > 0) {
+          a.userHoldTimer = Math.max(0, a.userHoldTimer - dt);
+        }
+
+        let bobY = 0;
+        let tiltDeg = 0;
+        let scaleY = 1;
+        const flipX = a.moveDir < 0 ? -1 : 1;
+
+        if (a.state === "react") {
+          a.reactTimer = Math.max(0, (a.reactTimer || 0) - dt);
+          const totalDur = a.itemId === "little_turtle" ? 1.8 : 1.15;
+          const p = 1 - a.reactTimer / Math.max(0.1, totalDur);
+          const hopHeight = a.itemId === "little_turtle" ? 5 : 13;
+          bobY = -Math.abs(Math.sin(p * Math.PI * 2)) * hopHeight;
+          tiltDeg = Math.sin(p * Math.PI * 4) * 6.5;
+          scaleY = 1 + Math.sin(p * Math.PI * 2) * 0.06;
+
+          if (a.reactTimer <= 0) {
+            a.state = "idle";
+            a.stateTimer = 1.6 + Math.random() * 2.0;
+          }
+        } else if (a.state === "fly" || a.state === "jump_arc") {
+          const dur = Math.max(0.28, a.jumpDuration || (a.state === "fly" ? 0.65 : 0.45));
+          a.jumpProgress = Math.min(1, (a.jumpProgress || 0) + dt / dur);
+          const t = a.jumpProgress;
+          const easeT = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          const arcH = a.state === "fly" ? 30 : 22;
+
+          a.x = a.startX + (a.targetX - a.startX) * easeT;
+          a.y = a.startY + (a.targetY - a.startY) * easeT - Math.sin(t * Math.PI) * arcH;
+          if (Math.abs(a.targetX - a.startX) > 2) {
+            a.moveDir = a.targetX >= a.startX ? 1 : -1;
+          }
+          tiltDeg = Math.sin(t * Math.PI) * (a.moveDir > 0 ? -6 : 6);
+
+          if (a.jumpProgress >= 1) {
+            a.x = a.targetX;
+            a.y = a.targetY;
+            a.jumpProgress = 0;
+            a.state = "idle";
+            a.stateTimer = 2.0 + Math.random() * 2.5;
+          }
+        } else if (a.state === "walk") {
+          const dx = a.targetX - a.x;
+          const dy = a.targetY - a.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 2.2) {
+            a.x = a.targetX;
+            a.y = a.targetY;
+            a.state = "idle";
+            a.stateTimer = 1.8 + Math.random() * 2.6;
+          } else {
+            const step = Math.min(dist, (a.speed || 42) * dt);
+            a.x += (dx / dist) * step;
+            a.y += (dy / dist) * step;
+            if (Math.abs(dx) > 1.2) {
+              a.moveDir = dx >= 0 ? 1 : -1;
+            }
+            const phaseSpeed = a.itemId === "little_turtle" ? 4.5 : 10.5;
+            a.walkPhase = (a.walkPhase || 0) + dt * phaseSpeed;
+            const hopAmp = a.itemId === "white_rabbit" ? 7.5 : a.itemId === "little_turtle" ? 1.0 : 3.2;
+            bobY = -Math.abs(Math.sin(a.walkPhase)) * hopAmp;
+            tiltDeg = Math.sin(a.walkPhase) * (a.itemId === "little_turtle" ? 1.5 : 3.2);
+          }
+        } else {
+          // idle / rest / play: 잔잔한 호흡 모션 + 타이머 만료 시 다음 행동 독립 결정
+          const breathSpeed = a.state === "rest" ? 1.8 : 2.6;
+          scaleY = 1 + Math.sin(elapsedSec * breathSpeed + (a.animSeed || 0)) * 0.028;
+          bobY = Math.sin(elapsedSec * breathSpeed + (a.animSeed || 0)) * 0.8;
+
+          if ((a.userHoldTimer || 0) <= 0) {
+            a.stateTimer -= dt;
+            if (a.stateTimer <= 0) {
+              if (a.itemId === "living_room_dog") {
+                this.pickNextExtraDogState(a);
+              } else {
+                this.pickNextAnimalState(a.itemId, a);
+              }
+            }
+          }
+        }
+
+        el.setAttribute("transform", `translate(${a.x.toFixed(1)}, ${a.y.toFixed(1)})`);
+        if (innerEl) {
+          const finalFlipX = a.moveDir < 0 ? -1 : 1;
+          innerEl.setAttribute(
+            "transform",
+            `translate(0, ${bobY.toFixed(1)}) rotate(${tiltDeg.toFixed(1)}) scale(${finalFlipX}, ${scaleY.toFixed(3)})`
+          );
+        }
+      });
+    }
+
+    /**
      * 동물 9종의 프레임별 상태 머신 및 디테일 애니메이션 업데이트
      */
     updateCompanionPets(dt, elapsedSec) {
@@ -4582,6 +4829,9 @@
 
       // 2. 동물 9종 상태 머신 및 고유 모션 업데이트
       this.updateCompanionPets(dt, elapsedSec);
+
+      // 2-1. 중복 배치된 복제 동물(#2/#3) instanceId별 독립 자율 이동·반응 업데이트
+      this.updateExtraPets(dt, elapsedSec);
 
       // 3. 기본 강아지(living_room_dog) 5단계 상태 머신 업데이트
       if (!this.placedItems.has("living_room_dog")) return;
