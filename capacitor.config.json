@@ -1,0 +1,16 @@
+{
+  "appId": "com.petfocustimer.app",
+  "appName": "Pet Focus Timer",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#FAF8F4"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#D97736",
+      "sound": "default"
+    }
+  }
+}

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#FEF9F1" />
+  <title>반려동물 힐링 포모도로 집중 타이머 | Pet Focus Timer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Pretendard:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+
+    <!-- =========================================================================
+         [화면 1 & 2] 메인 타이머 화면 (대기 상태 & 집중 진행 상태)
+         ========================================================================= -->
+    <section class="screen active" id="screen-main" aria-label="메인 집중 타이머 화면">
+      <!-- 최상단 헤더 바 -->
+      <header class="main-topbar">
+        <!-- 좌측: 실시간 집중 인원 표시 (2명 이상 'N명 집중 중', 0~1명/오프라인 '조용히 집중하는 시간') -->
+        <div class="live-status is-quiet" id="live-status" aria-live="polite">
+          <span class="live-red-dot" id="live-status-dot" aria-hidden="true"></span>
+          <span class="live-status-text" id="live-status-text">조용히 집중하는 시간</span>
+        </div>
+
+        <!-- 우측: 배경 없는 투명 라인 아이콘 버튼 5종 (🏪 상점 ➔ 📖 일기 ➔ 🎧 소리 ➔ ☀️ 화면 ➔ 🔕 방해금지) -->
+        <nav class="top-icon-nav" aria-label="주요 기능 메뉴">
+          <!-- 1. 🏪 소품 상점 이동 -->
+          <button type="button" class="line-icon-btn" id="btn-open-shop" title="소품 상점 열기" aria-label="소품 상점 이동">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3.5 9.5L5.2 4h13.6l1.7 5.5" />
+              <path d="M3.5 9.5c0 1.6 1.3 2.8 2.8 2.8s2.9-1.2 2.9-2.8c0 1.6 1.3 2.8 2.8 2.8s2.8-1.2 2.8-2.8c0 1.6 1.3 2.8 2.9 2.8s2.8-1.2 2.8-2.8" />
+              <path d="M5 12.2V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6.8" />
+              <path d="M10 15.5h4V20h-4z" />
+            </svg>
+          </button>
+
+          <!-- 2. 📖 나의 집중 기록 & 그림일기 -->
+          <button type="button" class="line-icon-btn" id="btn-open-receipt" title="나의 집중 기록 & 그림일기" aria-label="나의 집중 기록 및 그림일기 모달 열기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4.5 18.5A2 2 0 0 1 6.5 16.5H19.5" />
+              <path d="M6.5 3.5H19.5v17H6.5a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2z" />
+              <path d="M14 8l1.8 1.8L11 14.6H9.2v-1.8L14 8z" />
+            </svg>
+          </button>
+
+          <!-- 3. 🎧 소리/ASMR 말풍선 팝오버 메뉴 래퍼 -->
+          <div class="sound-menu-wrap" id="sound-menu-wrap">
+            <button type="button" class="line-icon-btn" id="btn-toggle-sound" title="소리 모드 선택" aria-label="소리 모드 선택 메뉴 열기" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 17.5v-5a8.5 8.5 0 0 1 17 0v5" />
+                <path d="M20.5 18.2a1.8 1.8 0 0 1-1.8 1.8h-1a1.8 1.8 0 0 1-1.8-1.8v-2.6a1.8 1.8 0 0 1 1.8-1.8h2.8zM3.5 18.2a1.8 1.8 0 0 0 1.8 1.8h1a1.8 1.8 0 0 0 1.8-1.8v-2.6a1.8 1.8 0 0 0-1.8-1.8H3.5z" />
+              </svg>
+              <span class="icon-active-dot" id="dot-sound"></span>
+            </button>
+
+            <!-- 말풍선 팝오버: 6종 소리 모드 (컴팩트 3열 × 2줄) + 창밖 풍경 소리 자동 변경 토글 -->
+            <div class="sound-popover hidden" id="sound-popover" role="menu" aria-label="힐링 소리 모드 선택">
+              <div class="sound-popover-grid">
+                <!-- 1. 백색모드 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="white" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="10" x2="4" y2="14" />
+                      <line x1="8" y1="6" x2="8" y2="18" />
+                      <line x1="12" y1="3" x2="12" y2="21" />
+                      <line x1="16" y1="7" x2="16" y2="17" />
+                      <line x1="20" y1="10" x2="20" y2="14" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">백색모드</span>
+                </button>
+
+                <!-- 2. 보슬비 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="rain" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.5 15a4 4 0 0 0 .5-7.96A5.5 5.5 0 0 0 7.2 8.2 3.5 3.5 0 0 0 6.5 15h11z" />
+                      <line x1="8.5" y1="18" x2="7.5" y2="20.5" />
+                      <line x1="12.5" y1="18" x2="11.5" y2="20.5" />
+                      <line x1="16.5" y1="18" x2="15.5" y2="20.5" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">보슬비</span>
+                </button>
+
+                <!-- 3. 바람 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="wind" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9.59 4.59A2 2 0 1 1 11 8H2" />
+                      <path d="M12.59 19.41A2 2 0 1 0 14 16H2" />
+                      <path d="M17.73 7.73A2.5 2.5 0 1 1 19.5 12H2" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">바람</span>
+                </button>
+
+                <!-- 4. 장작 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="fire" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 3c1.5 2.5 4.5 4.3 4.5 8.2a4.5 4.5 0 1 1-9 0c0-2.1 1.1-3.8 2.2-5 0 1.4.8 2.2 1.6 2.2.5 0 .7-.8.7-5.4z" />
+                      <line x1="5" y1="19" x2="19" y2="21.5" />
+                      <line x1="19" y1="19" x2="5" y2="21.5" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">장작</span>
+                </button>
+
+                <!-- 5. 새소리 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="birds" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 7h.01" />
+                      <path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" />
+                      <path d="m20 7 2 .5-2 .5" />
+                      <path d="M10 18v3" />
+                      <path d="M14 17.75V21" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">새소리</span>
+                </button>
+
+                <!-- 6. 귀뚜라미 -->
+                <button type="button" class="sound-mode-item" data-sound-mode="cricket" role="menuitem">
+                  <span class="sound-mode-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 14.5A6.5 6.5 0 0 1 9.5 5a6.5 6.5 0 1 0 9.5 9.5Z" />
+                      <path d="M15 4.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6.6-1.4Z" />
+                    </svg>
+                  </span>
+                  <span class="sound-mode-label">귀뚜라미</span>
+                </button>
+              </div>
+
+              <!-- 창밖 풍경 ↔ 소리 선택적 연동 슬림 토글 (기본 OFF) -->
+              <div class="sound-sync-footer">
+                <span class="sound-sync-label">창밖 풍경에 맞춰 소리 자동 변경</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked="false"
+                  class="sound-mini-switch"
+                  id="btn-sound-window-sync"
+                  aria-label="창밖 풍경에 맞춰 소리 자동 변경 토글"
+                >
+                  <span class="sound-mini-knob"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. ☀️ 화면 켜짐 유지 WakeLock 토글 -->
+          <button type="button" class="line-icon-btn" id="btn-toggle-wakelock" title="화면 켜짐 유지 (WakeLock)" aria-label="화면 켜짐 유지 토글">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3.8" />
+              <path d="M12 3.5v2M12 18.5v2M6 6l1.4 1.4M16.6 16.6L18 18M3.5 12h2M18.5 12h2M6 18l1.4-1.4M16.6 7.4L18 6" />
+            </svg>
+            <span class="icon-active-dot" id="dot-wakelock"></span>
+          </button>
+
+          <!-- 5. 🔕 집중 시 방해금지 설정 -->
+          <button type="button" class="line-icon-btn" id="btn-open-dnd" title="집중 시 방해금지 설정" aria-label="방해금지 설정 모달 열기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13.6 20a1.8 1.8 0 0 1-3.2 0" />
+              <path d="M17.8 13A15 15 0 0 1 17.3 8.5" />
+              <path d="M6.8 6.8A5.3 5.3 0 0 0 6.7 8.5c0 5.8-2.5 7.5-2.5 7.5h12.3" />
+              <path d="M17.3 8.5a5.3 5.3 0 0 0-8.2-4.4" />
+              <line x1="3.8" y1="3.8" x2="20.2" y2="20.2" />
+            </svg>
+            <span class="icon-active-dot" id="dot-dnd"></span>
+          </button>
+        </nav>
+      </header>
+
+      <!-- 타이머 영역 (좌측 상단 배지 아래, 카드 배경 없음 + 하단 분리형 보상 배지) -->
+      <div class="timer-header-section">
+        <div class="timer-control-inline" role="group" aria-label="집중 시간 설정">
+          <button type="button" class="timer-step-btn" id="btn-timer-minus" aria-label="5분 감소">&minus;</button>
+          <span class="timer-digits" id="timer-display">25:00</span>
+          <button type="button" class="timer-step-btn" id="btn-timer-plus" aria-label="5분 증가">&#43;</button>
+        </div>
+
+        <!-- 타이머 아래: 메인 집중 보상 배지 + 우측 분리형 몰입 보너스 미니 배지 (클릭 시 뼈다귀 적립 가이드 오픈) -->
+        <div class="timer-reward-badges-row">
+          <button type="button" class="timer-reward-badge" id="timer-reward-badge" title="클릭하여 뼈다귀 적립 가이드 보기">
+            <svg class="cute-bone-icon" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" fill="#FFFDF8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="reward-label-text">집중 보상</span>
+            <strong class="reward-amount-text" id="timer-reward-text">+15개</strong>
+            <span class="badge-chevron-mark" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </span>
+          </button>
+
+          <button type="button" class="timer-immersion-mini-badge hidden" id="timer-immersion-badge" title="장시간 몰입 보너스 · 클릭하여 가이드 보기">
+            <span class="immersion-fire-emoji" aria-hidden="true">🔥</span>
+            <strong class="immersion-bonus-num" id="timer-immersion-text">+2</strong>
+          </button>
+        </div>
+      </div>
+
+      <!-- 중앙 캔버스 영역 (거실 뷰: 4분할 격자 창문 + 창틀 선반 + 화분 + 동물/소품) -->
+      <main class="living-room-stage" id="living-room-stage">
+        <!-- 동물/소품 터치 시 말풍선 -->
+        <div class="pet-speech-bubble" id="pet-speech-bubble" role="status" aria-live="polite">
+          멍! 오늘도 같이 집중해요 🐾
+        </div>
+
+        <svg id="living-room-svg" class="living-room-svg" aria-label="반려동물 거실 풍경 캔버스"></svg>
+      </main>
+
+      <!-- 하단 액션 영역 -->
+      <footer class="main-bottom-actions">
+        <!-- 대기 상태 UI -->
+        <div class="action-group-idle" id="action-group-idle">
+          <button type="button" class="pill-btn-primary" id="btn-start-focus">
+            <svg class="paw-svg-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <ellipse cx="12" cy="15.5" rx="4.6" ry="3.8" />
+              <ellipse cx="6.2" cy="10.2" rx="1.9" ry="2.5" transform="rotate(-20 6.2 10.2)" />
+              <ellipse cx="9.8" cy="7.5" rx="1.9" ry="2.6" transform="rotate(-7 9.8 7.5)" />
+              <ellipse cx="14.2" cy="7.5" rx="1.9" ry="2.6" transform="rotate(7 14.2 7.5)" />
+              <ellipse cx="17.8" cy="10.2" rx="1.9" ry="2.5" transform="rotate(20 17.8 10.2)" />
+            </svg>
+            <span>집중모드</span>
+          </button>
+        </div>
+
+        <!-- 집중 진행 상태 UI -->
+        <div class="action-group-focus hidden" id="action-group-focus">
+          <p class="focus-serenity-quote" id="focus-serenity-quote">
+            창가에 스미는 햇살과 함께 몰입하는 중 🍃
+          </p>
+          <button type="button" class="pill-btn-primary" id="btn-pause-focus">
+            <span class="pause-svg-wrap" id="pause-btn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+                <rect x="6" y="4" width="4" height="16" rx="1.2" />
+                <rect x="14" y="4" width="4" height="16" rx="1.2" />
+              </svg>
+            </span>
+            <span id="pause-btn-label">일시정지</span>
+          </button>
+          <button type="button" class="text-btn-giveup" id="btn-giveup-focus">
+            중단하기
+          </button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- =========================================================================
+         [화면 3] 소품 상점 화면
+         ========================================================================= -->
+    <section class="screen" id="screen-shop" aria-label="소품 상점 화면">
+      <!-- 상점 상단 헤더 -->
+      <header class="subscreen-header">
+        <button type="button" class="header-back-btn" id="btn-shop-back" aria-label="메인 화면으로 돌아가기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </button>
+        <h1 class="subscreen-title">소품 상점</h1>
+        <div class="header-right-cluster">
+          <button type="button" class="header-bone-pill clickable-guide-trigger" id="btn-shop-bone-guide-top" title="뼈다귀 적립 가이드 보기">
+            <svg class="cute-bone-icon" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" fill="#FFFDF8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong id="shop-header-bones">1000</strong>
+            <span class="badge-chevron-mark" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <div class="subscreen-scroll-body">
+        <!-- 나의 미니 거실 프리뷰 카드 (50:50 정가운데 분할 + 플랫 미니멀 레이아웃) -->
+        <div class="mini-preview-card">
+          <div class="mini-preview-header">
+            <div class="mini-preview-header-col left">
+              <div class="mini-preview-title-wrap">
+                <span class="mini-dot"></span>
+                <span class="mini-preview-title">나의 미니 거실 프리뷰</span>
+              </div>
+              <span class="mini-summary-boost" id="shop-preview-boost-badge">✨ +0%</span>
+            </div>
+          </div>
+
+          <div class="mini-preview-split-body">
+            <!-- 좌측 칸 (50%): 세로형 미니 거실 프리뷰 (단일 실선 프레임) -->
+            <div class="mini-preview-left-col">
+              <div class="mini-preview-canvas" id="shop-mini-preview-canvas">
+                <!-- JS에서 실시간 미니 거실 SVG 렌더링 -->
+              </div>
+            </div>
+
+            <!-- 우측 칸 (50%): 플랫 미니멀 현재 배치 목록 & 빠른 빼기(Quick Unplace) -->
+            <div class="mini-preview-right-panel">
+              <div class="mini-panel-summary-row">
+                <div class="mini-summary-left-group">
+                  <span class="mini-summary-slot" id="shop-preview-slot-badge">배치 0/10</span>
+                  <button type="button" class="btn-shop-reset-placed" id="btn-shop-reset-placed" title="거실 배치 초기화" aria-label="거실 배치 초기화">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+                      <polyline points="21 3 21 8 16 8" />
+                    </svg>
+                  </button>
+                </div>
+                <button type="button" class="btn-slot-expand-mini" id="btn-shop-expand-slots" title="뼈다귀로 배치 슬롯 확장">
+                  + 확장
+                </button>
+              </div>
+
+              <div class="mini-placed-scroll-list" id="shop-mini-placed-list" aria-label="현재 거실 배치 소품 목록">
+                <!-- JS에서 현재 배치된 소품 미니 리스트 또는 빈 상태 안내 문구 렌더링 -->
+              </div>
+
+              <button type="button" class="btn-mini-panel-inventory" id="btn-preview-to-inventory">
+                <span>보관함 관리</span>
+                <span class="badge-chevron-mark" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 카테고리 필터 탭 (6개 탭 한 줄 맞춤) -->
+        <div class="category-tabs" id="shop-category-tabs" role="tablist" aria-label="소품 카테고리">
+          <button type="button" class="cat-tab active" data-category="all" role="tab" aria-selected="true">전체</button>
+          <button type="button" class="cat-tab" data-category="pet" role="tab" aria-selected="false">🐾&#8202;동물</button>
+          <button type="button" class="cat-tab" data-category="pet_goods" role="tab" aria-selected="false">🧸&#8202;펫 용품</button>
+          <button type="button" class="cat-tab" data-category="furniture" role="tab" aria-selected="false">💡&#8202;가구·조명</button>
+          <button type="button" class="cat-tab" data-category="decor" role="tab" aria-selected="false">🪴&#8202;식물·데코</button>
+          <button type="button" class="cat-tab" data-category="window_view" role="tab" aria-selected="false">🪟&#8202;창밖</button>
+        </div>
+
+        <!-- 섹션 타이틀 -->
+        <div class="collection-header-row">
+          <h2 class="collection-title">따스한 거실 소품 컬렉션</h2>
+          <span class="collection-count" id="shop-collection-count">총 40종</span>
+        </div>
+
+        <!-- 상점 아이템 2열 그리드 -->
+        <div class="shop-items-grid" id="shop-items-grid">
+          <!-- JS에서 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 구매 완료 하단 플로팅 토스트 알림 -->
+      <div class="purchase-toast" id="purchase-toast" role="status" aria-live="polite">
+        <div class="toast-left">
+          <span class="toast-check-badge">✓</span>
+          <div class="toast-text-group">
+            <strong id="toast-title">통통 테니스공 구매 완료!</strong>
+            <span id="toast-subtitle">아이템이 보관함에 쏙 들어갔어요</span>
+          </div>
+        </div>
+        <button type="button" class="toast-action-btn" id="btn-toast-go-inventory">
+          보관함 가기 &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         [화면 6] 소품 보관함 (Inventory) 화면
+         ========================================================================= -->
+    <section class="screen" id="screen-inventory" aria-label="소품 보관함 화면">
+      <header class="subscreen-header">
+        <button type="button" class="header-back-btn" id="btn-inventory-back" aria-label="이전 화면으로 돌아가기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </button>
+        <h1 class="subscreen-title">Inventory <span class="title-sub-ko">보관함</span></h1>
+        <div class="header-right-cluster">
+          <div class="header-bone-pill">
+            <svg class="cute-bone-icon" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" fill="#FFFDF8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="inv-header-bones">180</span>
+          </div>
+          <button type="button" class="header-circle-btn" id="btn-inv-to-shop" title="소품 상점으로 이동" aria-label="소품 상점 이동">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l1.8-5h14.4L21 9" />
+              <path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="subscreen-scroll-body">
+        <!-- 상단: 현재 거실에 배치된 소품 슬롯 현황 (최대 10개 · 1줄 컴팩트 요약 & 마우스 드래그 가로 스크롤) -->
+        <div class="equipped-slots-panel">
+          <div class="equipped-panel-top">
+            <div class="equipped-panel-titles">
+              <h2 class="equipped-panel-title">🏠 현재 거실에 배치된 소품</h2>
+              <p class="equipped-panel-sub" id="inv-panel-sub">최대 10개 배치 · 거실에서 자유롭게 이동</p>
+            </div>
+            <div class="equipped-slot-actions">
+              <span class="equipped-slot-counter" id="inv-slot-counter">배치 0/10</span>
+              <button type="button" class="btn-slot-expand-mini" id="btn-inv-expand-slots" title="뼈다귀로 배치 슬롯 확장">
+                + 확장
+              </button>
+            </div>
+          </div>
+
+          <div class="equipped-slots-strip" id="inv-equipped-strip">
+            <!-- JS에서 배치된 소품 컴팩트 카드(회수 버튼 포함) 및 빈 슬롯 렌더링 -->
+          </div>
+        </div>
+
+        <!-- 보관함 카테고리 탭 (6개 탭 한 줄 맞춤) -->
+        <div class="category-tabs" id="inv-category-tabs" role="tablist" aria-label="보관함 카테고리">
+          <button type="button" class="cat-tab active" data-category="all">전체<span class="tab-cnt" id="inv-cnt-all">3</span></button>
+          <button type="button" class="cat-tab" data-category="pet">🐾&#8202;동물</button>
+          <button type="button" class="cat-tab" data-category="pet_goods">🧸&#8202;펫 용품</button>
+          <button type="button" class="cat-tab" data-category="furniture">💡&#8202;가구·조명</button>
+          <button type="button" class="cat-tab" data-category="decor">🪴&#8202;식물·데코</button>
+          <button type="button" class="cat-tab" data-category="window_view">🪟&#8202;창밖</button>
+        </div>
+
+        <!-- 하단 3열 컴팩트 미니 타일 그리드: 보유 아이템 목록 (원탭 즉시 배치/해제 토글) -->
+        <div class="inventory-items-grid" id="inventory-items-grid">
+          <!-- JS에서 3열 컴팩트 타일 렌더링 -->
+        </div>
+
+        <!-- 프리뷰 테스트 & 초기 상태로 리셋 도우미 카드 -->
+        <div class="inv-tip-card">
+          <div class="inv-tip-left">
+            <span class="inv-tip-icon">🎁</span>
+            <div>
+              <strong>프리뷰 테스트 도우미</strong>
+              <p>전종 소품을 한 번에 해금하거나, 빈 창문만 보이는 최초 실행 상태로 즉시 리셋할 수 있어요.</p>
+            </div>
+          </div>
+          <div class="inv-tip-btn-group">
+            <button type="button" class="inv-tip-btn" id="btn-unlock-all-demo">전종 해금</button>
+            <button type="button" class="inv-tip-btn reset" id="btn-reset-initial-state">초기 상태로 리셋</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 보관함 하단 슬림 고정 바 -->
+      <footer class="inventory-bottom-bar">
+        <button type="button" class="inv-footer-main-btn" id="btn-inv-check-room">
+          거실로 돌아가기
+        </button>
+        <button type="button" class="inv-footer-sub-btn" id="btn-inv-more-shop">
+          <span>상점</span>
+          <span class="badge-chevron-mark" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </span>
+        </button>
+      </footer>
+    </section>
+
+    <!-- =========================================================================
+         [화면 4 & 5] 구매 확인 팝업 모달 (토글 ON / OFF 상태 전환)
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-purchase" role="dialog" aria-modal="true" aria-labelledby="purchase-modal-title">
+      <div class="modal-card purchase-modal-card">
+        <button type="button" class="modal-close-x" id="btn-close-purchase-modal" aria-label="닫기">&times;</button>
+
+        <div class="purchase-item-thumb" id="purchase-modal-thumb"></div>
+        <span class="purchase-cat-chip" id="purchase-modal-cat">장난감</span>
+        <h3 class="purchase-item-title" id="purchase-modal-title">통통 테니스공</h3>
+        <p class="purchase-item-desc" id="purchase-modal-desc">
+          살짝 건드리면 데구르르 굴러가는 강아지 최애 연두빛 장난감이에요.
+        </p>
+
+        <!-- 영수증 계산 박스 (현재 보유 / 필요 뼈다귀 / 구매 후 잔여) -->
+        <div class="purchase-receipt-box">
+          <div class="receipt-row">
+            <span>현재 보유 뼈다귀</span>
+            <strong id="purchase-cur-bones">🦴 1000개</strong>
+          </div>
+          <div class="receipt-row need">
+            <span>필요 뼈다귀</span>
+            <strong id="purchase-need-bones">- 45개</strong>
+          </div>
+          <div class="receipt-divider"></div>
+          <div class="receipt-row remain">
+            <span>구매 후 잔여</span>
+            <strong id="purchase-rem-bones">955개</strong>
+          </div>
+        </div>
+
+        <!-- '구매 완료 후 바로 거실에 배치하기' ON/OFF 토글 스위치 -->
+        <div class="auto-place-toggle-box" id="auto-place-toggle-box">
+          <div class="toggle-box-left">
+            <span class="toggle-room-icon">🛋️</span>
+            <div class="toggle-text-wrap">
+              <span class="toggle-main-label">구매 완료 후 바로 거실에 배치하기</span>
+              <span class="toggle-sub-label" id="auto-place-subtext">구매 즉시 거실에 바로 배치돼요</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked="true"
+            class="custom-switch on"
+            id="btn-auto-place-switch"
+            aria-label="구매 완료 후 바로 거실에 배치하기 토글"
+          >
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+
+        <div class="modal-btn-row">
+          <button type="button" class="modal-btn-cancel" id="btn-cancel-purchase">취소</button>
+          <button type="button" class="modal-btn-confirm" id="btn-confirm-purchase">
+            🦴 <span id="purchase-btn-price">45</span>개로 구매하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [슬롯 제한 (N/N FULL) 알림 팝업 모달]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-slot-limit" role="dialog" aria-modal="true" aria-labelledby="slot-limit-title">
+      <div class="modal-card slot-limit-card">
+        <div class="slot-limit-badge" id="slot-limit-badge">10 / 10 FULL</div>
+        <h3 class="slot-limit-title" id="slot-limit-title">거실 배치 슬롯이 가득 찼어요 (10/10)</h3>
+        <p class="slot-limit-desc" id="slot-limit-desc">
+          거실에는 현재 최대 10개의 동물·소품을 동시에 꺼내놓을 수 있어요.<br />
+          기존 소품을 하나 회수하거나 슬롯을 확장해 보세요!
+        </p>
+
+        <!-- 20칸 미만일 때 바로 슬롯 확장으로 이어지는 CTA 버튼 -->
+        <button type="button" class="slot-limit-expand-btn" id="btn-limit-expand-slots">
+          <span class="slot-limit-expand-label">+ 슬롯 확장하기 +2칸</span>
+          <span class="slot-limit-expand-cost" id="slot-limit-expand-cost">(🦴 150)</span>
+        </button>
+
+        <div class="slot-quick-list" id="slot-limit-quick-list">
+          <!-- 현재 배치된 소품을 바로 회수할 수 있는 미니 리스트 -->
+        </div>
+        <div class="modal-btn-row single">
+          <button type="button" class="modal-btn-confirm" id="btn-close-slot-limit">확인했어요</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [배치 슬롯 확장 확인 팝업 모달 (미니멀 프리미엄 3단 레이아웃)]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-slot-expand" role="dialog" aria-modal="true" aria-labelledby="slot-expand-title">
+      <div class="modal-card slot-expand-card">
+        <div class="slot-expand-step-row" aria-label="확장 단계 미리보기">
+          <div class="slot-expand-dots" id="slot-expand-dots" role="tablist" aria-label="슬롯 확장 5단계">
+            <button type="button" class="slot-dot-btn is-selected" data-expand-step="1" role="tab" aria-selected="true" aria-label="1단계 미리보기">
+              <span class="slot-dot"></span>
+            </button>
+            <button type="button" class="slot-dot-btn" data-expand-step="2" role="tab" aria-selected="false" aria-label="2단계 미리보기">
+              <span class="slot-dot"></span>
+            </button>
+            <button type="button" class="slot-dot-btn" data-expand-step="3" role="tab" aria-selected="false" aria-label="3단계 미리보기">
+              <span class="slot-dot"></span>
+            </button>
+            <button type="button" class="slot-dot-btn" data-expand-step="4" role="tab" aria-selected="false" aria-label="4단계 미리보기">
+              <span class="slot-dot"></span>
+            </button>
+            <button type="button" class="slot-dot-btn" data-expand-step="5" role="tab" aria-selected="false" aria-label="5단계 미리보기">
+              <span class="slot-dot"></span>
+            </button>
+          </div>
+          <span class="slot-expand-step-num" id="slot-expand-step">1/5</span>
+        </div>
+
+        <h3 class="slot-expand-title" id="slot-expand-title">거실 슬롯 확장</h3>
+
+        <div class="slot-expand-hero-box" aria-live="polite">
+          <span class="slot-expand-from">
+            <span class="slot-num-from" id="slot-expand-from-num">10</span><span class="slot-unit-from">slots</span>
+          </span>
+          <svg class="slot-expand-arrow-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="13 6 19 12 13 18" />
+          </svg>
+          <span class="slot-expand-to">
+            <span class="slot-num-to" id="slot-expand-to-num">12</span><span class="slot-unit-to">slots</span>
+            <span class="slot-delta-tag" id="slot-expand-delta">+2</span>
+          </span>
+        </div>
+
+        <p class="slot-expand-status" id="slot-expand-status">
+          <svg class="slot-bone-svg" id="slot-expand-status-bone" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="slot-expand-status-text">현재 보유 1000개</span>
+        </p>
+
+        <div class="modal-btn-row slot-expand-actions">
+          <button type="button" class="modal-btn-cancel" id="btn-cancel-slot-expand">취소</button>
+          <button type="button" class="modal-btn-confirm" id="btn-confirm-slot-expand">
+            <svg class="slot-bone-svg btn-bone" id="slot-expand-btn-bone" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="slot-expand-confirm-label">150 확장하기</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [보유 아이템 관리 미니 팝업 (1줄 스텝퍼 바 + 추가 구매 오클릭 방지)]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-item-manage" role="dialog" aria-modal="true" aria-labelledby="item-manage-title">
+      <div class="modal-card item-manage-card">
+        <!-- 슬롯 가득 참 액션 토스트 (아이템 관리 팝업 바로 위 밀착 고정) -->
+        <div class="slot-full-action-toast" id="slot-full-action-toast" role="status" aria-live="polite">
+          <span class="slot-toast-msg">거실 슬롯이 가득 찼어요</span>
+          <button type="button" class="slot-toast-expand-btn" id="btn-toast-quick-expand">
+            <span>확장</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+
+        <button type="button" class="modal-close-x item-manage-close" id="btn-close-item-manage" aria-label="닫기">&times;</button>
+
+        <div class="item-manage-header">
+          <div class="item-manage-thumb" id="item-manage-thumb"></div>
+          <h3 class="item-manage-title" id="item-manage-title">아장아장 크로키 강아지</h3>
+          <p class="item-manage-summary" id="item-manage-summary">보유 1 / 3</p>
+        </div>
+
+        <div class="item-manage-stepper-box">
+          <span class="item-manage-stepper-label">거실 배치</span>
+          <div class="item-manage-stepper-ctrl">
+            <button type="button" class="item-stepper-btn" id="btn-manage-recall-one" aria-label="거실에서 1개 회수">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+            <span class="item-manage-stepper-count" aria-live="polite">
+              <strong id="item-manage-placed-num">1</strong><span class="stepper-of"> / <span id="item-manage-owned-num">1</span></span>
+            </span>
+            <button type="button" class="item-stepper-btn" id="btn-manage-place-one" aria-label="거실에 1개 추가 배치">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="item-manage-btn buy-more" id="btn-manage-buy-more">
+          <svg class="slot-bone-svg btn-bone" id="item-manage-buy-bone" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3.9 7C2.2 6.6 1.8 4.4 3.2 3.1C4.5 1.9 6.7 2.5 7.4 4.6H16.6C17.3 2.5 19.5 1.9 20.8 3.1C22.2 4.4 21.8 6.6 20.1 7C21.8 7.4 22.2 9.6 20.8 10.9C19.5 12.1 17.3 11.5 16.6 9.4H7.4C6.7 11.5 4.5 12.1 3.2 10.9C1.8 9.6 2.2 7.4 3.9 7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="item-manage-buy-label">50 추가 구매</span>
+        </button>
+
+        <p class="item-manage-footnote">
+          중복 배치해도 ✨ 배치 보너스는 1회만 적용돼요
+        </p>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [거실 배치 일괄 초기화 확인 미니 팝업 (아이콘 중심 컴팩트 리디자인)]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-reset-placed" role="dialog" aria-modal="true" aria-labelledby="reset-placed-title">
+      <div class="modal-card reset-placed-card">
+        <div class="reset-placed-icon-badge" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+            <polyline points="21 3 21 8 16 8" />
+          </svg>
+        </div>
+        <h3 class="reset-placed-title" id="reset-placed-title">거실 배치 초기화</h3>
+        <p class="reset-placed-desc" id="reset-placed-desc">
+          창밖 제외 <strong>0개</strong>가 보관함으로 돌아가요
+        </p>
+        <div class="modal-btn-row reset-placed-actions">
+          <button type="button" class="modal-btn-cancel" id="btn-cancel-reset-placed">취소</button>
+          <button type="button" class="modal-btn-confirm reset-confirm-btn" id="btn-confirm-reset-placed">초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [중도 포기 확인 팝업 모달 (포기 패널티 안내)]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-giveup-confirm" role="dialog" aria-modal="true" aria-labelledby="giveup-modal-title">
+      <div class="modal-card giveup-modal-card">
+        <h3 class="giveup-modal-title" id="giveup-modal-title">정말 집중을 포기하시겠어요? 😢</h3>
+        <p class="giveup-modal-desc" id="giveup-modal-desc">
+          지금 중단하면 이번 세션의 뼈다귀 보상(<strong id="giveup-lost-bones">🦴 +15개</strong>)을 받을 수 없어요.
+        </p>
+        <div class="giveup-btn-stack">
+          <button type="button" class="giveup-btn-keep" id="btn-giveup-cancel">
+            계속 집중하기
+          </button>
+          <button type="button" class="giveup-btn-abort" id="btn-giveup-confirm">
+            보상 없이 포기하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         ['뼈다귀 적립 가이드' 통합 모달 (겹선 없는 플랫 미니멀 디자인)]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-bone-guide" role="dialog" aria-modal="true" aria-labelledby="bone-guide-title">
+      <div class="modal-card bone-guide-card">
+        <button type="button" class="modal-close-x" id="btn-close-bone-guide" aria-label="닫기">&times;</button>
+
+        <div class="records-sheet-header">
+          <span class="diary-modal-tag">REWARD GUIDE</span>
+          <h3 class="diary-modal-title" id="bone-guide-title">뼈다귀 적립 가이드</h3>
+        </div>
+
+        <!-- 최상단 실시간 부스트 상태 배너 (테두리 없는 부드러운 연살구 배경) -->
+        <div class="guide-live-boost-box" id="bone-guide-boost-box">
+          <span id="bone-guide-boost-text">✨ 현재 거실 부스트 +0% 적용 중</span>
+        </div>
+
+        <div class="guide-sections-scroll">
+          <!-- 1) 집중 시간별 보상 (바깥 겹선 박스 없이 플랫 4열 카드) -->
+          <div class="guide-flat-section">
+            <div class="guide-sec-head-row">
+              <h4 class="guide-sec-title">집중 시간별 보상</h4>
+              <span class="guide-sec-sub">기본 5분 = 🦴 3개</span>
+            </div>
+            <div class="guide-tier-table">
+              <div class="guide-tier-cell">
+                <span class="tier-min">25분</span>
+                <strong class="tier-val">15</strong>
+                <span class="tier-sub muted">기본</span>
+              </div>
+              <div class="guide-tier-cell">
+                <span class="tier-min">30분</span>
+                <strong class="tier-val">20</strong>
+                <span class="tier-sub">🔥 +2</span>
+              </div>
+              <div class="guide-tier-cell">
+                <span class="tier-min">45분</span>
+                <strong class="tier-val">32</strong>
+                <span class="tier-sub">🔥 +5</span>
+              </div>
+              <div class="guide-tier-cell highlight-60">
+                <span class="tier-min">60분</span>
+                <strong class="tier-val">50</strong>
+                <span class="tier-sub">🔥 +14</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2) 추가 보너스 (단일 연베이지 배경 박스 + 내부 얇은 구분선 플랫 리스트) -->
+          <div class="guide-flat-section">
+            <div class="guide-sec-head-row">
+              <h4 class="guide-sec-title">추가 보너스</h4>
+            </div>
+            <div class="guide-flat-list-box">
+              <div class="guide-flat-row">
+                <div class="simple-row-left">
+                  <span class="simple-row-title">첫 집중 완주 보너스</span>
+                  <span class="welcome-status-chip" id="guide-welcome-status-chip">1회 한정</span>
+                </div>
+                <strong class="simple-row-val">🦴 +30개</strong>
+              </div>
+              <div class="guide-flat-row">
+                <div class="simple-row-left">
+                  <span class="simple-row-title">거실 동물·소품 배치</span>
+                </div>
+                <strong class="simple-row-val">개당 +2~5% 합산</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 중도 포기 안내 문구 (박스 없이 차분한 텍스트) & 매트 블랙 확인 버튼 -->
+        <p class="guide-bottom-footnote">
+          중도 포기 시 뼈다귀가 지급되지 않아요 · 집중 중 시간 축소 불가
+        </p>
+
+        <div class="modal-btn-row single">
+          <button type="button" class="modal-btn-confirm dnd-confirm-btn" id="btn-ok-bone-guide">
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [나의 집중 기록 & 그림일기 통합 모달 시트]
+         - 탭 1: 📊 집중 내역 (3분할 요약 카드 + 📅 달력형 / 📈 그래프형 + 집중 타임라인)
+         - 탭 2: 📔 오늘의 그림일기 (폴라로이드 엽서 뷰 & 이미지 저장/공유)
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-receipt" role="dialog" aria-modal="true" aria-labelledby="records-modal-title">
+      <div class="modal-card records-sheet-card">
+        <button type="button" class="modal-close-x" id="btn-close-receipt-modal" aria-label="닫기">&times;</button>
+
+        <div class="records-sheet-header">
+          <span class="diary-modal-tag">FOCUS ARCHIVE &amp; PICTURE DIARY</span>
+          <h3 class="diary-modal-title" id="records-modal-title">나의 집중 기록 &amp; 그림일기</h3>
+        </div>
+
+        <!-- [1. 상단 메인 탭 전환 (2개 탭)] -->
+        <div class="records-main-tabs" id="records-main-tabs" role="tablist" aria-label="기록 및 그림일기 탭">
+          <button type="button" class="record-main-tab active" data-record-tab="history" role="tab" aria-selected="true">
+            📊 집중 내역
+          </button>
+          <button type="button" class="record-main-tab" data-record-tab="diary" role="tab" aria-selected="false">
+            📔 오늘의 그림일기
+          </button>
+        </div>
+
+        <!-- =================================================================
+             [탭 1] 📊 집중 내역 패널 (기본 선택)
+             ================================================================= -->
+        <div class="record-tab-pane active" id="record-pane-history" role="tabpanel">
+          <div class="history-scroll-container">
+            <!-- ① 상단 누적 요약 카드 (3분할 미니멀 박스) -->
+            <div class="summary-trio-grid">
+              <div class="summary-mini-box">
+                <span class="summary-box-label">오늘 집중</span>
+                <strong class="summary-box-val" id="stat-today-mins">50분</strong>
+              </div>
+              <div class="summary-mini-box">
+                <span class="summary-box-label">누적 집중</span>
+                <strong class="summary-box-val" id="stat-total-time">12시간 25분</strong>
+              </div>
+              <div class="summary-mini-box">
+                <span class="summary-box-label">연속 달성</span>
+                <strong class="summary-box-val accent" id="stat-streak-days">🔥 3일째</strong>
+              </div>
+            </div>
+
+            <!-- ② 뷰 전환 서브 탭 (📅 달력형 | 📈 그래프형) -->
+            <div class="history-viz-card">
+              <div class="viz-card-header">
+                <div class="viz-subtabs" id="history-viz-subtabs" role="tablist">
+                  <button type="button" class="viz-subtab active" data-viz-mode="calendar" role="tab" aria-selected="true">
+                    📅 달력형
+                  </button>
+                  <button type="button" class="viz-subtab" data-viz-mode="graph" role="tab" aria-selected="false">
+                    📈 그래프형
+                  </button>
+                </div>
+
+                <!-- 달력 월 이동 컨트롤 (달력형일 때 표시) -->
+                <div class="calendar-month-nav" id="calendar-month-nav">
+                  <button type="button" class="cal-nav-btn" id="btn-cal-prev" aria-label="이전 달">&lsaquo;</button>
+                  <span class="cal-month-label" id="cal-month-label">2026. 11</span>
+                  <button type="button" class="cal-nav-btn" id="btn-cal-next" aria-label="다음 달">&rsaquo;</button>
+                </div>
+
+                <!-- 그래프 주간/월간 전환 경량 토글 (그래프형일 때만 우측 표시) -->
+                <div class="graph-period-tabs hidden" id="graph-period-tabs" role="tablist" aria-label="그래프 기간 단위">
+                  <button type="button" class="graph-period-tab active" data-graph-period="weekly" role="tab" aria-selected="true">
+                    주간
+                  </button>
+                  <button type="button" class="graph-period-tab" data-graph-period="monthly" role="tab" aria-selected="false">
+                    월간
+                  </button>
+                </div>
+              </div>
+
+              <!-- [A] 📅 달력형 뷰 -->
+              <div class="viz-body-calendar" id="viz-body-calendar">
+                <div class="calendar-weekdays">
+                  <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+                </div>
+                <div class="calendar-days-grid" id="calendar-days-grid">
+                  <!-- JS에서 월간 달력 그리드 + 발바닥 도장(🐾) & 집중 시간(50m) 렌더링 -->
+                </div>
+              </div>
+
+              <!-- [B] 📈 그래프형 뷰 (주간 월~일 / 월간 1~5주차 수직 막대그래프) -->
+              <div class="viz-body-graph hidden" id="viz-body-graph">
+                <div class="graph-period-bar">
+                  <div class="graph-period-nav">
+                    <button type="button" class="cal-nav-btn graph-nav-btn" id="btn-graph-prev" aria-label="이전 기간">&lsaquo;</button>
+                    <span class="graph-period-label" id="graph-period-label">11.23 ~ 11.29</span>
+                    <button type="button" class="cal-nav-btn graph-nav-btn" id="btn-graph-next" aria-label="다음 기간">&rsaquo;</button>
+                  </div>
+                  <span class="graph-period-total" id="graph-period-total">합계 0분</span>
+                </div>
+                <div class="weekly-bar-chart" id="weekly-bar-chart">
+                  <!-- JS에서 주간(월~일) 또는 월간(1~5주차) 수직 막대그래프 렌더링 -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ③ 하단 기본 내역 리스트 (집중 타임라인 - 상단 캘린더 월/선택 날짜 실시간 연동) -->
+            <div class="timeline-section">
+              <div class="timeline-header-row">
+                <span class="timeline-title" id="timeline-filter-title">11월 집중 내역 (총 0건)</span>
+                <button type="button" class="btn-reset-date-filter hidden" id="btn-reset-date-filter">
+                  월 전체 보기
+                </button>
+              </div>
+              <div class="focus-timeline-list" id="focus-timeline-list">
+                <!-- JS에서 최신순 포모도로 완료 내역 렌더링 (예: 11.18 14:30 | 25분 집중 완료 | 🦴 +15) -->
+              </div>
+            </div>
+          </div>
+
+          <div class="diary-sub-actions">
+            <button type="button" class="diary-bonus-link" id="btn-receipt-bonus-bones">+100 뼈다귀 충전(테스트)</button>
+            <span class="sub-divider">·</span>
+            <button type="button" class="diary-close-link" id="btn-history-close">닫기</button>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             [탭 2] 📔 오늘의 그림일기 패널 (폴라로이드 엽서 & 저장/공유)
+             ================================================================= -->
+        <div class="record-tab-pane" id="record-pane-diary" role="tabpanel">
+          <!-- 폴라로이드 엽서 프레임 영역 (이미지 저장/공유 캡처 대상) -->
+          <article class="polaroid-postcard" id="polaroid-postcard">
+            <!-- 상단 사각 프레임: 현재 거실 배치 상태가 그대로 렌더링되는 미니 캔버스 -->
+            <div class="polaroid-photo-frame" id="polaroid-photo-frame">
+              <!-- JS에서 renderPolaroidSceneSVG() 렌더링 -->
+            </div>
+
+            <!-- 하단 여백 영역 -->
+            <div class="polaroid-caption-area">
+              <!-- 상단 좌측 날짜 & 우측 발바닥 도장 + 오늘 집중 시간/뼈다귀 요약 -->
+              <div class="polaroid-meta-row">
+                <span class="polaroid-date" id="diary-date-text">2026.11.18</span>
+                <div class="polaroid-stamp-badge">
+                  <svg class="stamp-paw-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <ellipse cx="12" cy="15.5" rx="4.4" ry="3.6" />
+                    <ellipse cx="6.3" cy="10.3" rx="1.8" ry="2.4" transform="rotate(-20 6.3 10.3)" />
+                    <ellipse cx="9.8" cy="7.6" rx="1.8" ry="2.5" transform="rotate(-7 9.8 7.6)" />
+                    <ellipse cx="14.2" cy="7.6" rx="1.8" ry="2.5" transform="rotate(7 14.2 7.6)" />
+                    <ellipse cx="17.7" cy="10.3" rx="1.8" ry="2.4" transform="rotate(20 17.7 10.3)" />
+                  </svg>
+                  <span id="diary-focus-summary">오늘 총 50분 집중 · 🦴 +30</span>
+                </div>
+              </div>
+
+              <!-- 중앙 손글씨 한 줄 일기 (클릭하여 직접 수정 가능 - 모바일에서도 항상 딱 2줄 유지) -->
+              <div class="polaroid-quote-wrap">
+                <div
+                  class="polaroid-handwriting-quote"
+                  id="diary-quote-editable"
+                  contenteditable="true"
+                  spellcheck="false"
+                  role="textbox"
+                  aria-label="오늘의 한 줄 일기 문구 (클릭하여 2줄 이내로 직접 수정 가능)"
+                >오늘도 차곡차곡 쌓인 평온,
+내일도 창가에서 기다릴게요 ☀️</div>
+              </div>
+
+              <div class="polaroid-edit-hint-row">
+                <span class="edit-hint-text">✏️ 눌러서 직접 수정 (2줄 · 30자 이내)</span>
+                <button type="button" class="btn-shuffle-quote" id="btn-shuffle-diary-quote" title="다른 일기 문구 추천">
+                  🎲 문구 변경
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 하단 매트 블랙 알약 버튼: 그림일기 카드로 저장 / 공유 -->
+          <button type="button" class="pill-btn-save-diary" id="btn-save-share-diary">
+            <svg class="camera-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+            <span>그림일기 카드로 저장 / 공유</span>
+          </button>
+
+          <div class="diary-sub-actions">
+            <button type="button" class="diary-close-link" id="btn-receipt-ok">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [방해금지 설정 미니 팝업 모달]
+         ========================================================================= -->
+    <div class="modal-backdrop hidden" id="modal-dnd" role="dialog" aria-modal="true" aria-labelledby="dnd-modal-title">
+      <div class="modal-card dnd-modal-card">
+        <button type="button" class="modal-close-x" id="btn-close-dnd-modal" aria-label="닫기">&times;</button>
+
+        <div class="dnd-modal-header">
+          <div class="dnd-title-icon-badge" id="dnd-header-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              <path d="M18.63 13A17.89 17.89 0 0 1 18 8" />
+              <path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14" />
+              <path d="M18 8a6 6 0 0 0-9.33-5" />
+              <line x1="2" y1="2" x2="22" y2="22" />
+            </svg>
+          </div>
+          <h3 class="diary-modal-title" id="dnd-modal-title">방해금지 설정</h3>
+        </div>
+
+        <div class="dnd-options-box">
+          <!-- ① 첫 번째 토글: 모든 알림·전화 차단 -->
+          <div class="dnd-option-row main" id="dnd-main-row">
+            <div class="dnd-option-text">
+              <strong class="dnd-option-title">모든 알림·전화 차단</strong>
+              <p class="dnd-option-desc">집중 중 무음 전환</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked="false"
+              class="custom-switch"
+              id="btn-dnd-main-switch"
+              aria-label="모든 알림·전화 차단 토글"
+            >
+              <span class="switch-knob"></span>
+            </button>
+          </div>
+
+          <div class="dnd-option-divider"></div>
+
+          <!-- ② 두 번째 토글: 반복 전화 허용 -->
+          <div class="dnd-option-row sub disabled" id="dnd-repeat-row">
+            <div class="dnd-sub-branch" aria-hidden="true">└</div>
+            <div class="dnd-option-text">
+              <strong class="dnd-option-title">반복 전화 허용</strong>
+              <p class="dnd-option-desc">같은 번호 2회 이상 시 울림</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked="true"
+              class="custom-switch on"
+              id="btn-dnd-repeat-switch"
+              aria-label="반복 전화 허용 토글"
+              disabled
+            >
+              <span class="switch-knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-btn-row single">
+          <button type="button" class="modal-btn-confirm dnd-confirm-btn" id="btn-dnd-confirm">
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상단 미니 상태 토스트 (ASMR / WakeLock / 집중 완료 안내) -->
+    <div class="mini-top-toast" id="mini-top-toast" role="status" aria-live="polite"></div>
+
+    <!-- 하단 창밖 풍경 ↔ 어울리는 소리 제안 토스트 (자동 변경 토글 OFF 시 표시) -->
+    <div class="sound-suggest-toast" id="sound-suggest-toast" role="status" aria-live="polite">
+      <span class="sound-suggest-text" id="sound-suggest-text">보슬비 소리도 함께 켜볼까요?</span>
+      <button type="button" class="sound-suggest-btn" id="btn-sound-suggest-accept">켜기</button>
+    </div>
+
+  </div>
+
+  <!-- 모듈형 스크립트 로드 (로컬 파일 직접 실행, 웹서버, Capacitor 안드로이드 WebView 모두 호환) -->
+  <script src="./js/native-bridge.js"></script>
+  <script src="./js/focus-presence.js"></script>
+  <script src="./js/items.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/pet-canvas.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

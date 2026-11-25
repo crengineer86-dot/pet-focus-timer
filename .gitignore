@@ -1,0 +1,20 @@
+# Dependencies & Web Build Outputs
+node_modules/
+dist/
+build/
+
+# Environment & Secrets
+.env
+.env.*
+*.keystore
+*.jks
+
+# Android Gradle Build Artifacts (keep android/ core configs & .github/workflows/)
+android/.gradle/
+android/app/build/
+android/local.properties
+.gradle/
+
+# OS / Editor
+.DS_Store
+Thumbs.db

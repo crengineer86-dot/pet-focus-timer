@@ -1,0 +1,22 @@
+{
+  "name": "pet-focus-timer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "반려동물 힐링 포모도로 집중 타이머 (Capacitor Android)",
+  "scripts": {
+    "build": "node scripts/build-web.js",
+    "android:init": "npx cap add android && node scripts/configure-android.js",
+    "android:configure": "node scripts/configure-android.js",
+    "cap:sync": "npm run build && npx cap sync android && node scripts/configure-android.js"
+  },
+  "dependencies": {
+    "@capacitor-community/keep-awake": "^6.0.0",
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/local-notifications": "^6.1.1",
+    "firebase": "^11.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0"
+  }
+}
