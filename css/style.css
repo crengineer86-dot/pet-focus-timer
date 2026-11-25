@@ -1146,13 +1146,13 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 21px;
-  padding: 0 7.5px;
+  height: 18px;
+  padding: 0 6.5px;
   border-radius: 999px;
   background-color: var(--bg-ivory);
   border: 1px solid #C9BFB0;
   color: var(--ink-black);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -1172,6 +1172,9 @@ button {
 }
 
 .btn-slot-expand-mini.is-max {
+  height: 16px;
+  padding: 0 6px;
+  font-size: 9.5px;
   background-color: #EFEAE0;
   border-color: #DDD5C7;
   color: var(--ink-muted);
