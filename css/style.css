@@ -1793,8 +1793,8 @@ button {
 
 .slot-mini-name {
   font-size: 10.5px;
-  font-weight: 700;
-  color: var(--ink-black);
+  font-weight: 600;
+  color: #5C564F;
   margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
