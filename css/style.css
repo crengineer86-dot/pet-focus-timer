@@ -4078,6 +4078,31 @@ button {
   transform: translateX(-50%) translateY(0);
 }
 
+/* 하단 화면 켜짐 유지(해 아이콘) 전용 토스트 */
+.wakelock-bottom-toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%) translateY(10px);
+  background-color: var(--ink-black);
+  color: var(--bg-ivory);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 8px 22px rgba(31, 30, 29, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 65;
+}
+
+.wakelock-bottom-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* 하단 창밖 풍경 ↔ 어울리는 소리 제안 토스트 (자동 변경 OFF 시) */
 .sound-suggest-toast {
   position: absolute;
