@@ -132,6 +132,7 @@
       this.btnSoundSuggestAcceptEl = document.getElementById("btn-sound-suggest-accept");
       this.dotWakeLockEl = document.getElementById("dot-wakelock");
       this.timerMinusBtnEl = document.getElementById("btn-timer-minus");
+      this.timerPlusBtnEl = document.getElementById("btn-timer-plus");
       this.timerDisplayEl = document.getElementById("timer-display");
       this.timerRewardTextEl = document.getElementById("timer-reward-text");
       this.timerImmersionBadgeEl = document.getElementById("timer-immersion-badge");
@@ -1105,6 +1106,13 @@
         const isLocked = isAtMinIdle || isLockedRunning;
         this.timerMinusBtnEl.classList.toggle("locked", isLocked);
         this.timerMinusBtnEl.setAttribute("aria-disabled", String(isLocked));
+      }
+
+      // 최대 시간(120분) 도달 시 + 버튼 상한 잠금 표시
+      if (this.timerPlusBtnEl) {
+        const isAtMax = this.configuredMinutes >= 120;
+        this.timerPlusBtnEl.classList.toggle("locked", isAtMax);
+        this.timerPlusBtnEl.setAttribute("aria-disabled", String(isAtMax));
       }
     }
 

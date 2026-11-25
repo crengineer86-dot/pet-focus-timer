@@ -411,7 +411,7 @@ button {
   z-index: 28;
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   align-self: flex-start;
   gap: 12px;
   padding: 3px 22px 2px;
@@ -421,8 +421,8 @@ button {
 .timer-control-inline {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 11px;
+  justify-content: flex-start;
+  gap: 8px;
   background: transparent;
 }
 
@@ -435,6 +435,7 @@ button {
   line-height: 1;
   padding: 4px 5px;
   opacity: 0.75;
+  flex-shrink: 0;
   transition: opacity 0.15s ease, transform 0.12s ease;
 }
 
@@ -448,9 +449,21 @@ button {
 
 .timer-step-btn.locked {
   opacity: 0.28;
+  cursor: default;
+}
+
+.timer-step-btn.locked:hover {
+  opacity: 0.28;
+}
+
+.timer-step-btn.locked:active {
+  transform: none;
 }
 
 .timer-digits {
+  display: inline-block;
+  min-width: 118px;
+  text-align: center;
   font-family: var(--font-num);
   font-size: 36px;
   font-weight: 700;
