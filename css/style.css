@@ -3033,15 +3033,15 @@ button {
 }
 
 .reset-placed-icon-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background-color: #F4EFE7;
   color: #5C564F;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 14px;
+  margin: 0 auto 10px;
 }
 
 .reset-placed-title {
