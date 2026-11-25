@@ -1281,8 +1281,8 @@
       this.hideMiniToast();
       this.pendingSuggestedSound = soundId;
       this.soundSuggestTextEl.textContent = viewLabel
-        ? `'${viewLabel}' 적용 · ${soundLabel}도 켤까요?`
-        : `${soundLabel} 소리도 함께 켜볼까요?`;
+        ? `'${viewLabel}' 적용 · ${soundLabel} ASMR 켤까요?`
+        : `${soundLabel} ASMR도 함께 켜볼까요?`;
       this.soundSuggestToastEl.classList.add("show");
 
       if (this.soundSuggestTimer) clearTimeout(this.soundSuggestTimer);
