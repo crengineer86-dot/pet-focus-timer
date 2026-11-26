@@ -327,7 +327,7 @@
               </div>
 
               <button type="button" class="btn-mini-panel-inventory" id="btn-preview-to-inventory">
-                <span>보관함 관리</span>
+                <span>보관함</span>
                 <span class="badge-chevron-mark" aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6" />
@@ -340,12 +340,12 @@
 
         <!-- 카테고리 필터 탭 (6개 탭 한 줄 맞춤) -->
         <div class="category-tabs" id="shop-category-tabs" role="tablist" aria-label="소품 카테고리">
-          <button type="button" class="cat-tab active" data-category="all" role="tab" aria-selected="true">전체</button>
-          <button type="button" class="cat-tab" data-category="pet" role="tab" aria-selected="false">🐾&#8202;동물</button>
-          <button type="button" class="cat-tab" data-category="pet_goods" role="tab" aria-selected="false">🧸&#8202;펫 용품</button>
-          <button type="button" class="cat-tab" data-category="furniture" role="tab" aria-selected="false">💡&#8202;가구·조명</button>
-          <button type="button" class="cat-tab" data-category="decor" role="tab" aria-selected="false">🪴&#8202;식물·데코</button>
-          <button type="button" class="cat-tab" data-category="window_view" role="tab" aria-selected="false">🪟&#8202;창밖</button>
+          <button type="button" class="cat-tab active" data-category="all" role="tab" aria-selected="true"><span>전체</span></button>
+          <button type="button" class="cat-tab" data-category="pet" role="tab" aria-selected="false"><span class="cat-emoji" aria-hidden="true">🐾</span><span>동물</span></button>
+          <button type="button" class="cat-tab" data-category="pet_goods" role="tab" aria-selected="false"><span class="cat-emoji" aria-hidden="true">🧸</span><span>펫 용품</span></button>
+          <button type="button" class="cat-tab" data-category="furniture" role="tab" aria-selected="false"><span class="cat-emoji" aria-hidden="true">💡</span><span>가구·조명</span></button>
+          <button type="button" class="cat-tab" data-category="decor" role="tab" aria-selected="false"><span class="cat-emoji" aria-hidden="true">🪴</span><span>식물·데코</span></button>
+          <button type="button" class="cat-tab" data-category="window_view" role="tab" aria-selected="false"><span class="cat-emoji" aria-hidden="true">🪟</span><span>창밖</span></button>
         </div>
 
         <!-- 섹션 타이틀 -->
@@ -386,7 +386,7 @@
             <polyline points="12 19 5 12 12 5" />
           </svg>
         </button>
-        <h1 class="subscreen-title">Inventory <span class="title-sub-ko">보관함</span></h1>
+        <h1 class="subscreen-title">보관함</h1>
         <div class="header-right-cluster">
           <div class="header-bone-pill">
             <svg class="cute-bone-icon" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -427,12 +427,12 @@
 
         <!-- 보관함 카테고리 탭 (6개 탭 한 줄 맞춤) -->
         <div class="category-tabs" id="inv-category-tabs" role="tablist" aria-label="보관함 카테고리">
-          <button type="button" class="cat-tab active" data-category="all">전체<span class="tab-cnt" id="inv-cnt-all">3</span></button>
-          <button type="button" class="cat-tab" data-category="pet">🐾&#8202;동물</button>
-          <button type="button" class="cat-tab" data-category="pet_goods">🧸&#8202;펫 용품</button>
-          <button type="button" class="cat-tab" data-category="furniture">💡&#8202;가구·조명</button>
-          <button type="button" class="cat-tab" data-category="decor">🪴&#8202;식물·데코</button>
-          <button type="button" class="cat-tab" data-category="window_view">🪟&#8202;창밖</button>
+          <button type="button" class="cat-tab active" data-category="all"><span>전체</span><span class="tab-cnt" id="inv-cnt-all">3</span></button>
+          <button type="button" class="cat-tab" data-category="pet"><span class="cat-emoji" aria-hidden="true">🐾</span><span>동물</span></button>
+          <button type="button" class="cat-tab" data-category="pet_goods"><span class="cat-emoji" aria-hidden="true">🧸</span><span>펫 용품</span></button>
+          <button type="button" class="cat-tab" data-category="furniture"><span class="cat-emoji" aria-hidden="true">💡</span><span>가구·조명</span></button>
+          <button type="button" class="cat-tab" data-category="decor"><span class="cat-emoji" aria-hidden="true">🪴</span><span>식물·데코</span></button>
+          <button type="button" class="cat-tab" data-category="window_view"><span class="cat-emoji" aria-hidden="true">🪟</span><span>창밖</span></button>
         </div>
 
         <!-- 하단 3열 컴팩트 미니 타일 그리드: 보유 아이템 목록 (원탭 즉시 배치/해제 토글) -->
@@ -536,24 +536,19 @@
     <div class="modal-backdrop hidden" id="modal-slot-expand" role="dialog" aria-modal="true" aria-labelledby="slot-expand-title">
       <div class="modal-card slot-expand-card">
         <div class="slot-expand-step-row" aria-label="확장 단계 미리보기">
-          <div class="slot-expand-dots" id="slot-expand-dots" role="tablist" aria-label="슬롯 확장 5단계">
-            <button type="button" class="slot-dot-btn is-selected" data-expand-step="1" role="tab" aria-selected="true" aria-label="1단계 미리보기">
-              <span class="slot-dot"></span>
-            </button>
-            <button type="button" class="slot-dot-btn" data-expand-step="2" role="tab" aria-selected="false" aria-label="2단계 미리보기">
-              <span class="slot-dot"></span>
-            </button>
-            <button type="button" class="slot-dot-btn" data-expand-step="3" role="tab" aria-selected="false" aria-label="3단계 미리보기">
-              <span class="slot-dot"></span>
-            </button>
-            <button type="button" class="slot-dot-btn" data-expand-step="4" role="tab" aria-selected="false" aria-label="4단계 미리보기">
-              <span class="slot-dot"></span>
-            </button>
-            <button type="button" class="slot-dot-btn" data-expand-step="5" role="tab" aria-selected="false" aria-label="5단계 미리보기">
-              <span class="slot-dot"></span>
-            </button>
+          <div class="slot-expand-dots" id="slot-expand-dots" role="tablist" aria-label="슬롯 확장 10단계">
+            <button type="button" class="slot-dot-btn is-selected" data-expand-step="1" role="tab" aria-selected="true" aria-label="1단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="2" role="tab" aria-selected="false" aria-label="2단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="3" role="tab" aria-selected="false" aria-label="3단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="4" role="tab" aria-selected="false" aria-label="4단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="5" role="tab" aria-selected="false" aria-label="5단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="6" role="tab" aria-selected="false" aria-label="6단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="7" role="tab" aria-selected="false" aria-label="7단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="8" role="tab" aria-selected="false" aria-label="8단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="9" role="tab" aria-selected="false" aria-label="9단계 미리보기"><span class="slot-dot"></span></button>
+            <button type="button" class="slot-dot-btn" data-expand-step="10" role="tab" aria-selected="false" aria-label="10단계 미리보기"><span class="slot-dot"></span></button>
           </div>
-          <span class="slot-expand-step-num" id="slot-expand-step">1/5</span>
+          <span class="slot-expand-step-num" id="slot-expand-step">1/10</span>
         </div>
 
         <h3 class="slot-expand-title" id="slot-expand-title">거실 슬롯 확장</h3>
@@ -819,33 +814,19 @@
               </div>
             </div>
 
-            <!-- ② 뷰 전환 서브 탭 (📅 달력형 | 📈 그래프형) -->
+            <!-- ② 통합 상단 컨트롤 1줄 (좌측 기간 탐색 < 2026.11 > · 우측 [달력 | 주간 | 월간]) -->
             <div class="history-viz-card">
               <div class="viz-card-header">
-                <div class="viz-subtabs" id="history-viz-subtabs" role="tablist">
-                  <button type="button" class="viz-subtab active" data-viz-mode="calendar" role="tab" aria-selected="true">
-                    📅 달력형
-                  </button>
-                  <button type="button" class="viz-subtab" data-viz-mode="graph" role="tab" aria-selected="false">
-                    📈 그래프형
-                  </button>
-                </div>
-
-                <!-- 달력 월 이동 컨트롤 (달력형일 때 표시) -->
                 <div class="calendar-month-nav" id="calendar-month-nav">
-                  <button type="button" class="cal-nav-btn" id="btn-cal-prev" aria-label="이전 달">&lsaquo;</button>
-                  <span class="cal-month-label" id="cal-month-label">2026. 11</span>
-                  <button type="button" class="cal-nav-btn" id="btn-cal-next" aria-label="다음 달">&rsaquo;</button>
+                  <button type="button" class="cal-nav-btn" id="btn-cal-prev" aria-label="이전 기간">&lsaquo;</button>
+                  <span class="cal-month-label" id="cal-month-label">2026.11</span>
+                  <button type="button" class="cal-nav-btn" id="btn-cal-next" aria-label="다음 기간">&rsaquo;</button>
                 </div>
 
-                <!-- 그래프 주간/월간 전환 경량 토글 (그래프형일 때만 우측 표시) -->
-                <div class="graph-period-tabs hidden" id="graph-period-tabs" role="tablist" aria-label="그래프 기간 단위">
-                  <button type="button" class="graph-period-tab active" data-graph-period="weekly" role="tab" aria-selected="true">
-                    주간
-                  </button>
-                  <button type="button" class="graph-period-tab" data-graph-period="monthly" role="tab" aria-selected="false">
-                    월간
-                  </button>
+                <div class="viz-subtabs" id="history-viz-subtabs" role="tablist" aria-label="기록 보기 방식">
+                  <button type="button" class="viz-subtab active" data-viz-mode="calendar" role="tab" aria-selected="true">달력</button>
+                  <button type="button" class="viz-subtab" data-viz-mode="weekly" role="tab" aria-selected="false">주간</button>
+                  <button type="button" class="viz-subtab" data-viz-mode="monthly" role="tab" aria-selected="false">월간</button>
                 </div>
               </div>
 
@@ -861,13 +842,8 @@
 
               <!-- [B] 📈 그래프형 뷰 (주간 월~일 / 월간 1~5주차 수직 막대그래프) -->
               <div class="viz-body-graph hidden" id="viz-body-graph">
-                <div class="graph-period-bar">
-                  <div class="graph-period-nav">
-                    <button type="button" class="cal-nav-btn graph-nav-btn" id="btn-graph-prev" aria-label="이전 기간">&lsaquo;</button>
-                    <span class="graph-period-label" id="graph-period-label">11.23 ~ 11.29</span>
-                    <button type="button" class="cal-nav-btn graph-nav-btn" id="btn-graph-next" aria-label="다음 기간">&rsaquo;</button>
-                  </div>
-                  <span class="graph-period-total" id="graph-period-total">합계 0분</span>
+                <div class="weekly-chart-total-row hidden" id="weekly-chart-total-row">
+                  <span class="weekly-chart-total" id="weekly-chart-total">주간 합계 0분</span>
                 </div>
                 <div class="weekly-bar-chart" id="weekly-bar-chart">
                   <!-- JS에서 주간(월~일) 또는 월간(1~5주차) 수직 막대그래프 렌더링 -->
@@ -875,13 +851,16 @@
               </div>
             </div>
 
-            <!-- ③ 하단 기본 내역 리스트 (집중 타임라인 - 상단 캘린더 월/선택 날짜 실시간 연동) -->
+            <!-- ③ 하단 기본 내역 리스트 (집중 타임라인 - 좌측 제목 / 우측 총 건수·합계 시간) -->
             <div class="timeline-section">
               <div class="timeline-header-row">
-                <span class="timeline-title" id="timeline-filter-title">11월 집중 내역 (총 0건)</span>
-                <button type="button" class="btn-reset-date-filter hidden" id="btn-reset-date-filter">
-                  월 전체 보기
-                </button>
+                <span class="timeline-title" id="timeline-filter-title">11월 집중 내역</span>
+                <div class="timeline-header-right">
+                  <span class="timeline-summary-meta" id="timeline-summary-meta">총 0건 · 0분</span>
+                  <button type="button" class="btn-reset-date-filter hidden" id="btn-reset-date-filter">
+                    월 전체
+                  </button>
+                </div>
               </div>
               <div class="focus-timeline-list" id="focus-timeline-list">
                 <!-- JS에서 최신순 포모도로 완료 내역 렌더링 (예: 11.18 14:30 | 25분 집중 완료 | 🦴 +15) -->

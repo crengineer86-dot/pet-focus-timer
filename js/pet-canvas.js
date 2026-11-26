@@ -1204,40 +1204,37 @@
         `;
 
       case "mini_cat_tower":
-        // 대형 3단 원목 캣타워 (스탠드 조명급 높이 96px, 가로 72px: 1층 숨숨집 + 스크래처 기둥 + 2층 좌/우 발판 + 3층 꼭대기 둥지 + 폼폼 장난감)
+        // 깔끔한 3단 독립 탑승 원목 캣타워 (외형 72×96 유지: 1층 좌측 발판 y=-28, 2층 우측 발판 y=-60, 3층 좌측 둥지 y=-94)
         return `
           <!-- 바닥 베이스 보드 -->
           <rect x="-36" y="-6" width="72" height="6" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.75" />
-          <!-- 1층 좌측 원목 숨숨집 -->
-          <rect x="-28" y="-34" width="27" height="28" rx="2.5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" />
-          <path d="M-20 -6 L-20 -20 A5.5 5.5 0 0 1 -9 -20 L-9 -6 Z" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.55" />
-          <circle cx="-14.5" cy="-26.5" r="2.2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.3" />
-          <!-- 우측 메인 스크래처 기둥 (빗금 디테일) -->
-          <rect x="11" y="-56" width="7.5" height="50" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.65" />
-          <line x1="11" y1="-48" x2="18.5" y2="-45" stroke="#1F1E1D" stroke-width="1.2" />
-          <line x1="11" y1="-40" x2="18.5" y2="-37" stroke="#1F1E1D" stroke-width="1.2" />
-          <line x1="11" y1="-32" x2="18.5" y2="-29" stroke="#1F1E1D" stroke-width="1.2" />
-          <line x1="11" y1="-24" x2="18.5" y2="-21" stroke="#1F1E1D" stroke-width="1.2" />
-          <line x1="11" y1="-16" x2="18.5" y2="-13" stroke="#1F1E1D" stroke-width="1.2" />
-          <!-- 좌측 서브 기둥 -->
-          <rect x="-21" y="-53" width="6" height="19" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.55" />
-          <line x1="-21" y1="-46" x2="-15" y2="-43.5" stroke="#1F1E1D" stroke-width="1.15" />
-          <line x1="-21" y1="-39" x2="-15" y2="-36.5" stroke="#1F1E1D" stroke-width="1.15" />
-          <!-- 2단 좌측 중간 발판 (상단 y = -58) -->
-          <rect x="-33" y="-58" width="32" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.7" />
-          <!-- 2단 우측 메인 발판 (상단 y = -62) -->
-          <rect x="-3" y="-62" width="36" height="6" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.7" />
+          <!-- 1층 좌측 하부 스크래처 기둥 -->
+          <rect x="-20" y="-23" width="6.5" height="17" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.55" />
+          <line x1="-20" y1="-17" x2="-13.5" y2="-14.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <line x1="-20" y1="-11" x2="-13.5" y2="-8.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <!-- 1층 좌측 발판 (상단 y = -28, 중심 x = -17) -->
+          <rect x="-34" y="-28" width="34" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.7" />
+          <!-- 2층 우측 메인 스크래처 기둥 -->
+          <rect x="13.5" y="-54.5" width="7" height="48.5" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.65" />
+          <line x1="13.5" y1="-46" x2="20.5" y2="-43" stroke="#1F1E1D" stroke-width="1.2" />
+          <line x1="13.5" y1="-37" x2="20.5" y2="-34" stroke="#1F1E1D" stroke-width="1.2" />
+          <line x1="13.5" y1="-28" x2="20.5" y2="-25" stroke="#1F1E1D" stroke-width="1.2" />
+          <line x1="13.5" y1="-19" x2="20.5" y2="-16" stroke="#1F1E1D" stroke-width="1.2" />
+          <!-- 2층 우측 메인 발판 (상단 y = -60, 중심 x = +17) -->
+          <rect x="0" y="-60" width="34" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.7" />
           <!-- 매달린 폼폼 방울 장난감 -->
-          <line x1="26" y1="-56" x2="26" y2="-44" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
-          <circle cx="26" cy="-41" r="3.4" fill="#E99A7E" stroke="#1F1E1D" stroke-width="1.4" />
-          <!-- 3단 상부 스크래처 기둥 -->
-          <rect x="-12" y="-88" width="6.5" height="30" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.6" />
-          <line x1="-12" y1="-80" x2="-5.5" y2="-77.5" stroke="#1F1E1D" stroke-width="1.15" />
-          <line x1="-12" y1="-72" x2="-5.5" y2="-69.5" stroke="#1F1E1D" stroke-width="1.15" />
-          <line x1="-12" y1="-64" x2="-5.5" y2="-61.5" stroke="#1F1E1D" stroke-width="1.15" />
-          <!-- 3단 꼭대기 둥지 베드 (상단 y = -94) -->
-          <path d="M-29 -94 L11 -94 L8 -88 L-26 -88 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" stroke-linejoin="round" />
-          <rect x="-31" y="-96" width="44" height="4" rx="2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.65" />
+          <line x1="27" y1="-54.5" x2="27" y2="-43" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
+          <circle cx="27" cy="-40" r="3.2" fill="#E99A7E" stroke="#1F1E1D" stroke-width="1.4" />
+          <!-- 3층 좌측 상부 스크래처 기둥 -->
+          <rect x="-15" y="-88" width="6.5" height="60" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="1.6" />
+          <line x1="-15" y1="-79" x2="-8.5" y2="-76.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <line x1="-15" y1="-69" x2="-8.5" y2="-66.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <line x1="-15" y1="-59" x2="-8.5" y2="-56.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <line x1="-15" y1="-49" x2="-8.5" y2="-46.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <line x1="-15" y1="-39" x2="-8.5" y2="-36.5" stroke="#1F1E1D" stroke-width="1.15" />
+          <!-- 3층 꼭대기 둥지 베드 (상단 y = -94, 중심 x = -12) -->
+          <path d="M-31 -94 L7 -94 L4 -88 L-28 -88 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" stroke-linejoin="round" />
+          <rect x="-33" y="-96" width="42" height="4" rx="2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.65" />
         `;
 
       case "cozy_tent_house":
@@ -1632,17 +1629,26 @@
       );
       this.svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-      const propsHtml = ALL_PROP_IDS
-        .map(
-          (id) => {
-            const isLit = appStorage ? appStorage.getLampLit(id) : true;
-            return `
+      const FLOOR_MAT_IDS = new Set(["beige_cushion"]);
+      const buildPropGroupHtml = (id) => {
+        const isLit = appStorage ? appStorage.getLampLit(id) : true;
+        return `
           <g id="prop-${id}" class="draggable-prop" data-item-id="${id}" style="cursor:grab; display:none; touch-action:none; pointer-events:auto;">
             ${getItemLocalSVGMarkup(id, true, isLit)}
           </g>
         `;
-          }
-        )
+      };
+
+      const floorMatsHtml = ALL_PROP_IDS.filter((id) => FLOOR_MAT_IDS.has(id))
+        .map(buildPropGroupHtml)
+        .join("");
+      const furniturePropsHtml = ALL_PROP_IDS.filter(
+        (id) => !FLOOR_MAT_IDS.has(id) && !ALL_LIVING_PETS.has(id)
+      )
+        .map(buildPropGroupHtml)
+        .join("");
+      const livingPetsHtml = ALL_PROP_IDS.filter((id) => ALL_LIVING_PETS.has(id))
+        .map(buildPropGroupHtml)
         .join("");
 
       this.svg.innerHTML = `
@@ -1675,15 +1681,19 @@
           <circle id="snap-guide-dot" cx="190" cy="${WINDOW_SILL_Y}" r="3.6" fill="#D97736" opacity="0" />
         </g>
 
-        <!-- ================= [배치 소품 & 동물 친구 레이어 (드래그 앤 드롭 가능)] ================= -->
-        ${propsHtml}
+        <!-- ================= [레이어 1: 바닥 휴식형 소품(방석·러그 등) — 항상 가구·동물 아래 렌더링] ================= -->
+        ${floorMatsHtml}
+        <g id="extra-floor-mats-layer"></g>
 
-        <!-- ================= [손그림 크로키 화풍 강아지 캐릭터 레이어 (하단 그림자 없음)] ================= -->
+        <!-- ================= [레이어 2: 일반 가구·캣타워·횃대·소파·텐트·조명·데코 — 항상 동물 아래 렌더링] ================= -->
+        ${furniturePropsHtml}
+        <g id="extra-furniture-layer"></g>
+
+        <!-- ================= [레이어 3: 살아있는 동물 친구들(1번 원본 + 중복 개체) — 항상 소품·가구 위 렌더링] ================= -->
+        ${livingPetsHtml}
         <g id="dog-character" class="draggable-prop" data-item-id="living_room_dog" style="cursor:grab; display:none; touch-action:none; pointer-events:auto;">
           ${this.getDuplicateDogMarkup()}
         </g>
-
-        <!-- 동일 아이템 2~3번째 중복 배치 인스턴스 전용 레이어 (독립 드래그/시차 애니메이션/좌우 반전 지원) -->
         <g id="extra-instances-layer"></g>
       `;
 
@@ -1902,16 +1912,14 @@
       if (itemId === "cockatiel_bird") {
         const perches = [];
 
-        if (this.placedItems.has("wall_wood_branch")) {
-          const bp = this.getCurrentItemPosition("wall_wood_branch");
+        this.getAllPlacedInstancesOf("wall_wood_branch").forEach((bp) => {
           const bx = Math.max(bp.x - 14, Math.min(bp.x + 8, clamped.x));
           perches.push({ x: bx, y: bp.y - 5.5, exactY: true });
-        }
-        if (this.placedItems.has("wooden_bird_perch")) {
-          const pp = this.getCurrentItemPosition("wooden_bird_perch");
+        });
+        this.getAllPlacedInstancesOf("wooden_bird_perch").forEach((pp) => {
           const px = Math.max(pp.x - 14, Math.min(pp.x + 8, clamped.x));
           perches.push({ x: px, y: pp.y - 53.5, exactY: true });
-        }
+        });
         for (const bar of WINDOW_HORIZONTAL_BARS) {
           const bx = Math.max(bar.walkMinX, Math.min(bar.walkMaxX, clamped.x));
           perches.push({ x: bx, y: bar.y - bottomOffset, exactY: false });
@@ -1946,30 +1954,34 @@
         candidates.push({ x: bx, y: bar.y - bottomOffset });
       }
 
-      // 3-B. 고양이 전용: 미니 원목 캣타워 2·3단 발판
+      // 3-B. 고양이 전용: 모든 중복 배치 미니 원목 캣타워 1·2·3단 독립 발판
       if (
         (itemId === "window_cat" || itemId === "tuxedo_cat") &&
         this.placedItems.has("mini_cat_tower")
       ) {
-        const tp = this.getCurrentItemPosition("mini_cat_tower");
-        candidates.push({ x: tp.x - 9, y: tp.y - 94 });
-        candidates.push({ x: tp.x + 14, y: tp.y - 62 });
-        candidates.push({ x: tp.x - 16, y: tp.y - 58 });
+        this.getAllPlacedInstancesOf("mini_cat_tower").forEach((tp) => {
+          candidates.push({ x: tp.x - 12, y: tp.y - 94 }); // 3층 꼭대기 둥지
+          candidates.push({ x: tp.x + 17, y: tp.y - 60 }); // 2층 우측 발판
+          candidates.push({ x: tp.x - 17, y: tp.y - 28 }); // 1층 좌측 발판
+        });
       }
 
-      // 3-C. 햄스터 전용: 우드 햄스터 쳇바퀴
+      // 3-C. 햄스터 전용: 모든 중복 배치 우드 햄스터 쳇바퀴
       if (itemId === "hamster_friend" && this.placedItems.has("hamster_wheel")) {
-        const wp = this.getCurrentItemPosition("hamster_wheel");
-        if (Math.hypot(clamped.x - wp.x, clamped.y - (wp.y - 13)) <= 32) {
-          candidates.push({ x: wp.x, y: wp.y - 13 });
-        }
+        this.getAllPlacedInstancesOf("hamster_wheel").forEach((wp) => {
+          if (Math.hypot(clamped.x - wp.x, clamped.y - (wp.y - 13)) <= 32) {
+            candidates.push({ x: wp.x, y: wp.y - 13 });
+          }
+        });
       }
 
-      // 3-D. 베이지 방석
-      if (cushionPos && cushionPos.y >= 168) {
-        const cx = Math.max(cushionPos.x - 22, Math.min(cushionPos.x + 22, clamped.x));
-        candidates.push({ x: cx, y: cushionPos.y - 2 });
-      }
+      // 3-D. 모든 중복 배치 베이지 방석·소파·텐트 휴식 스팟
+      this.getAllPlacedInstancesOf("beige_cushion").forEach((cp) => {
+        if (cp.y >= 168) {
+          const cx = Math.max(cp.x - 22, Math.min(cp.x + 22, clamped.x));
+          candidates.push({ x: cx, y: cp.y - 2 });
+        }
+      });
 
       // 3-E. 바닥 영역 (이미 바닥에 있으면 그 자리 유지, 벽 허공이면 바닥 시작선 후보 추가)
       const floorY = Math.max(minFloorAnchorY, Math.min(maxFloorAnchorY, clamped.y));
@@ -2085,6 +2097,66 @@
         return { x: this.animals[itemId].x, y: this.animals[itemId].y };
       }
       return appStorage.getItemPosition(itemId);
+    }
+
+    /**
+     * 동일 소품이 여러 개 중복 배치된 경우 모든 고유 instanceId의 좌표를 반환합니다.
+     */
+    getAllPlacedInstancesOf(itemId) {
+      if (!this.placedItems.has(itemId) || !appStorage) return [];
+      const list =
+        typeof appStorage.getPlacedInstancesByItem === "function"
+          ? appStorage.getPlacedInstancesByItem(itemId)
+          : [];
+      if (list.length > 0) {
+        return list.map((inst) => {
+          const clamped = this.clampPositionForItem(inst.x, inst.y, itemId);
+          return { instanceId: inst.instanceId, x: clamped.x, y: clamped.y };
+        });
+      }
+      const pos = this.getCurrentItemPosition(itemId);
+      const clamped = this.clampPositionForItem(pos.x, pos.y, itemId);
+      return [{ instanceId: `primary_${itemId}`, x: clamped.x, y: clamped.y }];
+    }
+
+    /**
+     * 후보 좌석/발판 목록 중 다른 동물이 이미 점유(또는 이동 목표) 중인 자리를 피해 비어 있는 자리를 우선 선택합니다.
+     */
+    pickAvailableTargetSpot(spots, selfState = null, radius = 18) {
+      if (!Array.isArray(spots) || spots.length === 0) return null;
+      const others = [];
+      if (this.placedItems.has("living_room_dog") && this.dog && this.dog !== selfState) {
+        others.push({ x: this.dog.x, y: this.dog.baseY, tx: this.dog.targetX, ty: this.dog.targetY });
+      }
+      Object.entries(this.animals || {}).forEach(([id, st]) => {
+        if (!st || st === selfState || !this.placedItems.has(id)) return;
+        others.push({ x: st.x, y: st.y, tx: st.targetX, ty: st.targetY });
+      });
+      if (this.extraAnimalStates) {
+        this.extraAnimalStates.forEach((st) => {
+          if (!st || st === selfState) return;
+          others.push({
+            x: st.x,
+            y: st.baseY !== undefined ? st.baseY : st.y,
+            tx: st.targetX,
+            ty: st.targetY
+          });
+        });
+      }
+
+      const unoccupied = spots.filter((sp) => {
+        return !others.some((o) => {
+          const dCur = Math.hypot(o.x - sp.x, o.y - sp.y);
+          const dTgt =
+            typeof o.tx === "number" && typeof o.ty === "number"
+              ? Math.hypot(o.tx - sp.x, o.ty - sp.y)
+              : Infinity;
+          return dCur <= radius || dTgt <= radius;
+        });
+      });
+
+      const pool = unoccupied.length > 0 ? unoccupied : spots;
+      return pool[Math.floor(Math.random() * pool.length)];
     }
 
     bindDragAndTapEvents() {
@@ -2496,8 +2568,17 @@
     }
 
     renderExtraInstances() {
-      const layer = this.svg?.querySelector("#extra-instances-layer");
-      if (!layer || !appStorage || typeof appStorage.getPlacedInstances !== "function") return;
+      const petLayer = this.svg?.querySelector("#extra-instances-layer");
+      const floorLayer = this.svg?.querySelector("#extra-floor-mats-layer") || petLayer;
+      const furnitureLayer = this.svg?.querySelector("#extra-furniture-layer") || petLayer;
+      if (!petLayer || !appStorage || typeof appStorage.getPlacedInstances !== "function") return;
+
+      const FLOOR_MAT_IDS = new Set(["beige_cushion"]);
+      const getTargetLayer = (itemId) => {
+        if (FLOOR_MAT_IDS.has(itemId)) return floorLayer;
+        if (ALL_LIVING_PETS.has(itemId)) return petLayer;
+        return furnitureLayer;
+      };
 
       const allInstances = appStorage.getPlacedInstances();
       const seenCountByItem = {};
@@ -2511,11 +2592,14 @@
         }
       });
 
-      // 기존 DOM 노드를 불변 instanceId 키로 인덱싱해 애니메이션 초기화(innerHTML 전체 재생성) 방지
+      // 기존 DOM 노드를 3개 레이어 전체에서 불변 instanceId 키로 인덱싱해 애니메이션 초기화 방지
       const existingById = new Map();
-      Array.from(layer.children).forEach((child) => {
-        const id = child.getAttribute("data-instance-id");
-        if (id) existingById.set(id, child);
+      const uniqueLayers = Array.from(new Set([floorLayer, furnitureLayer, petLayer]));
+      uniqueLayers.forEach((lyr) => {
+        Array.from(lyr.children).forEach((child) => {
+          const id = child.getAttribute("data-instance-id");
+          if (id) existingById.set(id, child);
+        });
       });
 
       const activeIds = new Set(extraInstances.map(({ inst }) => inst.instanceId));
@@ -2614,7 +2698,7 @@
 
         groupEl.appendChild(hitAreaEl);
         groupEl.appendChild(innerEl);
-        layer.appendChild(groupEl);
+        getTargetLayer(inst.itemId).appendChild(groupEl);
         this.bindExtraInstanceDrag(groupEl);
 
         // 복제 동물(이동형·고정형 전 종 포함) 고유 instanceId 기반 독립 상태 초기화
@@ -3349,26 +3433,39 @@
       const roll = Math.random();
       const hasCushion = this.placedItems.has("beige_cushion");
 
-      // 거실에 폭신폭신 베이지 방석이 있으면 일정 확률(약 28%)로 방석 위로 걸어가 중앙에 올라타 낮잠(rest)을 잠
-      if (hasCushion && roll < 0.28) {
-        const cushionPos = this.getCurrentItemPosition("beige_cushion");
-        const target = this.clampPositionForItem(
-          cushionPos.x + (Math.random() - 0.5) * 14,
-          cushionPos.y - 10,
-          "living_room_dog"
-        );
-        const dist = Math.hypot(target.x - d.x, target.y - d.baseY);
-        if (dist <= 6) {
-          d.state = "rest";
-          d.stateTimer = 5.5 + Math.random() * 3.5;
-        } else {
-          d.targetX = target.x;
-          d.targetY = target.y;
-          d.moveDir = d.targetX >= d.x ? 1 : -1;
-          d.nextActionAfterWalk = "rest_on_cushion";
-          d.state = "walk";
+      // 거실에 방석·소파·텐트가 있으면 중복 배치된 모든 인스턴스 중 비어 있는 곳을 우선 선택해 낮잠(rest)
+      const restFurnitureSpots = [];
+      this.getAllPlacedInstancesOf("beige_cushion").forEach((p) => {
+        restFurnitureSpots.push({ x: p.x, y: p.y - 10, instanceId: p.instanceId });
+      });
+      this.getAllPlacedInstancesOf("cozy_single_sofa").forEach((p) => {
+        restFurnitureSpots.push({ x: p.x, y: p.y - 16, instanceId: p.instanceId });
+      });
+      this.getAllPlacedInstancesOf("cozy_tent_house").forEach((p) => {
+        restFurnitureSpots.push({ x: p.x, y: p.y - 4, instanceId: p.instanceId });
+      });
+
+      if (restFurnitureSpots.length > 0 && roll < 0.30) {
+        const picked = this.pickAvailableTargetSpot(restFurnitureSpots, d, 20);
+        if (picked) {
+          const target = this.clampPositionForItem(
+            picked.x + (Math.random() - 0.5) * 8,
+            picked.y,
+            "living_room_dog"
+          );
+          const dist = Math.hypot(target.x - d.x, target.y - d.baseY);
+          if (dist <= 6) {
+            d.state = "rest";
+            d.stateTimer = 5.5 + Math.random() * 3.5;
+          } else {
+            d.targetX = target.x;
+            d.targetY = target.y;
+            d.moveDir = d.targetX >= d.x ? 1 : -1;
+            d.nextActionAfterWalk = "rest_on_cushion";
+            d.state = "walk";
+          }
+          return;
         }
-        return;
       }
 
       if (roll < 0.52) {
@@ -3474,26 +3571,32 @@
           return;
         }
         if (roll < 0.66) {
-          // 날개를 퍼덕이며 부드럽게 비행 이동 -> 반드시 지지대(벽면 나뭇가지, 원목 새 횃대, 4각 창틀 윗틀/창살/아래창틀)에 착지!
+          // 날개를 퍼덕이며 부드럽게 비행 이동 -> 모든 중복 배치 벽면 나뭇가지·원목 새 횃대 중 빈 자리 우선 착지!
           const specialPerches = [];
-          if (hasBranch && branchPos && !onBranch) {
-            specialPerches.push({
-              x: branchPos.x - 3 + (Math.random() - 0.5) * 14,
-              y: branchBarY,
-              isPerchSurface: true
-            });
-          }
-          if (hasPerch && perchPos && !onPerch) {
-            specialPerches.push({
-              x: perchPos.x - 3 + (Math.random() - 0.5) * 12,
-              y: perchBarY,
-              isPerchSurface: true
-            });
-          }
+          this.getAllPlacedInstancesOf("wall_wood_branch").forEach((bp) => {
+            const by = bp.y - 5.5;
+            if (Math.hypot(a.x - (bp.x - 3), a.y - by) > 22) {
+              specialPerches.push({
+                x: bp.x - 3 + (Math.random() - 0.5) * 14,
+                y: by,
+                isPerchSurface: true
+              });
+            }
+          });
+          this.getAllPlacedInstancesOf("wooden_bird_perch").forEach((pp) => {
+            const py = pp.y - 53.5;
+            if (Math.hypot(a.x - (pp.x - 3), a.y - py) > 22) {
+              specialPerches.push({
+                x: pp.x - 3 + (Math.random() - 0.5) * 12,
+                y: py,
+                isPerchSurface: true
+              });
+            }
+          });
 
           let rawPick = null;
-          if (specialPerches.length > 0 && Math.random() < 0.65) {
-            rawPick = specialPerches[Math.floor(Math.random() * specialPerches.length)];
+          if (specialPerches.length > 0 && Math.random() < 0.68) {
+            rawPick = this.pickAvailableTargetSpot(specialPerches, a, 16);
           } else {
             // 4각 창문 맨 윗틀(y=24) 비중을 높이고, 중간 창살(y=92)·아래 창틀(y=160)까지 발끝 정확히 맞춤 (허공/버튼 좌표 제거)
             const flySpots = [
@@ -3543,17 +3646,18 @@
       // -----------------------------------------------------------------------
       if (itemId === "window_cat" || itemId === "tuxedo_cat") {
         const catBottomOffset = ITEM_BOTTOM_OFFSET[itemId] || 0;
-        const hasCatTower = this.placedItems.has("mini_cat_tower");
-        const towerPos = hasCatTower ? this.getCurrentItemPosition("mini_cat_tower") : null;
+        const catTowers = this.getAllPlacedInstancesOf("mini_cat_tower");
+        const allTowerPlatforms = [];
+        catTowers.forEach((tp) => {
+          allTowerPlatforms.push({ x: tp.x - 12, y: tp.y - 94, instanceId: tp.instanceId }); // 3층 꼭대기 둥지
+          allTowerPlatforms.push({ x: tp.x + 17, y: tp.y - 60, instanceId: tp.instanceId }); // 2층 우측 발판
+          allTowerPlatforms.push({ x: tp.x - 17, y: tp.y - 28, instanceId: tp.instanceId }); // 1층 좌측 발판
+        });
 
-        // 현재 고양이가 캣타워 발판 위에 올라가 있는지 판별
-        const onCatTower =
-          hasCatTower &&
-          towerPos &&
-          Math.abs(a.x - towerPos.x) <= 32 &&
-          (Math.abs(a.y - (towerPos.y - 94)) <= 8 ||
-            Math.abs(a.y - (towerPos.y - 62)) <= 8 ||
-            Math.abs(a.y - (towerPos.y - 58)) <= 8);
+        // 현재 고양이가 배치된 모든 캣타워 중 어느 층 발판 위에 올라가 있는지 판별
+        const onCatTower = allTowerPlatforms.some(
+          (plat) => Math.abs(a.x - plat.x) <= 18 && Math.abs(a.y - plat.y) <= 8
+        );
 
         // 이미 캣타워 발판 위에 올라가 있을 때는 그 위에서 식빵을 굽거나(rest) 그루밍(play)하며 더 오래 머무름
         if (onCatTower && roll < 0.62) {
@@ -3568,51 +3672,62 @@
           return;
         }
 
-        // 1) 고양이 전용: 캣타워가 거실에 있으면 높은 확률로 캣타워 중간·꼭대기 발판으로 폴짝 점프!
-        if (hasCatTower && towerPos && !onCatTower && roll < 0.34) {
-          const towerPlatforms = [
-            { x: towerPos.x - 9, y: towerPos.y - 94 }, // 3단 꼭대기 둥지 베드
-            { x: towerPos.x + 14, y: towerPos.y - 62 }, // 2단 우측 메인 발판
-            { x: towerPos.x - 16, y: towerPos.y - 58 }  // 2단 좌측 중간 발판
-          ];
-          const rawPick = towerPlatforms[Math.floor(Math.random() * towerPlatforms.length)];
-          const clamped = this.clampPositionForItem(rawPick.x, rawPick.y, itemId);
-          a.startX = a.x;
-          a.startY = a.y;
-          a.targetX = clamped.x;
-          a.targetY = clamped.y;
-          a.moveDir = clamped.x >= a.x ? 1 : -1;
-          a.nextActionAfterJump = "cat_tower_perch";
-          a.state = "crouch_jump";
-          a.stateTimer = 0.30;
-          return;
-        }
-
-        // 2) 베이지 방석(beige_cushion)이 있으면 일정 확률로 방석 위로 이동해 낮잠(rest)
-        if (hasCushion && cushionPos && cushionPos.y >= 168 && roll < 0.52 && roll >= 0.32) {
-          const target = this.clampPositionForItem(
-            cushionPos.x + (Math.random() - 0.5) * 18,
-            cushionPos.y - 2,
-            itemId
-          );
-          const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
-          if (curBar || onCatTower || Math.abs(target.y - a.y) > 45) {
+        // 1) 고양이 전용: 배치된 모든 캣타워의 1·2·3층 중 비어 있는 발판을 우선 선택해 점프!
+        if (allTowerPlatforms.length > 0 && !onCatTower && roll < 0.36) {
+          const rawPick = this.pickAvailableTargetSpot(allTowerPlatforms, a, 16);
+          if (rawPick) {
+            const clamped = this.clampPositionForItem(rawPick.x, rawPick.y, itemId);
             a.startX = a.x;
             a.startY = a.y;
-            a.targetX = target.x;
-            a.targetY = target.y;
-            a.moveDir = target.x >= a.x ? 1 : -1;
-            a.nextActionAfterJump = "rest_on_cushion";
+            a.targetX = clamped.x;
+            a.targetY = clamped.y;
+            a.moveDir = clamped.x >= a.x ? 1 : -1;
+            a.nextActionAfterJump = "cat_tower_perch";
             a.state = "crouch_jump";
             a.stateTimer = 0.30;
-          } else {
-            a.targetX = target.x;
-            a.targetY = target.y;
-            a.moveDir = target.x >= a.x ? 1 : -1;
-            a.nextActionAfterWalk = "rest_on_cushion";
-            a.state = "walk";
+            return;
           }
-          return;
+        }
+
+        // 2) 방석·소파·텐트(중복 포함) 중 비어 있는 곳으로 이동해 낮잠(rest)
+        const catRestSpots = [];
+        this.getAllPlacedInstancesOf("beige_cushion").forEach((p) => {
+          if (p.y >= 168) catRestSpots.push({ x: p.x, y: p.y - 2, instanceId: p.instanceId });
+        });
+        this.getAllPlacedInstancesOf("cozy_single_sofa").forEach((p) => {
+          catRestSpots.push({ x: p.x, y: p.y - 16, instanceId: p.instanceId });
+        });
+        this.getAllPlacedInstancesOf("cozy_tent_house").forEach((p) => {
+          catRestSpots.push({ x: p.x, y: p.y - 2, instanceId: p.instanceId });
+        });
+
+        if (catRestSpots.length > 0 && roll < 0.54 && roll >= 0.34) {
+          const picked = this.pickAvailableTargetSpot(catRestSpots, a, 18);
+          if (picked) {
+            const target = this.clampPositionForItem(
+              picked.x + (Math.random() - 0.5) * 10,
+              picked.y,
+              itemId
+            );
+            const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
+            if (curBar || onCatTower || Math.abs(target.y - a.y) > 45) {
+              a.startX = a.x;
+              a.startY = a.y;
+              a.targetX = target.x;
+              a.targetY = target.y;
+              a.moveDir = target.x >= a.x ? 1 : -1;
+              a.nextActionAfterJump = "rest_on_cushion";
+              a.state = "crouch_jump";
+              a.stateTimer = 0.30;
+            } else {
+              a.targetX = target.x;
+              a.targetY = target.y;
+              a.moveDir = target.x >= a.x ? 1 : -1;
+              a.nextActionAfterWalk = "rest_on_cushion";
+              a.state = "walk";
+            }
+            return;
+          }
         }
 
         if (roll < 0.42) {
@@ -3778,24 +3893,38 @@
       }
 
       // -----------------------------------------------------------------------
-      // [D] 지상 전용 보행 동물 (웰시코기, 햄스터, 거북이, 고슴도치):
-      // 베이지 방석(beige_cushion)이 배치되어 있으면 일정 확률로 방석 위까지 걸어가 낮잠(rest)
+      // [D] 지상 전용 보행 동물 (웰시코기, 햄스터, 거북이, 고슴도치, 토끼):
+      // 방석·소파·텐트(중복 배치 전 인스턴스 포함) 중 비어 있는 곳을 우선 선택해 낮잠(rest)
       // -----------------------------------------------------------------------
-      if (hasCushion && cushionPos && roll < 0.25) {
+      const floorRestSpots = [];
+      this.getAllPlacedInstancesOf("beige_cushion").forEach((p) => {
+        floorRestSpots.push({ x: p.x, y: p.y - 2, instanceId: p.instanceId });
+      });
+      this.getAllPlacedInstancesOf("cozy_single_sofa").forEach((p) => {
+        floorRestSpots.push({ x: p.x, y: p.y - 16, instanceId: p.instanceId });
+      });
+      this.getAllPlacedInstancesOf("cozy_tent_house").forEach((p) => {
+        floorRestSpots.push({ x: p.x, y: p.y - 2, instanceId: p.instanceId });
+      });
+
+      if (floorRestSpots.length > 0 && roll < 0.28) {
         const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
-        // 바닥에 있는 지상 동물이 방석 위로 걸어가 웅크려 쉬기
+        // 바닥에 있는 지상 동물이 방석·소파·텐트 위로 걸어가 웅크려 쉬기
         if (!curBar) {
-          const target = this.clampPositionForItem(
-            cushionPos.x + (Math.random() - 0.5) * 18,
-            cushionPos.y - 2,
-            itemId
-          );
-          a.targetX = target.x;
-          a.targetY = target.y;
-          if (Math.abs(target.x - a.x) > 1) a.moveDir = target.x >= a.x ? 1 : -1;
-          a.nextActionAfterWalk = "rest_on_cushion";
-          a.state = "walk";
-          return;
+          const picked = this.pickAvailableTargetSpot(floorRestSpots, a, 18);
+          if (picked) {
+            const target = this.clampPositionForItem(
+              picked.x + (Math.random() - 0.5) * 10,
+              picked.y,
+              itemId
+            );
+            a.targetX = target.x;
+            a.targetY = target.y;
+            if (Math.abs(target.x - a.x) > 1) a.moveDir = target.x >= a.x ? 1 : -1;
+            a.nextActionAfterWalk = "rest_on_cushion";
+            a.state = "walk";
+            return;
+          }
         }
       }
 
@@ -5092,9 +5221,9 @@
     }
     if ((itemId === "window_cat" || itemId === "tuxedo_cat") && placedSet.has("mini_cat_tower")) {
       const tp = getStoredPreviewPos("mini_cat_tower", 64, 318);
-      candidates.push({ x: tp.x - 9, y: tp.y - 94 });
-      candidates.push({ x: tp.x + 14, y: tp.y - 62 });
-      candidates.push({ x: tp.x - 16, y: tp.y - 58 });
+      candidates.push({ x: tp.x - 12, y: tp.y - 94 });
+      candidates.push({ x: tp.x + 17, y: tp.y - 60 });
+      candidates.push({ x: tp.x - 17, y: tp.y - 28 });
     }
     if (itemId === "hamster_friend" && placedSet.has("hamster_wheel")) {
       const wp = getStoredPreviewPos("hamster_wheel", 118, WINDOW_SILL_Y);
@@ -5146,60 +5275,70 @@
         )
       : null;
 
-    const propsRendered = ALL_PROP_IDS
-      .map((id) => {
-        if (!set.has(id)) return "";
-        const rawPos = appStorage ? appStorage.getItemPosition(id) : { x: 190, y: 290 };
-        let pos = clampPreviewItemPosition(id, rawPos.x, rawPos.y);
+    const FLOOR_MAT_IDS = new Set(["beige_cushion"]);
+    const floorMatChunks = [];
+    const furnitureChunks = [];
+    const livingPetChunks = [];
 
-        // 미니 프리뷰 & 폴라로이드에서도 왕관앵무가 나뭇가지/횃대 윗면 선에 발끝이 딱 맞닿아 앉도록 정렬
-        if (id === "cockatiel_bird") {
-          if (
-            branchPreviewPos &&
-            (Math.hypot(rawPos.x - branchPreviewPos.x, rawPos.y - branchPreviewPos.y) <= 65 ||
-              (Math.abs(rawPos.x - 158) <= 2 && Math.abs(rawPos.y - 122) <= 2))
-          ) {
-            const clampedX = clampPreviewItemPosition(
-              "cockatiel_bird",
-              branchPreviewPos.x - 3,
-              branchPreviewPos.y
-            ).x;
-            pos = { x: clampedX, y: branchPreviewPos.y - 5.5 };
-          } else if (
-            perchPreviewPos &&
-            Math.hypot(rawPos.x - perchPreviewPos.x, rawPos.y - (perchPreviewPos.y - 52)) <= 45
-          ) {
-            const clampedX = clampPreviewItemPosition(
-              "cockatiel_bird",
-              perchPreviewPos.x - 3,
-              perchPreviewPos.y
-            ).x;
-            pos = { x: clampedX, y: perchPreviewPos.y - 53.5 };
-          } else {
-            pos = resolvePreviewLandingPosition(id, pos.x, pos.y, set);
-          }
-        } else if (ALL_LIVING_PETS.has(id)) {
+    ALL_PROP_IDS.forEach((id) => {
+      if (!set.has(id)) return;
+      const rawPos = appStorage ? appStorage.getItemPosition(id) : { x: 190, y: 290 };
+      let pos = clampPreviewItemPosition(id, rawPos.x, rawPos.y);
+
+      // 미니 프리뷰 & 폴라로이드에서도 왕관앵무가 나뭇가지/횃대 윗면 선에 발끝이 딱 맞닿아 앉도록 정렬
+      if (id === "cockatiel_bird") {
+        if (
+          branchPreviewPos &&
+          (Math.hypot(rawPos.x - branchPreviewPos.x, rawPos.y - branchPreviewPos.y) <= 65 ||
+            (Math.abs(rawPos.x - 158) <= 2 && Math.abs(rawPos.y - 122) <= 2))
+        ) {
+          const clampedX = clampPreviewItemPosition(
+            "cockatiel_bird",
+            branchPreviewPos.x - 3,
+            branchPreviewPos.y
+          ).x;
+          pos = { x: clampedX, y: branchPreviewPos.y - 5.5 };
+        } else if (
+          perchPreviewPos &&
+          Math.hypot(rawPos.x - perchPreviewPos.x, rawPos.y - (perchPreviewPos.y - 52)) <= 45
+        ) {
+          const clampedX = clampPreviewItemPosition(
+            "cockatiel_bird",
+            perchPreviewPos.x - 3,
+            perchPreviewPos.y
+          ).x;
+          pos = { x: clampedX, y: perchPreviewPos.y - 53.5 };
+        } else {
           pos = resolvePreviewLandingPosition(id, pos.x, pos.y, set);
         }
+      } else if (ALL_LIVING_PETS.has(id)) {
+        pos = resolvePreviewLandingPosition(id, pos.x, pos.y, set);
+      }
 
-        const isLit = appStorage ? appStorage.getLampLit(id) : true;
-        let markup = getItemLocalSVGMarkup(id, false, isLit);
-        if (idPrefix) {
-          markup = markup
-            .replace(/url\(#lampNaturalGlowGrad\)/g, `url(#${idPrefix}lampNaturalGlowGrad)`)
-            .replace(/url\(#lampCoreGlowGrad\)/g, `url(#${idPrefix}lampCoreGlowGrad)`);
-        }
-        return `<g transform="translate(${pos.x}, ${pos.y})">${markup}</g>`;
-      })
-      .join("");
+      const isLit = appStorage ? appStorage.getLampLit(id) : true;
+      let markup = getItemLocalSVGMarkup(id, false, isLit);
+      if (idPrefix) {
+        markup = markup
+          .replace(/url\(#lampNaturalGlowGrad\)/g, `url(#${idPrefix}lampNaturalGlowGrad)`)
+          .replace(/url\(#lampCoreGlowGrad\)/g, `url(#${idPrefix}lampCoreGlowGrad)`);
+      }
+      const chunk = `<g transform="translate(${pos.x}, ${pos.y})">${markup}</g>`;
+      if (FLOOR_MAT_IDS.has(id)) {
+        floorMatChunks.push(chunk);
+      } else if (ALL_LIVING_PETS.has(id)) {
+        livingPetChunks.push(chunk);
+      } else {
+        furnitureChunks.push(chunk);
+      }
+    });
 
     const rawDogPos = appStorage
       ? appStorage.getItemPosition("living_room_dog")
       : { x: 196, y: 296 };
     const dogPos = resolvePreviewLandingPosition("living_room_dog", rawDogPos.x, rawDogPos.y, set);
 
-    const dogRendered = set.has("living_room_dog")
-      ? `
+    if (set.has("living_room_dog")) {
+      livingPetChunks.push(`
       <g transform="translate(${dogPos.x}, ${dogPos.y})">
         <line x1="-12" y1="4" x2="-14" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
         <line x1="-6" y1="4" x2="-4" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
@@ -5217,14 +5356,12 @@
         </g>
         <path d="M10 -12 C12 -6, 16 -4, 19 -5" fill="none" stroke="#D97736" stroke-width="2" stroke-linecap="round" />
         <circle cx="16" cy="-4" r="2.2" fill="#F4C065" stroke="#1F1E1D" stroke-width="1.1" />
-      </g>`
-      : "";
+      </g>`);
+    }
 
-    // 2~3번째 중복 배치 인스턴스들도 미니 프리뷰 및 그림일기 폴라로이드에 동일하게 반영
-    let extraInstancesRendered = "";
+    // 2~3번째 중복 배치 인스턴스들도 바닥 소품 < 가구 < 동물 레이어 순서로 반영
     if (appStorage && typeof appStorage.getPlacedInstances === "function") {
       const seenCount = {};
-      const extraChunks = [];
       appStorage.getPlacedInstances().forEach((inst) => {
         const cnt = seenCount[inst.itemId] || 0;
         seenCount[inst.itemId] = cnt + 1;
@@ -5266,9 +5403,15 @@
               .replace(/url\(#lampCoreGlowGrad\)/g, `url(#${idPrefix}lampCoreGlowGrad)`);
           }
         }
-        extraChunks.push(`<g transform="translate(${pos.x}, ${pos.y})"><g${flipTransform}>${markup}</g></g>`);
+        const chunk = `<g transform="translate(${pos.x}, ${pos.y})"><g${flipTransform}>${markup}</g></g>`;
+        if (FLOOR_MAT_IDS.has(inst.itemId)) {
+          floorMatChunks.push(chunk);
+        } else if (isPet) {
+          livingPetChunks.push(chunk);
+        } else {
+          furnitureChunks.push(chunk);
+        }
       });
-      extraInstancesRendered = extraChunks.join("");
     }
 
     const activeViewId = getActiveWindowViewFromPlaced(placedItemIds);
@@ -5289,16 +5432,16 @@
         <line x1="24" y1="${WINDOW_SILL_Y}" x2="356" y2="${WINDOW_SILL_Y}" stroke="#1F1E1D" stroke-width="1.65" stroke-linecap="round" />
       </g>
       ${getWindowSunbeamOverlayMarkup(activeViewId, idPrefix, true)}
-      ${propsRendered}
-      ${dogRendered}
-      ${extraInstancesRendered}
+      ${floorMatChunks.join("")}
+      ${furnitureChunks.join("")}
+      ${livingPetChunks.join("")}
     `;
   }
 
   function renderShopMiniPreviewSVG(placedItemIds = []) {
-    // 하단 더미 버튼 제거 후, 거실 전체가 세로 정중앙에 안정적인 액자 구도로 담기도록 viewBox Y 범위(-92 ~ 438, 높이 530)로 균형 보정
-    const previewMinY = -92;
-    const previewH = 530;
+    // 하단 배치 가구(텐트·소파·책장·방석 등, 최대 y≈497)가 잘리지 않고 거실 전체가 안정적으로 담기도록 viewBox Y 범위(-58 ~ 518, 높이 576) 확보
+    const previewMinY = -58;
+    const previewH = 576;
     return `
       <svg viewBox="${VIEWBOX_MIN_X} ${previewMinY} ${VIEWBOX_W} ${previewH}" fill="none" xmlns="http://www.w3.org/2000/svg" class="mini-room-svg" preserveAspectRatio="xMidYMid meet">
         <defs>
@@ -5314,10 +5457,9 @@
   }
 
   function renderPolaroidSceneSVG(placedItemIds = []) {
-    // 그림일기 폴라로이드 프레임(및 저장/공유 캡처): 상단 앵무새·나뭇가지가 윗 테두리에 닿지 않고
-    // 거실 전체가 프레임 정중앙에 여유 있게 담기도록 상단 여백 확보(viewBox Y: -92 ~ 448, 높이 540)
-    const polaroidMinY = -92;
-    const polaroidH = 540;
+    // 그림일기 폴라로이드 프레임(및 저장/공유 캡처): 상단 앵무새·창문부터 하단 배치 소품까지 잘림 없이 거실 전체가 여유 있게 담기도록 viewBox Y(-58 ~ 518, 높이 576) 설정
+    const polaroidMinY = -58;
+    const polaroidH = 576;
     return `
       <svg id="polaroid-scene-svg" viewBox="${VIEWBOX_MIN_X} ${polaroidMinY} ${VIEWBOX_W} ${polaroidH}" fill="none" xmlns="http://www.w3.org/2000/svg" class="polaroid-scene-svg" preserveAspectRatio="xMidYMid meet">
         <rect x="0" y="${polaroidMinY}" width="${VIEWBOX_W}" height="${polaroidH}" fill="#FEF9F1" />

@@ -8,7 +8,7 @@
   const {
     ITEMS_CATALOG,
     MAX_PLACED_SLOTS,
-    ABSOLUTE_MAX_SLOTS = 20,
+    ABSOLUTE_MAX_SLOTS = 30,
     SLOT_EXPANSION_TIERS = [],
     getMaxOwnedForItem,
     calculateRewardBreakdown
@@ -730,47 +730,93 @@
      */
     computeSpawnOffsetPosition(itemId, existingSameInstances = []) {
       const item = ITEMS_CATALOG.find((i) => i.id === itemId);
+      const allPlaced = Array.isArray(this.state.placedInstances)
+        ? this.state.placedInstances
+        : [];
       const base = existingSameInstances.length === 0
         ? this.getItemPosition(itemId)
         : (item?.defaultPos ? { ...item.defaultPos } : this.getItemPosition(itemId));
 
+      const isWallOrSill = base.y <= 170;
+
+      // 첫 번째 인스턴스이고 주변에 겹치는 배치물이 없으면 원래 기본 위치 그대로 배치
       if (existingSameInstances.length === 0) {
-        return { x: Math.round(base.x * 10) / 10, y: Math.round(base.y * 10) / 10 };
+        const collidesAny = allPlaced.some(
+          (inst) => Math.hypot((inst.x || 0) - base.x, (inst.y || 0) - base.y) < 22
+        );
+        if (!collidesAny) {
+          return { x: Math.round(base.x * 10) / 10, y: Math.round(base.y * 10) / 10 };
+        }
       }
 
-      const isWallOrSill = base.y <= 170;
       const candidates = isWallOrSill
         ? [
             { dx: 46, dy: 0 },
             { dx: -46, dy: 0 },
-            { dx: 82, dy: 0 },
-            { dx: -82, dy: 0 },
-            { dx: 26, dy: 0 }
+            { dx: 84, dy: 0 },
+            { dx: -84, dy: 0 },
+            { dx: 120, dy: 0 },
+            { dx: -120, dy: 0 },
+            { dx: 26, dy: 0 },
+            { dx: -26, dy: 0 }
           ]
         : [
-            { dx: 48, dy: 6 },
-            { dx: -48, dy: 10 },
-            { dx: 76, dy: -8 },
-            { dx: -76, dy: -6 },
-            { dx: 30, dy: 18 }
+            { dx: 52, dy: 8 },
+            { dx: -52, dy: 12 },
+            { dx: 84, dy: -10 },
+            { dx: -84, dy: -8 },
+            { dx: 34, dy: 38 },
+            { dx: -34, dy: 42 },
+            { dx: 96, dy: 48 },
+            { dx: -96, dy: 46 },
+            { dx: 0, dy: 64 },
+            { dx: 64, dy: 82 },
+            { dx: -64, dy: 82 },
+            { dx: 120, dy: 24 },
+            { dx: -120, dy: 24 },
+            { dx: 44, dy: -46 },
+            { dx: -44, dy: -46 }
           ];
 
       for (const offset of candidates) {
         const cx = Math.max(46, Math.min(334, base.x + offset.dx));
         const cy = isWallOrSill
           ? base.y
-          : Math.max(196, Math.min(334, base.y + offset.dy));
-        const tooClose = existingSameInstances.some(
-          (inst) => Math.hypot((inst.x || 0) - cx, (inst.y || 0) - cy) < 26
+          : Math.max(194, Math.min(430, base.y + offset.dy));
+        const tooClose = allPlaced.some(
+          (inst) => Math.hypot((inst.x || 0) - cx, (inst.y || 0) - cy) < 28
         );
         if (!tooClose) {
           return { x: Math.round(cx * 10) / 10, y: Math.round(cy * 10) / 10 };
         }
       }
 
+      // 최대 30개 배치 시에도 거실 전역에 고르게 분산되도록 여유 공간 탐색
+      if (!isWallOrSill) {
+        const floorGrid = [
+          { x: 64, y: 214 }, { x: 130, y: 214 }, { x: 196, y: 214 }, { x: 262, y: 214 }, { x: 320, y: 214 },
+          { x: 64, y: 274 }, { x: 130, y: 274 }, { x: 196, y: 274 }, { x: 262, y: 274 }, { x: 320, y: 274 },
+          { x: 64, y: 336 }, { x: 130, y: 336 }, { x: 196, y: 336 }, { x: 262, y: 336 }, { x: 320, y: 336 },
+          { x: 64, y: 398 }, { x: 130, y: 398 }, { x: 196, y: 398 }, { x: 262, y: 398 }, { x: 320, y: 398 }
+        ];
+        let bestSpot = floorGrid[0];
+        let bestMinDist = -1;
+        for (const pt of floorGrid) {
+          let minDist = Infinity;
+          for (const inst of allPlaced) {
+            const d = Math.hypot((inst.x || 0) - pt.x, (inst.y || 0) - pt.y);
+            if (d < minDist) minDist = d;
+          }
+          if (minDist > bestMinDist) {
+            bestMinDist = minDist;
+            bestSpot = pt;
+          }
+        }
+        return { x: bestSpot.x, y: bestSpot.y };
+      }
+
       const fallbackX = Math.max(46, Math.min(334, base.x + (existingSameInstances.length % 2 === 1 ? 42 : -42)));
-      const fallbackY = isWallOrSill ? base.y : Math.max(196, Math.min(334, base.y + 8));
-      return { x: Math.round(fallbackX * 10) / 10, y: Math.round(fallbackY * 10) / 10 };
+      return { x: Math.round(fallbackX * 10) / 10, y: Math.round(base.y * 10) / 10 };
     }
 
     placeOneInstance(itemId) {

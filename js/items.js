@@ -8,14 +8,19 @@
   const PetFocus = (global.PetFocus = global.PetFocus || {});
 
   const MAX_PLACED_SLOTS = 10;
-  const ABSOLUTE_MAX_SLOTS = 20;
+  const ABSOLUTE_MAX_SLOTS = 30;
   const MAX_OWNED_PER_ITEM = 3;
   const SLOT_EXPANSION_TIERS = [
     { step: 1, from: 10, to: 12, delta: 2, cost: 150 },
     { step: 2, from: 12, to: 14, delta: 2, cost: 250 },
     { step: 3, from: 14, to: 16, delta: 2, cost: 350 },
     { step: 4, from: 16, to: 18, delta: 2, cost: 450 },
-    { step: 5, from: 18, to: 20, delta: 2, cost: 550 }
+    { step: 5, from: 18, to: 20, delta: 2, cost: 550 },
+    { step: 6, from: 20, to: 22, delta: 2, cost: 650 },
+    { step: 7, from: 22, to: 24, delta: 2, cost: 750 },
+    { step: 8, from: 24, to: 26, delta: 2, cost: 850 },
+    { step: 9, from: 26, to: 28, delta: 2, cost: 950 },
+    { step: 10, from: 28, to: 30, delta: 2, cost: 1050 }
   ];
 
   const SHOP_CATEGORIES = [
@@ -641,19 +646,18 @@
         <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g transform="translate(50, 72) scale(0.68)">
             <rect x="-36" y="-6" width="72" height="6" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2.2"/>
-            <rect x="-27" y="-34" width="26" height="28" rx="3" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="2.2"/>
-            <path d="M-19 -6 L-19 -20 A5.5 5.5 0 0 1 -8 -20 L-8 -6 Z" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2"/>
-            <rect x="11" y="-56" width="7" height="50" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="2"/>
-            <line x1="11" y1="-46" x2="18" y2="-43" stroke="#1F1E1D" stroke-width="1.5"/>
-            <line x1="11" y1="-36" x2="18" y2="-33" stroke="#1F1E1D" stroke-width="1.5"/>
-            <line x1="11" y1="-26" x2="18" y2="-23" stroke="#1F1E1D" stroke-width="1.5"/>
-            <rect x="-32" y="-58" width="32" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2.1"/>
-            <rect x="-3" y="-62" width="35" height="6" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2.1"/>
-            <rect x="-12" y="-88" width="6.5" height="30" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="2"/>
-            <path d="M-29 -94 L11 -94 L8 -88 L-26 -88 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="2.1" stroke-linejoin="round"/>
-            <rect x="-31" y="-96" width="44" height="4.5" rx="2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2"/>
-            <line x1="25" y1="-56" x2="25" y2="-45" stroke="#1F1E1D" stroke-width="1.6"/>
-            <circle cx="25" cy="-42" r="3.6" fill="#E99A7E" stroke="#1F1E1D" stroke-width="1.6"/>
+            <rect x="-20" y="-23" width="6.5" height="17" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="2"/>
+            <rect x="-34" y="-28" width="34" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2.1"/>
+            <rect x="13.5" y="-54.5" width="7" height="48.5" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="2"/>
+            <line x1="13.5" y1="-44" x2="20.5" y2="-41" stroke="#1F1E1D" stroke-width="1.5"/>
+            <line x1="13.5" y1="-34" x2="20.5" y2="-31" stroke="#1F1E1D" stroke-width="1.5"/>
+            <line x1="13.5" y1="-24" x2="20.5" y2="-21" stroke="#1F1E1D" stroke-width="1.5"/>
+            <rect x="0" y="-60" width="34" height="5.5" rx="2.5" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2.1"/>
+            <rect x="-15" y="-88" width="6.5" height="60" fill="#F5EBDC" stroke="#1F1E1D" stroke-width="2"/>
+            <path d="M-31 -94 L7 -94 L4 -88 L-28 -88 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="2.1" stroke-linejoin="round"/>
+            <rect x="-33" y="-96" width="42" height="4.2" rx="2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="2"/>
+            <line x1="27" y1="-54.5" x2="27" y2="-44" stroke="#1F1E1D" stroke-width="1.6"/>
+            <circle cx="27" cy="-41" r="3.4" fill="#E99A7E" stroke="#1F1E1D" stroke-width="1.6"/>
           </g>
         </svg>
       `

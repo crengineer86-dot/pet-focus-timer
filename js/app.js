@@ -272,17 +272,15 @@
       this.calendarMonthNavEl = document.getElementById("calendar-month-nav");
       this.calMonthLabelEl = document.getElementById("cal-month-label");
       this.btnCalNextEl = document.getElementById("btn-cal-next");
-      this.graphPeriodTabsEl = document.getElementById("graph-period-tabs");
-      this.btnGraphPrevEl = document.getElementById("btn-graph-prev");
-      this.btnGraphNextEl = document.getElementById("btn-graph-next");
-      this.graphPeriodLabelEl = document.getElementById("graph-period-label");
-      this.graphPeriodTotalEl = document.getElementById("graph-period-total");
       this.vizBodyCalendarEl = document.getElementById("viz-body-calendar");
       this.calendarDaysGridEl = document.getElementById("calendar-days-grid");
       this.vizBodyGraphEl = document.getElementById("viz-body-graph");
+      this.weeklyChartTotalRowEl = document.getElementById("weekly-chart-total-row");
+      this.weeklyChartTotalEl = document.getElementById("weekly-chart-total");
       this.weeklyBarChartEl = document.getElementById("weekly-bar-chart");
 
       this.timelineFilterTitleEl = document.getElementById("timeline-filter-title");
+      this.timelineSummaryMetaEl = document.getElementById("timeline-summary-meta");
       this.btnResetDateFilterEl = document.getElementById("btn-reset-date-filter");
       this.focusTimelineListEl = document.getElementById("focus-timeline-list");
 
@@ -675,7 +673,7 @@
         }
       });
 
-      // [2. 뷰 전환 서브 탭 (📅 달력형 | 📈 그래프형)]
+      // [2. 통합 상단 3분할 세그먼트 토글 (달력 | 주간 | 월간)]
       this.historyVizSubtabsEl?.addEventListener("click", (e) => {
         const btn = e.target.closest(".viz-subtab");
         if (!btn) return;
@@ -685,31 +683,21 @@
         }
       });
 
-      // 달력 이전/다음 달 이동
+      // 통합 기간 이전/다음 이동 (< >): 주간 모드에서는 주 단위, 달력/월간 모드에서는 월 단위 이동
       document.getElementById("btn-cal-prev")?.addEventListener("click", () => {
-        this.changeCalendarMonth(-1);
-      });
-
-      document.getElementById("btn-cal-next")?.addEventListener("click", () => {
-        this.changeCalendarMonth(1);
-      });
-
-      // 그래프 주간/월간 전환 및 기간 이동 (< >)
-      this.graphPeriodTabsEl?.addEventListener("click", (e) => {
-        const btn = e.target.closest(".graph-period-tab");
-        if (!btn) return;
-        const period = btn.getAttribute("data-graph-period");
-        if (period) {
-          this.switchGraphPeriodMode(period);
+        if (this.historyVizMode === "weekly") {
+          this.navigateGraphPeriod(-1);
+        } else {
+          this.changeCalendarMonth(-1);
         }
       });
 
-      this.btnGraphPrevEl?.addEventListener("click", () => {
-        this.navigateGraphPeriod(-1);
-      });
-
-      this.btnGraphNextEl?.addEventListener("click", () => {
-        this.navigateGraphPeriod(1);
+      document.getElementById("btn-cal-next")?.addEventListener("click", () => {
+        if (this.historyVizMode === "weekly") {
+          this.navigateGraphPeriod(1);
+        } else {
+          this.changeCalendarMonth(1);
+        }
       });
 
       // 날짜 필터 해제 (전체 내역 보기)
@@ -2327,7 +2315,12 @@
     }
 
     switchHistoryVizMode(mode) {
-      this.historyVizMode = mode === "graph" ? "graph" : "calendar";
+      const normalized =
+        mode === "weekly" || mode === "monthly" ? mode : "calendar";
+      this.historyVizMode = normalized;
+      if (normalized === "weekly" || normalized === "monthly") {
+        this.graphPeriodMode = normalized;
+      }
 
       this.historyVizSubtabsEl?.querySelectorAll(".viz-subtab").forEach((btn) => {
         const isMatch = btn.getAttribute("data-viz-mode") === this.historyVizMode;
@@ -2337,24 +2330,16 @@
 
       const isCal = this.historyVizMode === "calendar";
       this.vizBodyCalendarEl?.classList.toggle("hidden", !isCal);
-      this.calendarMonthNavEl?.classList.toggle("hidden", !isCal);
-      this.graphPeriodTabsEl?.classList.toggle("hidden", isCal);
       this.vizBodyGraphEl?.classList.toggle("hidden", isCal);
 
+      if (normalized === "monthly") {
+        this.selectedFilterDate = null;
+      }
       this.renderReceiptModalContent();
     }
 
     switchGraphPeriodMode(period) {
-      this.graphPeriodMode = period === "monthly" ? "monthly" : "weekly";
-
-      this.graphPeriodTabsEl?.querySelectorAll(".graph-period-tab").forEach((btn) => {
-        const isMatch = btn.getAttribute("data-graph-period") === this.graphPeriodMode;
-        btn.classList.toggle("active", isMatch);
-        btn.setAttribute("aria-selected", String(isMatch));
-      });
-
-      this.selectedFilterDate = null;
-      this.renderReceiptModalContent();
+      this.switchHistoryVizMode(period === "monthly" ? "monthly" : "weekly");
     }
 
     navigateGraphPeriod(delta) {
@@ -2514,11 +2499,13 @@
 
       const year = this.calYear;
       const month = this.calMonth;
-      if (this.calMonthLabelEl) {
-        this.calMonthLabelEl.textContent = `${year}. ${String(month + 1).padStart(2, "0")}`;
-      }
-      if (this.btnCalNextEl) {
-        this.btnCalNextEl.disabled = this.isViewingCurrentMonth();
+      if (this.historyVizMode === "calendar") {
+        if (this.calMonthLabelEl) {
+          this.calMonthLabelEl.textContent = `${year}.${String(month + 1).padStart(2, "0")}`;
+        }
+        if (this.btnCalNextEl) {
+          this.btnCalNextEl.disabled = this.isViewingCurrentMonth();
+        }
       }
 
       const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0(일) ~ 6(토)
@@ -2612,15 +2599,16 @@
           });
         }
 
-        if (this.graphPeriodLabelEl) {
-          this.graphPeriodLabelEl.textContent = `${year}년 ${month + 1}월`;
+        if (this.historyVizMode === "monthly") {
+          if (this.calMonthLabelEl) {
+            this.calMonthLabelEl.textContent = `${year}.${String(month + 1).padStart(2, "0")}`;
+          }
+          if (this.btnCalNextEl) {
+            this.btnCalNextEl.disabled = isCurrentMonth;
+          }
         }
-        if (this.graphPeriodTotalEl) {
-          this.graphPeriodTotalEl.textContent = `합계 ${this.formatHoursAndMinutes(totalMonthMins)}`;
-        }
-        if (this.btnGraphNextEl) {
-          this.btnGraphNextEl.disabled = isCurrentMonth;
-        }
+        // 월간 뷰는 하단 'OO월 집중 내역' 헤더에 총 시간이 이미 표시되므로 상단 합계 행은 숨김
+        this.weeklyChartTotalRowEl?.classList.add("hidden");
 
         const periodMax = Math.max(0, ...buckets.map((b) => b.mins));
         const scaleMax = Math.max(30, periodMax);
@@ -2674,14 +2662,24 @@
         });
       }
 
-      if (this.graphPeriodLabelEl) {
-        this.graphPeriodLabelEl.textContent = `${PetFocus.formatDateMD(monday)} ~ ${PetFocus.formatDateMD(sunday)}`;
+      if (this.historyVizMode === "weekly") {
+        // 해당 주(월~일)의 목요일 기준 월/주차 계산 (예: 11월 4주)
+        const thursday = new Date(monday);
+        thursday.setDate(monday.getDate() + 3);
+        const weekMonth = thursday.getMonth() + 1;
+        const weekOfMonth = Math.floor((thursday.getDate() - 1) / 7) + 1;
+        if (this.calMonthLabelEl) {
+          this.calMonthLabelEl.textContent = `${weekMonth}월 ${weekOfMonth}주`;
+        }
+        if (this.btnCalNextEl) {
+          this.btnCalNextEl.disabled = this.graphWeekOffset >= 0;
+        }
       }
-      if (this.graphPeriodTotalEl) {
-        this.graphPeriodTotalEl.textContent = `합계 ${this.formatHoursAndMinutes(totalWeekMins)}`;
+      if (this.weeklyChartTotalRowEl) {
+        this.weeklyChartTotalRowEl.classList.remove("hidden");
       }
-      if (this.btnGraphNextEl) {
-        this.btnGraphNextEl.disabled = this.graphWeekOffset >= 0;
+      if (this.weeklyChartTotalEl) {
+        this.weeklyChartTotalEl.textContent = `주간 합계 ${this.formatHoursAndMinutes(totalWeekMins)}`;
       }
 
       const periodMax = Math.max(0, ...days.map((d) => d.mins));
@@ -2747,7 +2745,7 @@
         const mNum = Number(mStr) || currentMonthNum;
         const dNum = Number(dStr) || 1;
         if (this.timelineFilterTitleEl) {
-          this.timelineFilterTitleEl.textContent = `${mNum}월 ${dNum}일 집중 내역 (총 ${filteredLogs.length}건)`;
+          this.timelineFilterTitleEl.textContent = `${mNum}월 ${dNum}일 집중 내역`;
         }
         this.btnResetDateFilterEl?.classList.remove("hidden");
         emptyMessage = "선택한 날짜에 집중 기록이 아직 없어요.";
@@ -2756,10 +2754,18 @@
           (l) => typeof l.date === "string" && l.date.startsWith(monthPrefix)
         );
         if (this.timelineFilterTitleEl) {
-          this.timelineFilterTitleEl.textContent = `${currentMonthNum}월 집중 내역 (총 ${filteredLogs.length}건)`;
+          this.timelineFilterTitleEl.textContent = `${currentMonthNum}월 집중 내역`;
         }
         this.btnResetDateFilterEl?.classList.add("hidden");
         emptyMessage = `${currentMonthNum}월 집중 기록이 아직 없어요.`;
+      }
+
+      const totalFilteredMins = filteredLogs.reduce(
+        (acc, l) => acc + (Number(l.minutes) || 0),
+        0
+      );
+      if (this.timelineSummaryMetaEl) {
+        this.timelineSummaryMetaEl.textContent = `총 ${filteredLogs.length}건 · ${this.formatHoursAndMinutes(totalFilteredMins)}`;
       }
 
       if (filteredLogs.length === 0) {
@@ -2771,13 +2777,26 @@
         return;
       }
 
+      const padTwo = (val) => String(val || "0").padStart(2, "0");
       this.focusTimelineListEl.innerHTML = filteredLogs
         .map((log) => {
-          const md = log.displayDate || (log.date ? log.date.slice(5).replace("-", ".") : "");
+          let md = "";
+          if (typeof log.date === "string" && log.date.includes("-")) {
+            const parts = log.date.split("-");
+            md = `${padTwo(parts[1])}.${padTwo(parts[2])}`;
+          } else if (log.displayDate) {
+            const parts = String(log.displayDate).split(".");
+            md = parts.length === 2 ? `${padTwo(parts[0])}.${padTwo(parts[1])}` : String(log.displayDate);
+          }
+          let timeStr = String(log.time || "00:00");
+          if (timeStr.includes(":")) {
+            const [hh, mm] = timeStr.split(":");
+            timeStr = `${padTwo(hh)}:${padTwo(mm)}`;
+          }
           return `
             <div class="timeline-log-item">
               <div class="timeline-log-left">
-                <span class="timeline-log-datetime">${md} ${log.time}</span>
+                <span class="timeline-log-datetime">${md} ${timeStr}</span>
                 <span class="timeline-log-label">${log.label || `${log.minutes}분 집중 완료`}</span>
               </div>
               <span class="timeline-log-reward">🦴 +${formatBones(log.reward)}</span>
@@ -2855,7 +2874,14 @@
         this.clipRoundedRect(ctx, photoX, photoY, photoW, photoH, 18);
         ctx.fillStyle = "#FEF9F1";
         ctx.fillRect(photoX, photoY, photoW, photoH);
-        ctx.drawImage(img, photoX, photoY, photoW, photoH);
+        const srcW = img.naturalWidth || 380;
+        const srcH = img.naturalHeight || 576;
+        const fitScale = Math.min(photoW / srcW, photoH / srcH);
+        const drawW = srcW * fitScale;
+        const drawH = srcH * fitScale;
+        const drawX = photoX + (photoW - drawW) / 2;
+        const drawY = photoY + (photoH - drawH) / 2;
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
         ctx.restore();
         URL.revokeObjectURL(svgUrl);
 
