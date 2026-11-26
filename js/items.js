@@ -11,16 +11,16 @@
   const ABSOLUTE_MAX_SLOTS = 30;
   const MAX_OWNED_PER_ITEM = 3;
   const SLOT_EXPANSION_TIERS = [
-    { step: 1, from: 10, to: 12, delta: 2, cost: 150 },
-    { step: 2, from: 12, to: 14, delta: 2, cost: 250 },
-    { step: 3, from: 14, to: 16, delta: 2, cost: 350 },
-    { step: 4, from: 16, to: 18, delta: 2, cost: 450 },
-    { step: 5, from: 18, to: 20, delta: 2, cost: 550 },
-    { step: 6, from: 20, to: 22, delta: 2, cost: 650 },
-    { step: 7, from: 22, to: 24, delta: 2, cost: 750 },
-    { step: 8, from: 24, to: 26, delta: 2, cost: 850 },
-    { step: 9, from: 26, to: 28, delta: 2, cost: 950 },
-    { step: 10, from: 28, to: 30, delta: 2, cost: 1050 }
+    { step: 1, from: 10, to: 12, delta: 2, cost: 50 },
+    { step: 2, from: 12, to: 14, delta: 2, cost: 100 },
+    { step: 3, from: 14, to: 16, delta: 2, cost: 150 },
+    { step: 4, from: 16, to: 18, delta: 2, cost: 200 },
+    { step: 5, from: 18, to: 20, delta: 2, cost: 250 },
+    { step: 6, from: 20, to: 22, delta: 2, cost: 300 },
+    { step: 7, from: 22, to: 24, delta: 2, cost: 350 },
+    { step: 8, from: 24, to: 26, delta: 2, cost: 400 },
+    { step: 9, from: 26, to: 28, delta: 2, cost: 450 },
+    { step: 10, from: 28, to: 30, delta: 2, cost: 500 }
   ];
 
   const SHOP_CATEGORIES = [
