@@ -738,12 +738,17 @@
         : (item?.defaultPos ? { ...item.defaultPos } : this.getItemPosition(itemId));
 
       const isWallOrSill = base.y <= 170;
+      // 거실 우측 고정 원목 사다리(x=291, y=160~248)와 겹치는 영역 판정
+      const overlapsFixedLadder = (cx, cy) =>
+        cx >= 268 && cx <= 316 && cy >= 156 && cy <= 258;
 
-      // 첫 번째 인스턴스이고 주변에 겹치는 배치물이 없으면 원래 기본 위치 그대로 배치
+      // 첫 번째 인스턴스이고 주변에 겹치는 배치물·사다리가 없으면 원래 기본 위치 그대로 배치
       if (existingSameInstances.length === 0) {
-        const collidesAny = allPlaced.some(
-          (inst) => Math.hypot((inst.x || 0) - base.x, (inst.y || 0) - base.y) < 22
-        );
+        const collidesAny =
+          overlapsFixedLadder(base.x, base.y) ||
+          allPlaced.some(
+            (inst) => Math.hypot((inst.x || 0) - base.x, (inst.y || 0) - base.y) < 22
+          );
         if (!collidesAny) {
           return { x: Math.round(base.x * 10) / 10, y: Math.round(base.y * 10) / 10 };
         }
@@ -783,6 +788,7 @@
         const cy = isWallOrSill
           ? base.y
           : Math.max(194, Math.min(430, base.y + offset.dy));
+        if (overlapsFixedLadder(cx, cy)) continue;
         const tooClose = allPlaced.some(
           (inst) => Math.hypot((inst.x || 0) - cx, (inst.y || 0) - cy) < 28
         );
@@ -791,13 +797,13 @@
         }
       }
 
-      // 최대 30개 배치 시에도 거실 전역에 고르게 분산되도록 여유 공간 탐색
+      // 최대 30개 배치 시에도 거실 전역에 고르게 분산되도록 여유 공간 탐색 (우측 고정 사다리 영역 제외)
       if (!isWallOrSill) {
         const floorGrid = [
-          { x: 64, y: 214 }, { x: 130, y: 214 }, { x: 196, y: 214 }, { x: 262, y: 214 }, { x: 320, y: 214 },
-          { x: 64, y: 274 }, { x: 130, y: 274 }, { x: 196, y: 274 }, { x: 262, y: 274 }, { x: 320, y: 274 },
-          { x: 64, y: 336 }, { x: 130, y: 336 }, { x: 196, y: 336 }, { x: 262, y: 336 }, { x: 320, y: 336 },
-          { x: 64, y: 398 }, { x: 130, y: 398 }, { x: 196, y: 398 }, { x: 262, y: 398 }, { x: 320, y: 398 }
+          { x: 64, y: 214 }, { x: 126, y: 214 }, { x: 188, y: 214 }, { x: 244, y: 214 }, { x: 334, y: 214 },
+          { x: 64, y: 274 }, { x: 130, y: 274 }, { x: 196, y: 274 }, { x: 256, y: 274 }, { x: 332, y: 274 },
+          { x: 64, y: 336 }, { x: 130, y: 336 }, { x: 196, y: 336 }, { x: 262, y: 336 }, { x: 326, y: 336 },
+          { x: 64, y: 398 }, { x: 130, y: 398 }, { x: 196, y: 398 }, { x: 262, y: 398 }, { x: 326, y: 398 }
         ];
         let bestSpot = floorGrid[0];
         let bestMinDist = -1;

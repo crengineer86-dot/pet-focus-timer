@@ -21,6 +21,21 @@
   const WINDOW_SILL_Y = 160;
   const FLOOR_MIN_Y = 188;
 
+  // 거실 우측 창틀(2층) ↔ 바닥(1층) 연결 고정 원목 사다리 좌표
+  const LADDER_X = 291;
+  const LADDER_TOP_Y = WINDOW_SILL_Y; // 160
+  const LADDER_BOTTOM_Y = 248;
+
+  // 소등 시 웜 다크 모드에서 은은한 원형 발광(radial glow)을 연출하는 상점 조명 소품
+  const LAMP_ITEM_IDS = new Set([
+    "stand_lamp",
+    "cloud_wall_lamp",
+    "crescent_mood_lamp",
+    "mushroom_stand_lamp",
+    "starlight_garland",
+    "aroma_candle"
+  ]);
+
   // 동물별 이동/휴식 영역 분류
   const GROUND_ONLY_PETS = new Set([
     "living_room_dog",
@@ -785,20 +800,109 @@
   function getSharedLightingDefs(prefix = "") {
     return `
       <radialGradient id="${prefix}lampNaturalGlowGrad" cx="50%" cy="46%" r="50%">
-        <stop offset="0%" stop-color="#FFD460" stop-opacity="0.86"/>
-        <stop offset="35%" stop-color="#FFC254" stop-opacity="0.54"/>
-        <stop offset="68%" stop-color="#FFD480" stop-opacity="0.22"/>
-        <stop offset="100%" stop-color="#FEF9F1" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#FFD86B" stop-opacity="0.88"/>
+        <stop offset="38%" stop-color="#FFBE4F" stop-opacity="0.52"/>
+        <stop offset="72%" stop-color="#FFA940" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#FF9B30" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="${prefix}lampCoreGlowGrad" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#FFF09E" stop-opacity="0.95"/>
+        <stop offset="0%" stop-color="#FFF2AE" stop-opacity="0.96"/>
         <stop offset="55%" stop-color="#FFCA5C" stop-opacity="0.52"/>
-        <stop offset="100%" stop-color="#FEF9F1" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#FFB245" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="${prefix}lampDarkAuraGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FFE082" stop-opacity="0.56"/>
+        <stop offset="42%" stop-color="#FFB74D" stop-opacity="0.28"/>
+        <stop offset="76%" stop-color="#E5893C" stop-opacity="0.10"/>
+        <stop offset="100%" stop-color="#D97736" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="${prefix}ceilingLightConeGrad" cx="50%" cy="15%" r="65%">
+        <stop offset="0%" stop-color="#FFF3C4" stop-opacity="0.52"/>
+        <stop offset="55%" stop-color="#FFE29A" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="#FFE29A" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="${prefix}sunbeamGrad" cx="50%" cy="30%" r="60%">
         <stop offset="0%" stop-color="#FFFDF8" stop-opacity="0.6"/>
         <stop offset="100%" stop-color="#FEF9F1" stop-opacity="0"/>
       </radialGradient>
+    `;
+  }
+
+  function getWindowDarkAmbientGlowMarkup(viewId, prefix = "") {
+    const palettes = {
+      view_starry_night: { inner: "#D8E4FF", mid: "#8AA5DF", op1: 0.34, op2: 0.14 },
+      view_firefly_night: { inner: "#E7F39C", mid: "#9EC26B", op1: 0.34, op2: 0.14 },
+      view_autumn_sunset: { inner: "#FFC88A", mid: "#E58B52", op1: 0.36, op2: 0.14 },
+      view_cherry_blossom: { inner: "#FFD8E4", mid: "#E8A2B8", op1: 0.30, op2: 0.12 },
+      view_pink_dawn: { inner: "#FFD9C4", mid: "#E39B9B", op1: 0.32, op2: 0.12 },
+      view_after_rainbow: { inner: "#FFE8B8", mid: "#A9D2E8", op1: 0.28, op2: 0.11 },
+      view_cozy_snow: { inner: "#E8F0FA", mid: "#A8BED6", op1: 0.30, op2: 0.12 },
+      view_gentle_rain: { inner: "#C8DDF0", mid: "#7F9DB8", op1: 0.26, op2: 0.10 },
+      view_summer_leaves: { inner: "#DCEEC2", mid: "#8CB374", op1: 0.26, op2: 0.10 },
+      view_sunny_clouds: { inner: "#FFF0C6", mid: "#E8C588", op1: 0.30, op2: 0.12 }
+    };
+    const p = palettes[viewId] || { inner: "#F5E4C8", mid: "#C8A984", op1: 0.22, op2: 0.08 };
+    const gradId = `${prefix}windowDarkAmbientGrad`;
+    return `
+      <defs>
+        <radialGradient id="${gradId}" cx="50%" cy="46%" r="54%">
+          <stop offset="0%" stop-color="${p.inner}" stop-opacity="${p.op1}" />
+          <stop offset="52%" stop-color="${p.mid}" stop-opacity="${p.op2}" />
+          <stop offset="100%" stop-color="${p.mid}" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="190" cy="94" rx="134" ry="112" fill="url(#${gradId})" />
+    `;
+  }
+
+  function getFixedWoodenLadderMarkup() {
+    // 거실 우측 1층 바닥(y=248)과 2층 창틀 가로선(y=160)을 잇는 미니멀 선화 원목 사다리
+    const xL = LADDER_X - 8.5; // 282.5
+    const xR = LADDER_X + 8.5; // 299.5
+    const rungsY = [176, 193, 210, 227, 241];
+    const rungsHtml = rungsY
+      .map(
+        (ry) =>
+          `<rect class="ladder-rung" x="${xL + 2}" y="${ry - 1.6}" width="${xR - xL - 4}" height="3.2" rx="1.2" fill="#E5D2B5" stroke="#1F1E1D" stroke-width="1.35" />`
+      )
+      .join("");
+    return `
+      <g id="fixed-wooden-ladder" style="pointer-events:none;">
+        <!-- 창틀 선반에 걸리는 상단 원목 고리 -->
+        <path class="ladder-hook" d="M${xL + 1.5} ${LADDER_TOP_Y} L${xL + 1.5} ${LADDER_TOP_Y - 2.5} Q${xL + 1.5} ${LADDER_TOP_Y - 4.2} ${xL + 3.2} ${LADDER_TOP_Y - 4.2}" fill="none" stroke="#1F1E1D" stroke-width="1.45" stroke-linecap="round" />
+        <path class="ladder-hook" d="M${xR - 1.5} ${LADDER_TOP_Y} L${xR - 1.5} ${LADDER_TOP_Y - 2.5} Q${xR - 1.5} ${LADDER_TOP_Y - 4.2} ${xR - 3.2} ${LADDER_TOP_Y - 4.2}" fill="none" stroke="#1F1E1D" stroke-width="1.45" stroke-linecap="round" />
+        <!-- 가로 발판 5단 -->
+        ${rungsHtml}
+        <!-- 좌·우 원목 기둥 -->
+        <rect class="ladder-rail" x="${xL - 1.5}" y="${LADDER_TOP_Y}" width="3.4" height="${LADDER_BOTTOM_Y - LADDER_TOP_Y}" rx="1.4" fill="#E5D2B5" stroke="#1F1E1D" stroke-width="1.45" />
+        <rect class="ladder-rail" x="${xR - 1.9}" y="${LADDER_TOP_Y}" width="3.4" height="${LADDER_BOTTOM_Y - LADDER_TOP_Y}" rx="1.4" fill="#E5D2B5" stroke="#1F1E1D" stroke-width="1.45" />
+      </g>
+    `;
+  }
+
+  function getCeilingPendantLightMarkup() {
+    // 창문 우측 상단 천장(x=278)에서 내려오는 고정형 펜던트 거실등 + 손잡이 당김줄
+    const cx = 278;
+    return `
+      <g id="ceiling-pendant-light" role="button" tabindex="0" aria-label="거실 천장등 켜기/끄기" style="cursor:pointer; touch-action:none; pointer-events:auto;">
+        <!-- 점등 시 은은한 하향 빛 번짐 -->
+        <ellipse id="ceiling-light-cone" cx="${cx}" cy="44" rx="44" ry="30" fill="url(#ceilingLightConeGrad)" style="pointer-events:none;" />
+        <!-- 천장 연결 얇은 전선 -->
+        <line class="ceiling-stroke" x1="${cx}" y1="${VIEWBOX_MIN_Y - 8}" x2="${cx}" y2="2" stroke="#1F1E1D" stroke-width="1.5" stroke-linecap="round" />
+        <!-- 소켓 캡 -->
+        <rect class="ceiling-stroke ceiling-shade-fill" x="${cx - 3.5}" y="1.5" width="7" height="4.5" rx="1.5" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.4" />
+        <!-- 전구 알 -->
+        <circle class="ceiling-stroke ceiling-bulb-fill" cx="${cx}" cy="18.5" r="3.4" fill="#FFE694" stroke="#1F1E1D" stroke-width="1.3" />
+        <!-- 미니멀 돔 갓 -->
+        <path class="ceiling-stroke ceiling-shade-fill" d="M${cx - 14} 17 C${cx - 14} 7.5, ${cx - 7.5} 5, ${cx} 5 C${cx + 7.5} 5, ${cx + 14} 7.5, ${cx + 14} 17 Z" fill="#FFF7E4" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
+        <!-- 당김줄 + 손잡이 구슬 (원터치 / 아래로 당겨서 조작) -->
+        <g id="ceiling-pull-cord-group">
+          <line class="ceiling-stroke" x1="${cx + 7.5}" y1="17" x2="${cx + 7.5}" y2="39" stroke="#1F1E1D" stroke-width="1.35" stroke-linecap="round" />
+          <circle class="ceiling-cord-bead" cx="${cx + 7.5}" cy="41.8" r="3.1" fill="#D97736" stroke="#1F1E1D" stroke-width="1.35" />
+        </g>
+        <!-- 터치/드래그 편의를 위한 투명 히트 영역 -->
+        <rect x="${cx - 22}" y="${VIEWBOX_MIN_Y}" width="46" height="98" fill="transparent" />
+      </g>
     `;
   }
 
@@ -1131,6 +1235,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const shadeFill = isLampLit ? "#FFECB8" : "#FEF9F1";
         return `
+          <circle class="lamp-dark-aura" cx="0" cy="-26" r="88" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="lamp-glow-group" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-26" rx="68" ry="64" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-27" rx="30" ry="26" fill="url(#lampCoreGlowGrad)" />
@@ -1283,6 +1388,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFF3C8" : "#FEF9F1";
         return `
+          <circle class="lamp-dark-aura" cx="0" cy="-2" r="68" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="light-glow-cloud_wall_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-2" rx="46" ry="34" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-2" rx="22" ry="16" fill="url(#lampCoreGlowGrad)" />
@@ -1299,6 +1405,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFE79B" : "#FEF9F1";
         return `
+          <circle class="lamp-dark-aura" cx="0" cy="-17" r="62" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="light-glow-crescent_mood_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <circle cx="0" cy="-17" r="38" fill="url(#lampNaturalGlowGrad)" />
             <circle cx="0" cy="-17" r="18" fill="url(#lampCoreGlowGrad)" />
@@ -1313,6 +1420,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFECB8" : "#FEF9F1";
         return `
+          <circle class="lamp-dark-aura" cx="0" cy="-16" r="62" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="light-glow-mushroom_stand_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-16" rx="40" ry="34" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-16" rx="19" ry="15" fill="url(#lampCoreGlowGrad)" />
@@ -1328,6 +1436,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bulbFill = isLampLit ? "#FFE688" : "#FEF9F1";
         return `
+          <ellipse class="lamp-dark-aura" cx="0" cy="8" rx="74" ry="42" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="light-glow-starlight_garland" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="8" rx="54" ry="26" fill="url(#lampNaturalGlowGrad)" />
           </g>
@@ -1448,6 +1557,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const flameDisplay = isLampLit ? "block" : "none";
         return `
+          <circle class="lamp-dark-aura" cx="0" cy="-22" r="48" fill="url(#lampDarkAuraGrad)" style="opacity:0; pointer-events:none; transition:opacity 0.45s ease;" />
           <g data-part="light-glow-aroma_candle" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <circle cx="0" cy="-23" r="28" fill="url(#lampNaturalGlowGrad)" />
             <circle cx="0" cy="-23" r="13" fill="url(#lampCoreGlowGrad)" />
@@ -1632,8 +1742,9 @@
       const FLOOR_MAT_IDS = new Set(["beige_cushion"]);
       const buildPropGroupHtml = (id) => {
         const isLit = appStorage ? appStorage.getLampLit(id) : true;
+        const lampAttr = LAMP_ITEM_IDS.has(id) ? ' data-is-lamp="true"' : "";
         return `
-          <g id="prop-${id}" class="draggable-prop" data-item-id="${id}" style="cursor:grab; display:none; touch-action:none; pointer-events:auto;">
+          <g id="prop-${id}" class="draggable-prop" data-item-id="${id}"${lampAttr} style="cursor:grab; display:none; touch-action:none; pointer-events:auto;">
             ${getItemLocalSVGMarkup(id, true, isLit)}
           </g>
         `;
@@ -1661,6 +1772,9 @@
 
         <ellipse id="scene-sunbeam" cx="190" cy="245" rx="150" ry="110" fill="url(#sunbeamGrad)" opacity="0" style="pointer-events:none;" />
 
+        <!-- ================= [소등 시 창문 주변 달빛·배경빛 은은한 발광 레이어] ================= -->
+        <g id="window-dark-glow-layer" style="pointer-events:none;"></g>
+
         <!-- ================= [창밖 풍경 레이어: 4각 창문 유리 안쪽에만 마스킹 (미착용 시 빈 창문)] ================= -->
         <g id="window-view-layer" clip-path="url(#main_windowGlassClip)" style="pointer-events:none;"></g>
 
@@ -1672,8 +1786,14 @@
           <line x1="24" y1="${WINDOW_SILL_Y}" x2="356" y2="${WINDOW_SILL_Y}" stroke="#1F1E1D" stroke-width="1.65" stroke-linecap="round" />
         </g>
 
+        <!-- ================= [거실 우측 고정 원목 사다리: 1층 바닥 ↔ 2층 창틀 가로선 연결] ================= -->
+        ${getFixedWoodenLadderMarkup()}
+
         <!-- ================= [1번 뭉게구름 맑은 날 전용: 창살을 넘어 방 안 바닥으로 비추는 은은한 햇살 내림] ================= -->
         <g id="window-sunbeam-layer" style="pointer-events:none;"></g>
+
+        <!-- ================= [거실 상단 고정형 펜던트 천장등 + 당김줄 (원터치/당기기 점등·소등)] ================= -->
+        ${getCeilingPendantLightMarkup()}
 
         <!-- ================= [드래그 시 3단 가로 창틀(y=24, 92, 160)에만 표시되는 자석 가이드선] ================= -->
         <g id="snap-guides-layer" style="pointer-events:none;">
@@ -1697,8 +1817,104 @@
         <g id="extra-instances-layer"></g>
       `;
 
+      this.roomLightsOn = true;
       this.syncPositionsFromStorage();
       this.applyPlacedItemsVisibility();
+      this.bindCeilingLightEvents();
+    }
+
+    setRoomLights(isOn, { animatePull = true, silent = false } = {}) {
+      const nextOn = Boolean(isOn);
+      this.roomLightsOn = nextOn;
+      document.body.classList.toggle("room-lights-off", !nextOn);
+
+      if (animatePull && this.svg) {
+        const cordGroup = this.svg.querySelector("#ceiling-pull-cord-group");
+        if (cordGroup) {
+          cordGroup.style.transform = "";
+          cordGroup.classList.remove("is-springing");
+          void cordGroup.getBoundingClientRect();
+          cordGroup.classList.add("is-springing");
+        }
+      }
+
+      // 소등 시 배치된 조명 소품의 아로마 캔들 불꽃도 함께 켜진 상태로 표시
+      if (!nextOn && this.svg) {
+        this.svg.querySelectorAll('[data-part="candle-flame-aroma_candle"]').forEach((fl) => {
+          fl.style.display = "block";
+        });
+      }
+
+      if (!silent && typeof this.onRoomLightChange === "function") {
+        this.onRoomLightChange(nextOn);
+      }
+    }
+
+    toggleRoomLights(opts = {}) {
+      this.setRoomLights(!this.roomLightsOn, { animatePull: true, ...opts });
+      return this.roomLightsOn;
+    }
+
+    bindCeilingLightEvents() {
+      const lampEl = this.svg?.querySelector("#ceiling-pendant-light");
+      const cordGroup = this.svg?.querySelector("#ceiling-pull-cord-group");
+      if (!lampEl || lampEl.dataset.bound === "true") return;
+      lampEl.dataset.bound = "true";
+
+      let pulling = false;
+      let startClientY = 0;
+      let maxPullY = 0;
+      let activePointerId = null;
+
+      const onPointerDown = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        e.stopPropagation();
+        pulling = true;
+        activePointerId = e.pointerId;
+        startClientY = e.clientY;
+        maxPullY = 0;
+        if (cordGroup) {
+          cordGroup.classList.remove("is-springing");
+        }
+        try {
+          lampEl.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      };
+
+      const onPointerMove = (e) => {
+        if (!pulling || (activePointerId !== null && e.pointerId !== activePointerId)) return;
+        const dy = Math.max(0, Math.min(18, (e.clientY - startClientY) * 0.55));
+        if (dy > maxPullY) maxPullY = dy;
+        if (cordGroup) {
+          cordGroup.style.transform = `translateY(${dy.toFixed(1)}px)`;
+        }
+      };
+
+      const finishPull = (e) => {
+        if (!pulling || (activePointerId !== null && e.pointerId !== activePointerId)) return;
+        pulling = false;
+        activePointerId = null;
+        if (cordGroup) {
+          cordGroup.style.transform = "";
+        }
+        // 원터치 탭 또는 아래로 당겼다 놓기 모두 즉시 점등/소등 전환 + 탄성 스프링
+        this.toggleRoomLights();
+      };
+
+      lampEl.addEventListener("pointerdown", onPointerDown);
+      lampEl.addEventListener("pointermove", onPointerMove);
+      lampEl.addEventListener("pointerup", finishPull);
+      lampEl.addEventListener("pointercancel", () => {
+        pulling = false;
+        activePointerId = null;
+        if (cordGroup) cordGroup.style.transform = "";
+      });
+      lampEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          this.toggleRoomLights();
+        }
+      });
     }
 
     clientToSvgPoint(clientX, clientY) {
@@ -2492,8 +2708,9 @@
 
       const viewLayer = this.svg.querySelector("#window-view-layer");
       const sunbeamLayer = this.svg.querySelector("#window-sunbeam-layer");
+      const darkGlowLayer = this.svg.querySelector("#window-dark-glow-layer");
       const activeViewId = getActiveWindowViewFromPlaced(this.placedItems);
-      if (this.currentWindowViewId !== activeViewId) {
+      if (this.currentWindowViewId !== activeViewId || (darkGlowLayer && !darkGlowLayer.innerHTML)) {
         this.currentWindowViewId = activeViewId;
         if (viewLayer) {
           viewLayer.innerHTML = activeViewId
@@ -2502,6 +2719,9 @@
         }
         if (sunbeamLayer) {
           sunbeamLayer.innerHTML = getWindowSunbeamOverlayMarkup(activeViewId, "main_", true);
+        }
+        if (darkGlowLayer) {
+          darkGlowLayer.innerHTML = getWindowDarkAmbientGlowMarkup(activeViewId, "main_");
         }
       }
 
@@ -2677,6 +2897,9 @@
         groupEl.setAttribute("class", "draggable-prop extra-instance-prop");
         groupEl.setAttribute("data-item-id", inst.itemId);
         groupEl.setAttribute("data-instance-id", inst.instanceId);
+        if (LAMP_ITEM_IDS.has(inst.itemId)) {
+          groupEl.setAttribute("data-is-lamp", "true");
+        }
         groupEl.setAttribute("transform", `translate(${initPos.x}, ${initPos.y})`);
         groupEl.style.cursor = "grab";
         groupEl.style.touchAction = "none";
@@ -3404,7 +3627,7 @@
       const bounds = this.getStageSvgBounds();
       const btn = this.getFocusButtonSvgMetrics();
       const bottomOffset = ITEM_BOTTOM_OFFSET[itemId] || 0;
-      const allowWindowBar = CLIMBER_PETS.has(itemId) || itemId === "cockatiel_bird";
+      const allowWindowBar = CLIMBER_PETS.has(itemId) || GROUND_ONLY_PETS.has(itemId) || itemId === "cockatiel_bird";
       const curBar = allowWindowBar ? this.getCurrentWindowBar(curX, curY, itemId) : null;
 
       if (curBar) {
@@ -3423,6 +3646,97 @@
       const baseFloorY = curY < minFloorY ? Math.max(minFloorY + 40, 260) : curY;
       const nextY = Math.max(minFloorY, Math.min(maxFloorY, baseFloorY + deltaY));
       return this.clampPositionForItem(nextX, nextY, itemId);
+    }
+
+    /**
+     * 1층 바닥 ↔ 2층 창틀 가로선 사이를 고정 원목 사다리(LADDER_X)를 통해
+     * [사다리 앞까지 걷기 → 사다리 한 칸씩 오르내리기 → 창틀/바닥 걸어서 목적지 이동] 경로로 연결
+     */
+    startLadderPath(entity, itemId, targetX, targetY, finalAction = null, isDog = false) {
+      const bottomOffset = ITEM_BOTTOM_OFFSET[itemId] || 0;
+      const curX = entity.x;
+      const curY = isDog ? entity.baseY : entity.y;
+      const sillY = WINDOW_SILL_Y - bottomOffset;
+      const ladderFootY = LADDER_BOTTOM_Y - bottomOffset;
+
+      const curIsUpper = curY + bottomOffset <= WINDOW_SILL_Y + 12;
+      const targetIsUpper = targetY + bottomOffset <= WINDOW_SILL_Y + 12;
+
+      const steps = [];
+      if (!curIsUpper && targetIsUpper) {
+        // 1층 바닥 → 사다리 하단 → 사다리 등반 → 2층 창틀 가로선 → 목적지
+        steps.push({ mode: "walk", x: LADDER_X, y: ladderFootY });
+        steps.push({ mode: "climb_ladder", x: LADDER_X, y: sillY });
+        if (targetY < sillY - 12) {
+          // 중간/상단 창틀 목표(고양이·햄스터)라면 창틀 위 목표 X 아래까지 걸은 뒤 가볍게 점프
+          const hopFromX = Math.max(134, Math.min(246, targetX));
+          steps.push({ mode: "walk", x: hopFromX, y: sillY });
+          steps.push({ mode: "jump_to", x: targetX, y: targetY });
+        } else {
+          steps.push({ mode: "walk", x: targetX, y: targetY });
+        }
+      } else if (curIsUpper && !targetIsUpper) {
+        // 2층 창틀(또는 상위 창살) → 사다리 상단 → 사다리 하강 → 1층 바닥 목적지
+        if (curY < sillY - 12) {
+          const downToSillX = Math.max(134, Math.min(246, curX));
+          steps.push({ mode: "jump_to", x: downToSillX, y: sillY });
+        }
+        steps.push({ mode: "walk", x: LADDER_X, y: sillY });
+        steps.push({ mode: "climb_ladder", x: LADDER_X, y: ladderFootY });
+        steps.push({ mode: "walk", x: targetX, y: targetY });
+      } else {
+        // 같은 층 내 이동
+        steps.push({ mode: "walk", x: targetX, y: targetY });
+      }
+
+      entity.pathQueue = steps;
+      entity.finalActionAfterPath = finalAction;
+      this.advanceEntityPath(entity, isDog);
+    }
+
+    advanceEntityPath(entity, isDog = false) {
+      if (!Array.isArray(entity.pathQueue) || entity.pathQueue.length === 0) {
+        return false;
+      }
+      const nextStep = entity.pathQueue.shift();
+      const curX = entity.x;
+      const curY = isDog ? entity.baseY : entity.y;
+
+      if (nextStep.mode === "climb_ladder") {
+        entity.targetX = nextStep.x;
+        entity.targetY = nextStep.y;
+        entity.state = "climb_ladder";
+        entity.climbPhase = 0;
+        entity.nextActionAfterWalk =
+          entity.pathQueue.length === 0 ? entity.finalActionAfterPath : null;
+        return true;
+      }
+
+      if (nextStep.mode === "jump_to" && !isDog) {
+        entity.startX = curX;
+        entity.startY = curY;
+        entity.targetX = nextStep.x;
+        entity.targetY = nextStep.y;
+        if (Math.abs(nextStep.x - curX) > 1) {
+          entity.moveDir = nextStep.x >= curX ? 1 : -1;
+        }
+        entity.nextActionAfterJump =
+          entity.pathQueue.length === 0 ? entity.finalActionAfterPath : null;
+        entity.state = "crouch_jump";
+        entity.stateTimer = 0.24;
+        return true;
+      }
+
+      // 기본 walk 스텝
+      entity.targetX = nextStep.x;
+      entity.targetY = nextStep.y;
+      if (Math.abs(nextStep.x - curX) > 1) {
+        entity.moveDir = nextStep.x >= curX ? 1 : -1;
+      }
+      entity.nextActionAfterWalk =
+        entity.pathQueue.length === 0 ? entity.finalActionAfterPath : null;
+      entity.state = "walk";
+      return true;
     }
 
     /**
@@ -3458,26 +3772,44 @@
             d.state = "rest";
             d.stateTimer = 5.5 + Math.random() * 3.5;
           } else {
-            d.targetX = target.x;
-            d.targetY = target.y;
-            d.moveDir = d.targetX >= d.x ? 1 : -1;
-            d.nextActionAfterWalk = "rest_on_cushion";
-            d.state = "walk";
+            this.startLadderPath(d, "living_room_dog", target.x, target.y, "rest_on_cushion", true);
           }
           return;
         }
       }
 
-      if (roll < 0.52) {
+      // 강아지가 사다리를 타고 2층 창틀 구경(또는 창틀에서 1층 바닥 복귀)
+      const dogBottomOffset = ITEM_BOTTOM_OFFSET.living_room_dog || 17;
+      const dogOnSill = d.baseY + dogBottomOffset <= WINDOW_SILL_Y + 12;
+      if (roll >= 0.30 && roll < 0.44) {
+        if (dogOnSill) {
+          const floorTarget = this.clampPositionForItem(
+            76 + Math.random() * 228,
+            235 + Math.random() * 95,
+            "living_room_dog"
+          );
+          this.startLadderPath(d, "living_room_dog", floorTarget.x, floorTarget.y, null, true);
+        } else {
+          const sillSpots = [92, 162, 224, 262];
+          if (this.placedItems.has("goldfish_bowl")) {
+            const fp = this.getCurrentItemPosition("goldfish_bowl");
+            sillSpots.push(Math.max(48, Math.min(332, fp.x - 26)));
+          }
+          const pickX = sillSpots[Math.floor(Math.random() * sillSpots.length)];
+          const sillTarget = this.clampPositionForItem(
+            pickX,
+            WINDOW_SILL_Y - dogBottomOffset,
+            "living_room_dog"
+          );
+          this.startLadderPath(d, "living_room_dog", sillTarget.x, sillTarget.y, null, true);
+        }
+        return;
+      }
+
+      if (roll < 0.58) {
         // 1. walk: 현재 표면(창틀 선 또는 바닥)을 따라 실제로 발을 움직여 걷기
         const target = this.pickGroundWalkTarget(d.x, d.baseY, "living_room_dog");
-        d.targetX = target.x;
-        d.targetY = target.y;
-        if (Math.abs(d.targetX - d.x) > 1) {
-          d.moveDir = d.targetX >= d.x ? 1 : -1;
-        }
-        d.nextActionAfterWalk = null;
-        d.state = "walk";
+        this.startLadderPath(d, "living_room_dog", target.x, target.y, null, true);
       } else if (roll < 0.72) {
         // 2. idle: 숨쉬기 + 눈 깜빡임 + 꼬리 살랑이기
         d.state = "idle";
@@ -3710,7 +4042,10 @@
               itemId
             );
             const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
-            if (curBar || onCatTower || Math.abs(target.y - a.y) > 45) {
+            if (curBar) {
+              // 2층 창틀에서 1층 방석/소파/텐트로 갈 때는 반드시 사다리를 타고 내려온 뒤 걸어서 이동
+              this.startLadderPath(a, itemId, target.x, target.y, "rest_on_cushion", false);
+            } else if (onCatTower || Math.abs(target.y - a.y) > 45) {
               a.startX = a.x;
               a.startY = a.y;
               a.targetX = target.x;
@@ -3733,6 +4068,7 @@
         if (roll < 0.42) {
           // 지상/창틀 보행
           const target = this.pickGroundWalkTarget(a.x, a.y, itemId);
+          a.pathQueue = [];
           a.targetX = target.x;
           a.targetY = target.y;
           if (Math.abs(target.x - a.x) > 1) a.moveDir = target.x >= a.x ? 1 : -1;
@@ -3741,7 +4077,7 @@
           return;
         }
         if (roll < 0.58) {
-          // 4각 창틀(윗틀·중간 창살·아래 창틀) 및 바닥 오르내리기 점프 (빈 벽 허공·하단 버튼 제외)
+          // 1층 바닥 ↔ 2층 창틀 오르내리기는 사다리 경로 이용, 창틀 내부(중간/윗틀)는 가벼운 점프
           const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
           let candidates = [];
           if (curBar) {
@@ -3757,36 +4093,38 @@
                 { x: 224, y: WINDOW_SILL_Y - catBottomOffset }
               ];
             } else {
-              // y === WINDOW_SILL_Y (하단 창틀 선반) -> 중간 창틀 또는 바로 아래 확장된 바닥(224)으로 가볍게 착지
+              // y === WINDOW_SILL_Y (하단 창틀 선반) -> 중간 창틀 점프 또는 사다리 타고 1층 바닥 이동
               candidates = [
                 { x: 156, y: WINDOW_MID_Y - catBottomOffset },
                 { x: 224, y: WINDOW_MID_Y - catBottomOffset },
-                { x: Math.max(70, Math.min(310, a.x + (Math.random() - 0.5) * 60)), y: 224 }
+                { x: Math.max(70, Math.min(260, 80 + Math.random() * 180)), y: 248 }
               ];
             }
           } else {
-            // 바닥이나 캣타워에 있을 때 -> 아래 창틀 선반 또는 바닥 영역으로 점프
+            // 바닥에 있을 때 -> 사다리 타고 2층 창틀 선반으로 이동
             candidates = [
               { x: 84, y: WINDOW_SILL_Y - catBottomOffset },
               { x: 156, y: WINDOW_SILL_Y - catBottomOffset },
-              { x: 294, y: WINDOW_SILL_Y - catBottomOffset },
-              { x: 190, y: 245 }
+              { x: 226, y: WINDOW_SILL_Y - catBottomOffset }
             ];
-          }
-          if (hasCatTower && towerPos) {
-            candidates.push({ x: towerPos.x - 9, y: towerPos.y - 94 });
-            candidates.push({ x: towerPos.x + 14, y: towerPos.y - 62 });
           }
           const rawPick = candidates[Math.floor(Math.random() * candidates.length)];
           const clamped = this.clampPositionForItem(rawPick.x, rawPick.y, itemId);
-          a.startX = a.x;
-          a.startY = a.y;
-          a.targetX = clamped.x;
-          a.targetY = clamped.y;
-          a.moveDir = clamped.x >= a.x ? 1 : -1;
-          a.nextActionAfterJump = null;
-          a.state = "crouch_jump";
-          a.stateTimer = 0.30;
+          const curIsUpper = a.y + catBottomOffset <= WINDOW_SILL_Y + 12;
+          const targetIsUpper = clamped.y + catBottomOffset <= WINDOW_SILL_Y + 12;
+          if (curIsUpper !== targetIsUpper) {
+            this.startLadderPath(a, itemId, clamped.x, clamped.y, null, false);
+          } else {
+            a.pathQueue = [];
+            a.startX = a.x;
+            a.startY = a.y;
+            a.targetX = clamped.x;
+            a.targetY = clamped.y;
+            a.moveDir = clamped.x >= a.x ? 1 : -1;
+            a.nextActionAfterJump = null;
+            a.state = "crouch_jump";
+            a.stateTimer = 0.30;
+          }
           return;
         }
         if (roll < 0.75) {
@@ -3825,29 +4163,14 @@
             a.state = "wheel_run";
             a.stateTimer = 3.4 + Math.random() * 2.6;
             this.wheelSpinTimer = Math.max(this.wheelSpinTimer, a.stateTimer);
-          } else if (Math.abs(rideTarget.y - a.y) > 36) {
-            // 창틀과 바닥 사이처럼 높이 차가 크면 폴짝 점프로 이동
-            a.startX = a.x;
-            a.startY = a.y;
-            a.targetX = rideTarget.x;
-            a.targetY = rideTarget.y;
-            a.moveDir = rideTarget.x >= a.x ? 1 : -1;
-            a.nextActionAfterJump = "wheel_run";
-            a.jumpProgress = 0;
-            a.jumpDuration = 0.42;
-            a.state = "jump_arc";
           } else {
-            a.targetX = rideTarget.x;
-            a.targetY = rideTarget.y;
-            a.moveDir = rideTarget.x >= a.x ? 1 : -1;
             a.pauseDuringWalk = 0;
-            a.nextActionAfterWalk = "wheel_run";
-            a.state = "walk";
+            this.startLadderPath(a, "hamster_friend", rideTarget.x, rideTarget.y, "wheel_run", false);
           }
           return;
         }
 
-        // 4각 창틀(윗틀·중간 창살·아래 창틀) ↔ 바닥 오르내리기
+        // 1층 바닥 ↔ 2층 창틀(사다리 경로) 및 창틀 내부 오르내리기
         if (roll >= 0.44 && roll < 0.56) {
           const curBar = this.getCurrentWindowBar(a.x, a.y, itemId);
           let candidates = [];
@@ -3867,7 +4190,7 @@
               candidates = [
                 { x: 156, y: WINDOW_MID_Y - hamOffset },
                 { x: 224, y: WINDOW_MID_Y - hamOffset },
-                { x: Math.max(70, Math.min(310, a.x + (Math.random() - 0.5) * 60)), y: 220 }
+                { x: Math.max(70, Math.min(260, 80 + Math.random() * 180)), y: 248 }
               ];
             }
           } else {
@@ -3879,15 +4202,22 @@
           }
           const rawPick = candidates[Math.floor(Math.random() * candidates.length)];
           const clamped = this.clampPositionForItem(rawPick.x, rawPick.y, itemId);
-          a.startX = a.x;
-          a.startY = a.y;
-          a.targetX = clamped.x;
-          a.targetY = clamped.y;
-          a.moveDir = clamped.x >= a.x ? 1 : -1;
-          a.nextActionAfterJump = null;
-          a.jumpProgress = 0;
-          a.jumpDuration = 0.42;
-          a.state = "jump_arc";
+          const curIsUpper = a.y + hamOffset <= WINDOW_SILL_Y + 12;
+          const targetIsUpper = clamped.y + hamOffset <= WINDOW_SILL_Y + 12;
+          if (curIsUpper !== targetIsUpper) {
+            this.startLadderPath(a, itemId, clamped.x, clamped.y, null, false);
+          } else {
+            a.pathQueue = [];
+            a.startX = a.x;
+            a.startY = a.y;
+            a.targetX = clamped.x;
+            a.targetY = clamped.y;
+            a.moveDir = clamped.x >= a.x ? 1 : -1;
+            a.nextActionAfterJump = null;
+            a.jumpProgress = 0;
+            a.jumpDuration = 0.42;
+            a.state = "jump_arc";
+          }
           return;
         }
       }
@@ -3896,7 +4226,32 @@
       // [D] 지상 전용 보행 동물 (웰시코기, 햄스터, 거북이, 고슴도치, 토끼):
       // 방석·소파·텐트(중복 배치 전 인스턴스 포함) 중 비어 있는 곳을 우선 선택해 낮잠(rest)
       // -----------------------------------------------------------------------
-      const floorRestSpots = [];
+        // [D] 지상 보행 동물 (웰시코기, 햄스터, 거북이, 고슴도치, 토끼):
+        // 사다리를 통해 2층 창틀 구경 ↔ 1층 바닥 복귀도 자연스럽게 이동
+        if (GROUND_ONLY_PETS.has(itemId) && roll >= 0.28 && roll < 0.40) {
+          const petBottomOffset = ITEM_BOTTOM_OFFSET[itemId] || 0;
+          const petOnSill = a.y + petBottomOffset <= WINDOW_SILL_Y + 12;
+          if (petOnSill) {
+            const floorTarget = this.clampPositionForItem(
+              76 + Math.random() * 228,
+              240 + Math.random() * 90,
+              itemId
+            );
+            this.startLadderPath(a, itemId, floorTarget.x, floorTarget.y, null, false);
+          } else {
+            const sillSpots = [86, 156, 224, 258];
+            const pickX = sillSpots[Math.floor(Math.random() * sillSpots.length)];
+            const sillTarget = this.clampPositionForItem(
+              pickX,
+              WINDOW_SILL_Y - petBottomOffset,
+              itemId
+            );
+            this.startLadderPath(a, itemId, sillTarget.x, sillTarget.y, null, false);
+          }
+          return;
+        }
+
+        const floorRestSpots = [];
       this.getAllPlacedInstancesOf("beige_cushion").forEach((p) => {
         floorRestSpots.push({ x: p.x, y: p.y - 2, instanceId: p.instanceId });
       });
@@ -4148,7 +4503,9 @@
             } else {
               a.x = a.targetX;
               a.y = a.targetY;
-              if (a.nextActionAfterWalk === "wheel_run" && this.placedItems.has("hamster_wheel")) {
+              if (this.advanceEntityPath(a, false)) {
+                // 다음 경로(사다리 등반 또는 창틀/바닥 이동)로 자연스럽게 이어짐
+              } else if (a.nextActionAfterWalk === "wheel_run" && this.placedItems.has("hamster_wheel")) {
                 a.nextActionAfterWalk = null;
                 a.state = "wheel_run";
                 a.stateTimer = 3.4 + Math.random() * 2.6; // 3.4~6초 동안 쳇바퀴 안에서 신나게 달리기
@@ -4161,6 +4518,24 @@
                 a.nextActionAfterWalk = null;
                 a.state = "idle";
                 a.stateTimer = 2.6 + Math.random() * 3.0;
+              }
+            }
+          } else if (a.state === "climb_ladder") {
+            // 고정 원목 사다리를 한 칸씩 오르내리는 등반 모션
+            const dy = a.targetY - a.y;
+            const dist = Math.abs(dy);
+            const climbSpeed = 34;
+            if (dist > 2.2) {
+              a.x = LADDER_X + Math.sin((a.climbPhase || 0) * 1.4) * 1.6;
+              a.y += Math.sign(dy) * climbSpeed * dt;
+              a.climbPhase = (a.climbPhase || 0) + dt * 11;
+              a.walkPhase += dt * 12;
+            } else {
+              a.x = LADDER_X;
+              a.y = a.targetY;
+              if (!this.advanceEntityPath(a, false)) {
+                a.state = "idle";
+                a.stateTimer = 2.4 + Math.random() * 2.5;
               }
             }
           } else if (a.state === "wheel_run") {
@@ -4202,7 +4577,9 @@
             if (a.jumpProgress >= 1) {
               a.x = a.targetX;
               a.y = a.targetY;
-              if (a.nextActionAfterJump === "cat_tower_perch") {
+              if (this.advanceEntityPath(a, false)) {
+                // 사다리 하강 등 다음 경로 스텝으로 이어짐
+              } else if (a.nextActionAfterJump === "cat_tower_perch") {
                 a.nextActionAfterJump = null;
                 if (Math.random() < 0.6) {
                   a.state = "rest"; // 캣타워 발판 위에서 식빵 굽기 & 낮잠
@@ -4450,7 +4827,7 @@
           visual.setAttribute("transform", `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`);
         }
 
-        if ((a.state === "walk" && a.pauseDuringWalk <= 0) || a.state === "wheel_run") {
+        if ((a.state === "walk" && a.pauseDuringWalk <= 0) || a.state === "wheel_run" || a.state === "climb_ladder") {
           const mult = a.state === "wheel_run" ? 3.4 : 2.4;
           const amp = a.state === "wheel_run" ? 2.4 : 1.6;
           const step = Math.sin(a.walkPhase * mult) * amp;
@@ -4976,16 +5353,19 @@
             if (dist <= 3) {
               d.x = d.targetX;
               d.baseY = d.targetY;
-              if (d.nextActionAfterWalk === "rest_on_cushion") {
+              if (this.advanceEntityPath(d, true)) {
+                // 다음 경로(사다리 등반 또는 창틀/바닥 이동)로 자연스럽게 이어짐
+              } else if (d.nextActionAfterWalk === "rest_on_cushion") {
                 d.nextActionAfterWalk = null;
                 d.state = "rest";
                 d.stateTimer = 5.5 + Math.random() * 3.5; // 베이지 방석 위에서 포근하게 낮잠
+                this.setDogLegs(0, dogGroup);
               } else {
                 d.nextActionAfterWalk = null;
                 d.state = "idle";
                 d.stateTimer = 2.8 + Math.random() * 2.5;
+                this.setDogLegs(0, dogGroup);
               }
-              this.setDogLegs(0, dogGroup);
             } else {
               if (Math.abs(dx) > 0.8) {
                 d.moveDir = dx >= 0 ? 1 : -1;
@@ -4995,6 +5375,28 @@
               d.baseY += (dy / dist) * speed * dt;
               d.walkCycle += dt * 10;
               this.setDogLegs(Math.sin(d.walkCycle) * 4.8, dogGroup);
+            }
+          } else if (d.state === "climb_ladder") {
+            // 강아지가 사다리를 한 칸씩 오르내리는 등반 모션
+            if (bodyAnimWrap) bodyAnimWrap.setAttribute("transform", "translate(0, 0)");
+            if (dogHead) dogHead.setAttribute("transform", "translate(18, -14)");
+            const dy = d.targetY - d.baseY;
+            const dist = Math.abs(dy);
+            const climbSpeed = 34;
+            if (dist <= 2.4) {
+              d.x = LADDER_X;
+              d.baseY = d.targetY;
+              if (!this.advanceEntityPath(d, true)) {
+                d.state = "idle";
+                d.stateTimer = 2.6 + Math.random() * 2.4;
+                this.setDogLegs(0, dogGroup);
+              }
+            } else {
+              d.x = LADDER_X + Math.sin((d.climbPhase || 0) * 1.4) * 1.6;
+              d.baseY += Math.sign(dy) * climbSpeed * dt;
+              d.climbPhase = (d.climbPhase || 0) + dt * 11;
+              d.walkCycle += dt * 12;
+              this.setDogLegs(Math.sin(d.walkCycle) * 4.2, dogGroup);
             }
           } else if (d.state === "play" || d.state === "react") {
             if (d.playSubMode === "patter" && d.state !== "react") {
@@ -5431,6 +5833,7 @@
         <line x1="122" y1="${WINDOW_MID_Y}" x2="258" y2="${WINDOW_MID_Y}" stroke="#1F1E1D" stroke-width="1.5" />
         <line x1="24" y1="${WINDOW_SILL_Y}" x2="356" y2="${WINDOW_SILL_Y}" stroke="#1F1E1D" stroke-width="1.65" stroke-linecap="round" />
       </g>
+      ${getFixedWoodenLadderMarkup()}
       ${getWindowSunbeamOverlayMarkup(activeViewId, idPrefix, true)}
       ${floorMatChunks.join("")}
       ${furnitureChunks.join("")}

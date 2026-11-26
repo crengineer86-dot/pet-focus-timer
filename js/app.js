@@ -889,6 +889,9 @@
 
       liveCounter.setUserFocusing(true);
       this.scene.setFocusMode("running");
+      if (typeof this.scene.setRoomLights === "function") {
+        this.scene.setRoomLights(false, { animatePull: true, silent: true });
+      }
       this.renderTimerHeader();
       this.updateMainBottomActionsUI();
 
@@ -972,6 +975,9 @@
 
       liveCounter.setUserFocusing(false);
       this.scene.setFocusMode("idle");
+      if (typeof this.scene.setRoomLights === "function") {
+        this.scene.setRoomLights(true, { animatePull: true, silent: true });
+      }
       this.renderTimerHeader();
       this.updateMainBottomActionsUI();
       this.scene.triggerDogInteraction("괜찮아요! 숨 고르고 다시 시작해 봐요 🐾");
@@ -1018,6 +1024,9 @@
 
       liveCounter.setUserFocusing(false);
       this.scene.setFocusMode("idle");
+      if (typeof this.scene.setRoomLights === "function") {
+        this.scene.setRoomLights(true, { animatePull: true, silent: true });
+      }
       audioEngine.playChime();
 
       // 기본 보상 + 장시간 몰입 보너스 + 거실 부스트 + 첫 완주 웰컴 보너스(+30) 정산

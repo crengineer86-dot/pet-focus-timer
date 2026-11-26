@@ -4301,3 +4301,150 @@ button {
   70% { transform: translate(-0.25rem, 1.125rem); opacity: 0.9; }
   100% { transform: translate(0.375rem, 2rem); opacity: 0.2; }
 }
+
+/* ==========================================================================
+   [신규] 고정형 거실 천장등 소등 · 편안한 순수 웜 다크(차콜 브라운·다크 코코아) 모드
+   ========================================================================== */
+body,
+.app-shell,
+.main-header,
+.bottom-controls-bar,
+.timer-hero-section {
+  transition: background-color 0.45s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+body.room-lights-off {
+  --bg-ivory: #241E1A;
+  --bg-card-soft: #312822;
+  --bg-card-white: #382F28;
+  --ink-black: #F3E9DC;
+  --ink-muted: #C2B4A4;
+  --ink-subtle: #98897A;
+  --border-line: #4C4037;
+  --border-strong: #E9DAC6;
+  --accent-orange: #E58947;
+  --accent-orange-dark: #F09C5C;
+  --accent-orange-soft: #3E2F23;
+  --sage-green-bg: #36402F;
+  --sage-green-text: #C5DBAF;
+}
+
+body.room-lights-off .pill-btn-primary,
+body.room-lights-off .btn-focus-main {
+  background-color: #EFE3D3;
+  color: #241E1A;
+  border-color: #EFE3D3;
+}
+
+body.room-lights-off .header-icon-btn,
+body.room-lights-off .time-step-btn,
+body.room-lights-off .reward-preview-badge,
+body.room-lights-off .live-counter-pill {
+  background-color: rgba(56, 47, 40, 0.85);
+  border-color: #4F4238;
+  color: #F3E9DC;
+}
+
+body.room-lights-off .speech-bubble {
+  background-color: #3A3029;
+  color: #F3E9DC;
+  border-color: #5C4E43;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* 웜 다크 모드 시 거실 선화 구조물(창틀·사다리·천장등) 명암 대비 보정 */
+#window-structure *,
+#fixed-wooden-ladder *,
+#ceiling-pendant-light * {
+  transition: stroke 0.4s ease, fill 0.4s ease, opacity 0.4s ease;
+}
+
+body.room-lights-off #window-structure rect,
+body.room-lights-off #window-structure line {
+  stroke: #D6C7B5;
+}
+
+body.room-lights-off #fixed-wooden-ladder .ladder-rail,
+body.room-lights-off #fixed-wooden-ladder .ladder-rung {
+  fill: #5A4B3E;
+  stroke: #D6C7B5;
+}
+
+body.room-lights-off #fixed-wooden-ladder .ladder-hook {
+  stroke: #D6C7B5;
+}
+
+body.room-lights-off #ceiling-pendant-light .ceiling-stroke {
+  stroke: #D6C7B5;
+}
+
+body.room-lights-off #ceiling-pendant-light .ceiling-shade-fill {
+  fill: #3D332B;
+}
+
+body.room-lights-off #ceiling-pendant-light .ceiling-bulb-fill {
+  fill: #5C4E42;
+}
+
+body.room-lights-off #ceiling-pendant-light .ceiling-cord-bead {
+  fill: #E58947;
+  stroke: #D6C7B5;
+}
+
+body.room-lights-off #ceiling-light-cone {
+  opacity: 0;
+}
+
+/* 소등 시 상점 조명 소품(구름 벽조명·스탠드·초승달·버섯·가랜드·아로마 캔들) 따뜻한 원형 발광 강화 */
+body.room-lights-off #living-room-svg .lamp-light-effect {
+  opacity: 1 !important;
+  transition: opacity 0.45s ease;
+}
+
+body.room-lights-off #living-room-svg .lamp-dark-aura {
+  opacity: 0.92 !important;
+}
+
+body.room-lights-off #living-room-svg [data-is-lamp="true"] .lamp-shade-path {
+  fill: #FFE7A3 !important;
+  filter: drop-shadow(0 0 6px rgba(255, 206, 98, 0.72));
+}
+
+body.room-lights-off #living-room-svg [data-is-lamp="true"] [data-part="light-bulbs-starlight_garland"] circle {
+  fill: #FFE88E !important;
+  filter: drop-shadow(0 0 5px rgba(255, 214, 102, 0.85));
+}
+
+/* 소등 시 창밖 배경 은은한 자체 발광 및 창가 주변 달빛·배경빛 번짐 */
+#window-dark-glow-layer {
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+}
+
+body.room-lights-off #window-dark-glow-layer {
+  opacity: 1;
+}
+
+body.room-lights-off #window-view-layer {
+  filter: brightness(1.1) drop-shadow(0 0 6px rgba(255, 232, 186, 0.22));
+  transition: filter 0.45s ease;
+}
+
+/* 천장등 당김줄 탄성 애니메이션 */
+#ceiling-pull-cord-group {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+#ceiling-pull-cord-group.is-springing {
+  animation: ceilingCordPullSpring 0.44s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+@keyframes ceilingCordPullSpring {
+  0% { transform: translateY(0); }
+  28% { transform: translateY(13px); }
+  62% { transform: translateY(-2.5px); }
+  82% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
