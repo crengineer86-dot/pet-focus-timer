@@ -826,16 +826,16 @@
       case "window_cat":
         // 기존 고양이: 사뿐사뿐 걷기 다리 + 앞발 세수(그루밍) + 기지개 + 낮잠 호흡
         return `
-          <g ${isInteractiveMain ? 'id="wcat-visual"' : ""}>
+          <g data-part="wcat-visual">
             <!-- 걷기 상태일 때만 나타나는 사뿐사뿐 네 다리 -->
-            <g ${isInteractiveMain ? 'id="wcat-walk-legs"' : ""} style="display:none;">
-              <line ${isInteractiveMain ? 'id="wcat-leg-fl"' : ""} x1="-14" y1="-2" x2="-15" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="wcat-leg-fr"' : ""} x1="-8" y1="-2" x2="-7" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="wcat-leg-bl"' : ""} x1="10" y1="-2" x2="9" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="wcat-leg-br"' : ""} x1="16" y1="-2" x2="17" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
+            <g data-part="wcat-walk-legs" style="display:none;">
+              <line data-part="wcat-leg-fl" x1="-14" y1="-2" x2="-15" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
+              <line data-part="wcat-leg-fr" x1="-8" y1="-2" x2="-7" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
+              <line data-part="wcat-leg-bl" x1="10" y1="-2" x2="9" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
+              <line data-part="wcat-leg-br" x1="16" y1="-2" x2="17" y2="4" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
             </g>
             <path d="M-24 0 C-27 -16, -15 -26, 2 -25 C17 -24, 26 -14, 23 0 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" stroke-linejoin="round" />
-            <g ${isInteractiveMain ? 'id="wcat-head"' : ""}>
+            <g data-part="wcat-head">
               <path d="M-21 -8 C-24 -16, -19 -24, -11 -23 C-4 -23, -1 -16, -3 -8" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
               <path d="M-20 -20 L-23 -29 L-15 -23" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
               <path d="M-10 -23 L-5 -30 L-3 -21" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
@@ -845,10 +845,10 @@
               <line x1="-27" y1="-10" x2="-23" y2="-10.5" stroke="#1F1E1D" stroke-width="1.2" stroke-linecap="round" />
             </g>
             <!-- 그루밍(세수)할 때 볼 옆으로 올라오는 앞발 -->
-            <ellipse ${isInteractiveMain ? 'id="wcat-groom-paw"' : ""} cx="-19" cy="-12" rx="3.5" ry="2.3" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.45" style="display:none;" />
-            <path ${isInteractiveMain ? 'id="cat-tail-path"' : ""} d="M21 -3 C29 1, 32 11, 26 15 C21 18, 18 12, 20 7" fill="none" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
+            <ellipse data-part="wcat-groom-paw" cx="-19" cy="-12" rx="3.5" ry="2.3" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.45" style="display:none;" />
+            <path data-part="cat-tail-path" d="M21 -3 C29 1, 32 11, 26 15 C21 18, 18 12, 20 7" fill="none" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
           </g>
-          <g ${isInteractiveMain ? 'id="cat-zzz"' : ""} opacity="0.85">
+          <g data-part="cat-zzz" opacity="0.85">
             <text x="8" y="-33" fill="#1F1E1D" font-size="9" font-family="sans-serif" font-weight="600">z</text>
             <text x="15" y="-41" fill="#D97736" font-size="11" font-family="sans-serif" font-weight="700">Z</text>
           </g>
@@ -857,29 +857,29 @@
       case "hamster_friend":
         // 햄스터: 쪼르르 달리는 발 + 해바라기씨 오물오물 먹기 + 볼 닦기 + 웅크려 졸기
         return `
-          <g ${isInteractiveMain ? 'id="ham-visual"' : ""}>
+          <g data-part="ham-visual">
             <path d="M-11 0 C-13 -13, -8 -23, 0 -23 C8 -23, 13 -13, 11 0 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
             <circle cx="-7" cy="-21" r="3.2" fill="#F3E5D0" stroke="#1F1E1D" stroke-width="1.45" />
             <circle cx="7" cy="-21" r="3.2" fill="#F3E5D0" stroke="#1F1E1D" stroke-width="1.45" />
-            <g ${isInteractiveMain ? 'id="ham-eyes-open"' : ""}>
+            <g data-part="ham-eyes-open">
               <circle cx="-4" cy="-14" r="1.3" fill="#1F1E1D" />
               <circle cx="4" cy="-14" r="1.3" fill="#1F1E1D" />
             </g>
-            <g ${isInteractiveMain ? 'id="ham-eyes-closed"' : ""} style="display:none;">
+            <g data-part="ham-eyes-closed" style="display:none;">
               <path d="M-5.8 -14 Q-4 -12.5 -2.2 -14" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
               <path d="M2.2 -14 Q4 -12.5 5.8 -14" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
             </g>
             <ellipse cx="-6.5" cy="-11.5" rx="2.1" ry="1.25" fill="#F2B8A2" opacity="0.85" />
             <ellipse cx="6.5" cy="-11.5" rx="2.1" ry="1.25" fill="#F2B8A2" opacity="0.85" />
-            <g ${isInteractiveMain ? 'id="ham-hands-seed"' : ""}>
-              <path ${isInteractiveMain ? 'id="ham-seed"' : ""} d="M-2.2 -7.8 L0 -11.6 L2.2 -7.8 Z" fill="#1F1E1D" />
+            <g data-part="ham-hands-seed">
+              <path data-part="ham-seed" d="M-2.2 -7.8 L0 -11.6 L2.2 -7.8 Z" fill="#1F1E1D" />
               <circle cx="-2.8" cy="-8.5" r="1.7" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
               <circle cx="2.8" cy="-8.5" r="1.7" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
             </g>
-            <ellipse ${isInteractiveMain ? 'id="ham-foot-l"' : ""} cx="-4.5" cy="0" rx="2.4" ry="1.4" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
-            <ellipse ${isInteractiveMain ? 'id="ham-foot-r"' : ""} cx="4.5" cy="0" rx="2.4" ry="1.4" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
+            <ellipse data-part="ham-foot-l" cx="-4.5" cy="0" rx="2.4" ry="1.4" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
+            <ellipse data-part="ham-foot-r" cx="4.5" cy="0" rx="2.4" ry="1.4" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.2" />
           </g>
-          <g ${isInteractiveMain ? 'id="ham-zzz"' : ""} style="display:none;">
+          <g data-part="ham-zzz" style="display:none;">
             <text x="9" y="-24" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -887,21 +887,21 @@
       case "cockatiel_bird":
         // 왕관앵무: 비행 날갯짓 + 창틀/버튼 위 종종걸음 + 깃털 다듬기 + 고개 갸웃
         return `
-          <g ${isInteractiveMain ? 'id="cockatiel-visual"' : ""}>
+          <g data-part="cockatiel-visual">
             <path d="M2 -6 L7 5 L2 4 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
             <path d="M-8.5 0 C-11.5 -10, -8.5 -21, 0 -21 C7.5 -21, 10.5 -10, 6.8 0 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
-            <path ${isInteractiveMain ? 'id="cockatiel-wing"' : ""} d="M-2 -15 C4 -14, 7 -7, 3 -2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.5" stroke-linecap="round" />
-            <g ${isInteractiveMain ? 'id="cockatiel-head"' : ""} transform="translate(-2, -25)">
+            <path data-part="cockatiel-wing" d="M-2 -15 C4 -14, 7 -7, 3 -2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.5" stroke-linecap="round" />
+            <g data-part="cockatiel-head" transform="translate(-2, -25)">
               <circle cx="0" cy="0" r="8" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" />
-              <path ${isInteractiveMain ? 'id="cockatiel-crest"' : ""} d="M-1 -8 C-3 -16, 1 -19, 5 -17 M1 -8 C2 -14, 6 -16, 8.5 -14" fill="none" stroke="#1F1E1D" stroke-width="1.55" stroke-linecap="round" />
-              <circle ${isInteractiveMain ? 'id="cockatiel-eye"' : ""} cx="-3" cy="-1.2" r="1.4" fill="#1F1E1D" />
+              <path data-part="cockatiel-crest" d="M-1 -8 C-3 -16, 1 -19, 5 -17 M1 -8 C2 -14, 6 -16, 8.5 -14" fill="none" stroke="#1F1E1D" stroke-width="1.55" stroke-linecap="round" />
+              <circle data-part="cockatiel-eye" cx="-3" cy="-1.2" r="1.4" fill="#1F1E1D" />
               <circle cx="0.2" cy="1.5" r="2.4" fill="#E8845B" opacity="0.88" />
               <path d="M-7.8 -1.5 L-12.5 0.5 L-7.8 2 Z" fill="#F4C065" stroke="#1F1E1D" stroke-width="1.45" stroke-linejoin="round" />
             </g>
-            <line ${isInteractiveMain ? 'id="cockatiel-foot-l"' : ""} x1="-3" y1="0" x2="-3.5" y2="1.5" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
-            <line ${isInteractiveMain ? 'id="cockatiel-foot-r"' : ""} x1="2.5" y1="0" x2="3" y2="1.5" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
+            <line data-part="cockatiel-foot-l" x1="-3" y1="0" x2="-3.5" y2="1.5" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
+            <line data-part="cockatiel-foot-r" x1="2.5" y1="0" x2="3" y2="1.5" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
           </g>
-          <g ${isInteractiveMain ? 'id="cockatiel-zzz"' : ""} style="display:none;">
+          <g data-part="cockatiel-zzz" style="display:none;">
             <text x="8" y="-32" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -910,16 +910,16 @@
         // 말랑 치즈 고양이 (기존 id tuxedo_cat 유지): 하얀 바탕 + 따뜻한 살구/치즈빛 줄무늬 + 분홍 코
         // 사뿐사뿐 걷기 다리 + 앞발 세수(그루밍) + 등 말아 기지개 + 식빵 휴식 모션 모두 유지
         return `
-          <g ${isInteractiveMain ? 'id="tuxedo-visual"' : ""}>
-            <g ${isInteractiveMain ? 'id="tuxedo-body-wrap"' : ""}>
+          <g data-part="tuxedo-visual">
+            <g data-part="tuxedo-body-wrap">
               <!-- 걷기 상태일 때만 나오는 다리 -->
-              <g ${isInteractiveMain ? 'id="tuxedo-walk-legs"' : ""} style="display:none;">
-                <line ${isInteractiveMain ? 'id="tux-leg-fl"' : ""} x1="-12" y1="-2" x2="-13" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="tux-leg-fr"' : ""} x1="-5" y1="-2" x2="-4" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="tux-leg-bl"' : ""} x1="7" y1="-2" x2="6" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="tux-leg-br"' : ""} x1="13" y1="-2" x2="14" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+              <g data-part="tuxedo-walk-legs" style="display:none;">
+                <line data-part="tux-leg-fl" x1="-12" y1="-2" x2="-13" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+                <line data-part="tux-leg-fr" x1="-5" y1="-2" x2="-4" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+                <line data-part="tux-leg-bl" x1="7" y1="-2" x2="6" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+                <line data-part="tux-leg-br" x1="13" y1="-2" x2="14" y2="4" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
               </g>
-              <path ${isInteractiveMain ? 'id="tuxedo-tail"' : ""} d="M18 -4 C27 -4, 30 -13, 25 -17" fill="none" stroke="#1F1E1D" stroke-width="2.1" stroke-linecap="round" />
+              <path data-part="tuxedo-tail" d="M18 -4 C27 -4, 30 -13, 25 -17" fill="none" stroke="#1F1E1D" stroke-width="2.1" stroke-linecap="round" />
               <rect x="-20" y="-19" width="38" height="19" rx="9" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" />
               <!-- 치즈빛 등 줄무늬 포인트 -->
               <path d="M-2 -18.5 C-1 -12, 2 -12, 3 -18.5 Z" fill="#F4C392" />
@@ -927,8 +927,8 @@
               <path d="M13 -17 C15 -12, 17 -13, 17 -16 Z" fill="#F4C392" />
               <path d="M-12 0 C-12 -8.5, -3 -10, 2 0 Z" fill="#FFFDF9" />
               <ellipse cx="-10" cy="-1" rx="4.2" ry="2.2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.45" />
-              <ellipse ${isInteractiveMain ? 'id="tuxedo-groom-paw"' : ""} cx="-1" cy="-1" rx="4.2" ry="2.2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.45" />
-              <g ${isInteractiveMain ? 'id="tuxedo-head"' : ""} transform="translate(-8, -21)">
+              <ellipse data-part="tuxedo-groom-paw" cx="-1" cy="-1" rx="4.2" ry="2.2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.45" />
+              <g data-part="tuxedo-head" transform="translate(-8, -21)">
                 <circle cx="0" cy="0" r="10.2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" />
                 <path d="M-8.5 -5.5 L-10.5 -14.5 L-2.8 -8.5 Z" fill="#F6CCA2" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
                 <path d="M8.5 -5.5 L10.5 -14.5 L2.8 -8.5 Z" fill="#F6CCA2" stroke="#1F1E1D" stroke-width="1.55" stroke-linejoin="round" />
@@ -937,11 +937,11 @@
                 <line x1="0" y1="-9.3" x2="0" y2="-5.4" stroke="#D97736" stroke-width="1.35" stroke-linecap="round" />
                 <line x1="-2.5" y1="-8.8" x2="-1.5" y2="-5.8" stroke="#D97736" stroke-width="1.25" stroke-linecap="round" />
                 <line x1="2.5" y1="-8.8" x2="1.5" y2="-5.8" stroke="#D97736" stroke-width="1.25" stroke-linecap="round" />
-                <g ${isInteractiveMain ? 'id="tuxedo-eyes-open"' : ""}>
+                <g data-part="tuxedo-eyes-open">
                   <circle cx="-3.6" cy="-1.6" r="1.35" fill="#1F1E1D" />
                   <circle cx="3.6" cy="-1.6" r="1.35" fill="#1F1E1D" />
                 </g>
-                <g ${isInteractiveMain ? 'id="tuxedo-eyes-closed"' : ""} style="display:none;">
+                <g data-part="tuxedo-eyes-closed" style="display:none;">
                   <line x1="-5.2" y1="-1.6" x2="-2" y2="-1.6" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
                   <line x1="2" y1="-1.6" x2="5.2" y2="-1.6" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
                 </g>
@@ -952,7 +952,7 @@
               </g>
             </g>
           </g>
-          <g ${isInteractiveMain ? 'id="tuxedo-zzz"' : ""} style="display:none;">
+          <g data-part="tuxedo-zzz" style="display:none;">
             <text x="10" y="-30" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -960,40 +960,40 @@
       case "welsh_corgi":
         // 웰시코기: 짧은 다리 총총 달리기 + 배 보이고 뒤집어져 데굴데굴 장난(play) + 식빵 자세 휴식(rest)
         return `
-          <g ${isInteractiveMain ? 'id="corgi-visual"' : ""}>
+          <g data-part="corgi-visual">
             <!-- [1] 기본 서기 / 달리기 / 식빵 휴식 포즈 -->
-            <g ${isInteractiveMain ? 'id="corgi-pose-normal"' : ""}>
-              <g ${isInteractiveMain ? 'id="corgi-legs-group"' : ""}>
-                <line ${isInteractiveMain ? 'id="corgi-leg-bl"' : ""} x1="-15" y1="-6" x2="-16" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="corgi-leg-br"' : ""} x1="-9" y1="-6" x2="-9" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="corgi-leg-fl"' : ""} x1="9" y1="-6" x2="9" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-                <line ${isInteractiveMain ? 'id="corgi-leg-fr"' : ""} x1="15" y1="-6" x2="16" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+            <g data-part="corgi-pose-normal">
+              <g data-part="corgi-legs-group">
+                <line data-part="corgi-leg-bl" x1="-15" y1="-6" x2="-16" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+                <line data-part="corgi-leg-br" x1="-9" y1="-6" x2="-9" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+                <line data-part="corgi-leg-fl" x1="9" y1="-6" x2="9" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+                <line data-part="corgi-leg-fr" x1="15" y1="-6" x2="16" y2="0" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
               </g>
               <rect x="-22" y="-19" width="40" height="14" rx="7" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.7" />
-              <g ${isInteractiveMain ? 'id="corgi-rump"' : ""}>
+              <g data-part="corgi-rump">
                 <path d="M-22 -12 C-25 -15, -25 -9, -21 -8" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.55" stroke-linecap="round" />
                 <path d="M-17 -10 C-17 -15, -10 -15, -9 -6 L-20 -6 C-22 -7, -20 -10, -17 -10 Z" fill="#FEF9F1" />
               </g>
-              <g ${isInteractiveMain ? 'id="corgi-head"' : ""} transform="translate(17, -21)">
+              <g data-part="corgi-head" transform="translate(17, -21)">
                 <path d="M-7 -6 L-10 -17 L-1 -10 Z" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
                 <path d="M5 -7 L10 -17 L1 -10 Z" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
                 <circle cx="0" cy="-2" r="10.2" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.7" />
                 <path d="M-2 -8 C3 -8, 8 -3, 8 2 C8 6, -1 7, -3 3 Z" fill="#FEF9F1" />
-                <circle ${isInteractiveMain ? 'id="corgi-eye-open"' : ""} cx="3.5" cy="-3.5" r="1.45" fill="#1F1E1D" />
-                <path ${isInteractiveMain ? 'id="corgi-eye-closed"' : ""} d="M1.8 -3.5 Q3.5 -2 5.2 -3.5" fill="none" stroke="#1F1E1D" stroke-width="1.35" stroke-linecap="round" style="display:none;" />
+                <circle data-part="corgi-eye-open" cx="3.5" cy="-3.5" r="1.45" fill="#1F1E1D" />
+                <path data-part="corgi-eye-closed" d="M1.8 -3.5 Q3.5 -2 5.2 -3.5" fill="none" stroke="#1F1E1D" stroke-width="1.35" stroke-linecap="round" style="display:none;" />
                 <ellipse cx="10.2" cy="-1.5" rx="2" ry="1.4" fill="#1F1E1D" />
                 <ellipse cx="2" cy="1" rx="2.2" ry="1.2" fill="#F2B8A2" opacity="0.8" />
               </g>
             </g>
 
             <!-- [2] 배를 보이고 발라당 뒤집어져 데굴데굴 장난치는 포즈 (play) -->
-            <g ${isInteractiveMain ? 'id="corgi-pose-belly"' : ""} style="display:none;">
+            <g data-part="corgi-pose-belly" style="display:none;">
               <rect x="-21" y="-15" width="38" height="14" rx="7" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.7" />
               <path d="M-15 -14 C-6 -16, 6 -16, 12 -14 C12 -9, -15 -9, -15 -14 Z" fill="#FEF9F1" />
-              <line ${isInteractiveMain ? 'id="corgi-paw-up-1"' : ""} x1="-13" y1="-14" x2="-15" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="corgi-paw-up-2"' : ""} x1="-7" y1="-14" x2="-6" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="corgi-paw-up-3"' : ""} x1="6" y1="-14" x2="5" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="corgi-paw-up-4"' : ""} x1="12" y1="-14" x2="14" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+              <line data-part="corgi-paw-up-1" x1="-13" y1="-14" x2="-15" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+              <line data-part="corgi-paw-up-2" x1="-7" y1="-14" x2="-6" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+              <line data-part="corgi-paw-up-3" x1="6" y1="-14" x2="5" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
+              <line data-part="corgi-paw-up-4" x1="12" y1="-14" x2="14" y2="-21" stroke="#1F1E1D" stroke-width="2" stroke-linecap="round" />
               <g transform="translate(17, -10)">
                 <circle cx="0" cy="0" r="9.5" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.7" />
                 <path d="M-4 6 L-8 13 L0 8 Z" fill="#F6E6CE" stroke="#1F1E1D" stroke-width="1.6" stroke-linejoin="round" />
@@ -1004,7 +1004,7 @@
               </g>
             </g>
           </g>
-          <g ${isInteractiveMain ? 'id="corgi-zzz"' : ""} style="display:none;">
+          <g data-part="corgi-zzz" style="display:none;">
             <text x="20" y="-33" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -1012,13 +1012,13 @@
       case "little_turtle":
         // 꼬마 거북이: 네 발 번갈아 기어가기 + 목 쭉 빼고 두리번거리기(play) + 등껍질 속 휴식(rest)
         return `
-          <g ${isInteractiveMain ? 'id="turtle-visual"' : ""}>
-            <g ${isInteractiveMain ? 'id="turtle-body-wrap"' : ""}>
-              <g ${isInteractiveMain ? 'id="turtle-limbs"' : ""}>
-                <ellipse ${isInteractiveMain ? 'id="turtle-leg-bl"' : ""} cx="-11.5" cy="-1.8" rx="3.8" ry="2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
-                <ellipse ${isInteractiveMain ? 'id="turtle-leg-fl"' : ""} cx="9.5" cy="-1.8" rx="3.8" ry="2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
+          <g data-part="turtle-visual">
+            <g data-part="turtle-body-wrap">
+              <g data-part="turtle-limbs">
+                <ellipse data-part="turtle-leg-bl" cx="-11.5" cy="-1.8" rx="3.8" ry="2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
+                <ellipse data-part="turtle-leg-fl" cx="9.5" cy="-1.8" rx="3.8" ry="2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
                 <path d="M-17.5 -4 L-22.5 -3 L-17.5 -6 Z" fill="#1F1E1D" />
-                <g ${isInteractiveMain ? 'id="turtle-head-group"' : ""}>
+                <g data-part="turtle-head-group">
                   <path d="M13.5 -9 C20.5 -12, 23.5 -9, 22.5 -5 C21.5 -2, 15.5 -3, 13.5 -5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" stroke-linecap="round" />
                   <circle cx="19.5" cy="-8" r="1.2" fill="#1F1E1D" />
                 </g>
@@ -1030,7 +1030,7 @@
               <line x1="4" y1="-13.5" x2="6.8" y2="-16" stroke="#1F1E1D" stroke-width="1.25" />
             </g>
           </g>
-          <g ${isInteractiveMain ? 'id="turtle-zzz"' : ""} style="display:none;">
+          <g data-part="turtle-zzz" style="display:none;">
             <text x="12" y="-20" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -1038,12 +1038,12 @@
       case "hedgehog_friend":
         // 고슴도치: 아장아장 발걸음 + 코 킁킁 바닥 탐색(play) + 동그랗게 공처럼 말려 쉬기(rest)
         return `
-          <g ${isInteractiveMain ? 'id="hedgehog-visual"' : ""}>
-            <g ${isInteractiveMain ? 'id="hedgehog-normal"' : ""}>
-              <line ${isInteractiveMain ? 'id="hedge-foot-l"' : ""} x1="-9" y1="-2" x2="-9" y2="0" stroke="#1F1E1D" stroke-width="1.85" stroke-linecap="round" />
-              <line ${isInteractiveMain ? 'id="hedge-foot-r"' : ""} x1="6" y1="-2" x2="6" y2="0" stroke="#1F1E1D" stroke-width="1.85" stroke-linecap="round" />
+          <g data-part="hedgehog-visual">
+            <g data-part="hedgehog-normal">
+              <line data-part="hedge-foot-l" x1="-9" y1="-2" x2="-9" y2="0" stroke="#1F1E1D" stroke-width="1.85" stroke-linecap="round" />
+              <line data-part="hedge-foot-r" x1="6" y1="-2" x2="6" y2="0" stroke="#1F1E1D" stroke-width="1.85" stroke-linecap="round" />
               <path d="M-17 -2 L-20 -7 L-15 -10 L-17 -15 L-11 -16 L-11 -21 L-5 -19 L-2 -23 L3 -19 L8 -21 L9 -15 L14 -13 L11 -7 L17 -5 L12 -2 Z" fill="#E8DEC9" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
-              <g ${isInteractiveMain ? 'id="hedgehog-snout"' : ""}>
+              <g data-part="hedgehog-snout">
                 <path d="M5 -13 C12 -13, 18 -8, 20 -4 C16 -1, 7 -2, 4 -2 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
                 <circle cx="13" cy="-7" r="1.3" fill="#1F1E1D" />
                 <circle cx="20" cy="-4.5" r="1.55" fill="#1F1E1D" />
@@ -1053,12 +1053,12 @@
               <line x1="-2" y1="-14" x2="1" y2="-16" stroke="#1F1E1D" stroke-width="1.25" stroke-linecap="round" />
               <line x1="-5" y1="-8" x2="-2" y2="-10" stroke="#1F1E1D" stroke-width="1.25" stroke-linecap="round" />
             </g>
-            <g ${isInteractiveMain ? 'id="hedgehog-ball"' : ""} style="display:none;">
+            <g data-part="hedgehog-ball" style="display:none;">
               <path d="M0 -25 L4 -22 L9 -24 L10 -19 L15 -18 L13 -13 L16 -9 L12 -5 L13 -1 L7 -2 L3 0 L0 -3 L-4 0 L-8 -2 L-13 -1 L-12 -6 L-16 -10 L-13 -14 L-15 -19 L-10 -19 L-8 -24 L-4 -22 Z" fill="#E8DEC9" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
               <circle cx="0" cy="-12" r="6" fill="none" stroke="#1F1E1D" stroke-width="1.25" stroke-dasharray="3 2" />
             </g>
           </g>
-          <g ${isInteractiveMain ? 'id="hedgehog-zzz"' : ""} style="display:none;">
+          <g data-part="hedgehog-zzz" style="display:none;">
             <text x="11" y="-24" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -1066,22 +1066,22 @@
       case "white_rabbit":
         // 하얀 토끼: 깡총깡총 점프 이동 + 뒷발로 서서 귀 쫑긋(play) + 옆으로 길게 누워 쉬기(rest)
         return `
-          <g ${isInteractiveMain ? 'id="rabbit-visual"' : ""}>
-            <g ${isInteractiveMain ? 'id="rabbit-body-group"' : ""}>
+          <g data-part="rabbit-visual">
+            <g data-part="rabbit-body-group">
               <circle cx="-15.5" cy="-6" r="4" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
               <path d="M-13.5 0 C-15.5 -11.5, -7.5 -19.5, 4 -17.5 C12.5 -16.5, 16.5 -8.5, 13.5 0 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" stroke-linejoin="round" />
               <circle cx="8.5" cy="-15.5" r="8" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.7" />
-              <g ${isInteractiveMain ? 'id="rabbit-ears"' : ""}>
+              <g data-part="rabbit-ears">
                 <path d="M5 -22 C2 -34, 6 -38, 8 -23" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" stroke-linecap="round" />
                 <path d="M9.8 -22 C11 -35, 15.5 -37, 13.8 -22" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" stroke-linecap="round" />
               </g>
-              <circle ${isInteractiveMain ? 'id="rabbit-eye-open"' : ""} cx="12" cy="-16.5" r="1.35" fill="#1F1E1D" />
-              <path ${isInteractiveMain ? 'id="rabbit-eye-closed"' : ""} d="M10.4 -16.5 Q12 -15 13.6 -16.5" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" style="display:none;" />
+              <circle data-part="rabbit-eye-open" cx="12" cy="-16.5" r="1.35" fill="#1F1E1D" />
+              <path data-part="rabbit-eye-closed" d="M10.4 -16.5 Q12 -15 13.6 -16.5" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" style="display:none;" />
               <ellipse cx="10.5" cy="-13.8" rx="1.9" ry="1.05" fill="#F2B8A2" opacity="0.85" />
               <circle cx="16.5" cy="-15" r="1.15" fill="#E8845B" />
             </g>
           </g>
-          <g ${isInteractiveMain ? 'id="rabbit-zzz"' : ""} style="display:none;">
+          <g data-part="rabbit-zzz" style="display:none;">
             <text x="15" y="-28" fill="#D97736" font-size="9.5" font-family="sans-serif" font-weight="700">z</text>
           </g>
         `;
@@ -1092,12 +1092,12 @@
             <path d="M-12 0 L12 0 M-14 -27 C-21 -21, -21 -6, -12 0 L12 0 C21 -6, 21 -21, 14 -27 Z" fill="#F3FAFD" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
             <ellipse cx="0" cy="-27" rx="14" ry="3.1" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
             <path d="M-15.5 -19 Q-8 -21 0 -19 T15.5 -19" fill="none" stroke="#689EB3" stroke-width="1.25" stroke-linecap="round" />
-            <g ${isInteractiveMain ? 'id="goldfish-swimmer"' : ""} transform="translate(1, -11)">
-              <path ${isInteractiveMain ? 'id="goldfish-tail"' : ""} d="M-6.5 0 L-11.5 -3.8 L-10.5 3.8 Z" fill="#D97736" stroke="#1F1E1D" stroke-width="1.25" stroke-linejoin="round" />
+            <g data-part="goldfish-swimmer" transform="translate(1, -11)">
+              <path data-part="goldfish-tail" d="M-6.5 0 L-11.5 -3.8 L-10.5 3.8 Z" fill="#D97736" stroke="#1F1E1D" stroke-width="1.25" stroke-linejoin="round" />
               <ellipse cx="0" cy="0" rx="6.5" ry="4" fill="#D97736" stroke="#1F1E1D" stroke-width="1.4" />
               <circle cx="3.3" cy="-0.8" r="0.95" fill="#1F1E1D" />
             </g>
-            <g ${isInteractiveMain ? 'id="goldfish-bubbles"' : ""} opacity="0">
+            <g data-part="goldfish-bubbles" opacity="0">
               <circle cx="4" cy="-17" r="1.4" fill="#FEF9F1" stroke="#689EB3" stroke-width="1.15" />
               <circle cx="7" cy="-22" r="1.9" fill="#FEF9F1" stroke="#689EB3" stroke-width="1.15" />
               <circle cx="3" cy="-27" r="2.3" fill="#FEF9F1" stroke="#689EB3" stroke-width="1.15" />
@@ -1131,13 +1131,13 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const shadeFill = isLampLit ? "#FFECB8" : "#FEF9F1";
         return `
-          <g ${isInteractiveMain ? 'id="lamp-glow-group"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="lamp-glow-group" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-26" rx="68" ry="64" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-27" rx="30" ry="26" fill="url(#lampCoreGlowGrad)" />
           </g>
           <line x1="0" y1="-24" x2="0" y2="44" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
           <ellipse cx="0" cy="46" rx="16" ry="4.5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" />
-          <path ${isInteractiveMain ? 'id="lamp-shade-path"' : ""} class="lamp-shade-path" d="M-14 -48 L14 -48 L20 -24 L-20 -24 Z" fill="${shadeFill}" stroke="#1F1E1D" stroke-width="1.6" stroke-linejoin="round" />
+          <path data-part="lamp-shade-path" class="lamp-shade-path" d="M-14 -48 L14 -48 L20 -24 L-20 -24 Z" fill="${shadeFill}" stroke="#1F1E1D" stroke-width="1.6" stroke-linejoin="round" />
           <line x1="7" y1="-24" x2="7" y2="-14" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
           <circle cx="7" cy="-12.5" r="1.7" fill="#D97736" />
         `;
@@ -1176,7 +1176,7 @@
 
       case "tennis_ball":
         return `
-          <g ${isInteractiveMain ? 'id="ball-body"' : ""}>
+          <g data-part="ball-body">
             <circle cx="0" cy="0" r="10.5" fill="#DCE9B8" stroke="#1F1E1D" stroke-width="1.55" />
             <path d="M-7 -6 C-2 -2, -2 2, -7 6" fill="none" stroke="#1F1E1D" stroke-width="1.25" stroke-linecap="round" />
             <path d="M7 -6 C2 -2, 2 2, 7 6" fill="none" stroke="#1F1E1D" stroke-width="1.25" stroke-linecap="round" />
@@ -1254,7 +1254,7 @@
 
       case "yellow_duck_toy":
         return `
-          <g ${isInteractiveMain ? 'id="duck-toy-body"' : ""}>
+          <g data-part="duck-toy-body">
             <path d="M-11 0 C-14 0, -16 -9, -9 -12 C-3 -13, 8 -13, 12 -8 C15 -4, 12 0, 8 0 Z" fill="#F9E07F" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
             <circle cx="5" cy="-15.5" r="7" fill="#F9E07F" stroke="#1F1E1D" stroke-width="1.65" />
             <circle cx="7.2" cy="-17" r="1.3" fill="#1F1E1D" />
@@ -1269,7 +1269,7 @@
           <rect x="-21" y="-4.5" width="42" height="4.5" rx="2" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.65" />
           <path d="M-12 -4.5 L0 -28 L12 -4.5" fill="none" stroke="#1F1E1D" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
           <g transform="translate(0, -28)">
-            <g ${isInteractiveMain ? 'id="hamster-wheel-rotor"' : ""}>
+            <g data-part="hamster-wheel-rotor">
               <circle cx="0" cy="0" r="21" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
               <circle cx="0" cy="0" r="16.5" fill="none" stroke="#E9DAC6" stroke-width="1.5" />
               <line x1="-16.5" y1="0" x2="16.5" y2="0" stroke="#1F1E1D" stroke-width="1.3" />
@@ -1286,11 +1286,11 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFF3C8" : "#FEF9F1";
         return `
-          <g ${isInteractiveMain ? 'id="light-glow-cloud_wall_lamp"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="light-glow-cloud_wall_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-2" rx="46" ry="34" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-2" rx="22" ry="16" fill="url(#lampCoreGlowGrad)" />
           </g>
-          <path ${isInteractiveMain ? 'id="light-body-cloud_wall_lamp"' : ""} class="lamp-shade-path" d="M-16 9 L15 9 C21 9, 24 3, 19 -1 C20 -8, 12 -12, 7 -8 C4 -15, -7 -15, -10 -7 C-17 -8, -22 -2, -19 4 C-22 6, -20 9, -16 9 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
+          <path data-part="light-body-cloud_wall_lamp" class="lamp-shade-path" d="M-16 9 L15 9 C21 9, 24 3, 19 -1 C20 -8, 12 -12, 7 -8 C4 -15, -7 -15, -10 -7 C-17 -8, -22 -2, -19 4 C-22 6, -20 9, -16 9 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
           <path d="M-6 1 Q-4 3 -2 1" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
           <path d="M3 1 Q5 3 7 1" fill="none" stroke="#1F1E1D" stroke-width="1.3" stroke-linecap="round" />
           <ellipse cx="-8" cy="2.5" rx="1.8" ry="1" fill="#F2B8A2" opacity="0.8" />
@@ -1302,12 +1302,12 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFE79B" : "#FEF9F1";
         return `
-          <g ${isInteractiveMain ? 'id="light-glow-crescent_mood_lamp"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="light-glow-crescent_mood_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <circle cx="0" cy="-17" r="38" fill="url(#lampNaturalGlowGrad)" />
             <circle cx="0" cy="-17" r="18" fill="url(#lampCoreGlowGrad)" />
           </g>
           <rect x="-11" y="-4" width="22" height="4" rx="1.8" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.6" />
-          <path ${isInteractiveMain ? 'id="light-body-crescent_mood_lamp"' : ""} class="lamp-shade-path" d="M2 -29 C-11 -29, -15 -11, 2 -5 C-5 -10, -4 -23, 2 -29 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
+          <path data-part="light-body-crescent_mood_lamp" class="lamp-shade-path" d="M2 -29 C-11 -29, -15 -11, 2 -5 C-5 -10, -4 -23, 2 -29 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
           <circle cx="6" cy="-18" r="1.7" fill="#F4C065" />
         `;
       }
@@ -1316,12 +1316,12 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bodyFill = isLampLit ? "#FFECB8" : "#FEF9F1";
         return `
-          <g ${isInteractiveMain ? 'id="light-glow-mushroom_stand_lamp"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="light-glow-mushroom_stand_lamp" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="-16" rx="40" ry="34" fill="url(#lampNaturalGlowGrad)" />
             <ellipse cx="0" cy="-16" rx="19" ry="15" fill="url(#lampCoreGlowGrad)" />
           </g>
           <path d="M-7 0 L-5 -14 L5 -14 L7 0 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.6" stroke-linejoin="round" />
-          <path ${isInteractiveMain ? 'id="light-body-mushroom_stand_lamp"' : ""} class="lamp-shade-path" d="M-16 -14 C-16 -27, 16 -27, 16 -14 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
+          <path data-part="light-body-mushroom_stand_lamp" class="lamp-shade-path" d="M-16 -14 C-16 -27, 16 -27, 16 -14 Z" fill="${bodyFill}" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
           <line x1="6" y1="-14" x2="6" y2="-9" stroke="#1F1E1D" stroke-width="1.25" stroke-linecap="round" />
           <circle cx="6" cy="-8" r="1.4" fill="#D97736" />
         `;
@@ -1331,7 +1331,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const bulbFill = isLampLit ? "#FFE688" : "#FEF9F1";
         return `
-          <g ${isInteractiveMain ? 'id="light-glow-starlight_garland"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="light-glow-starlight_garland" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <ellipse cx="0" cy="8" rx="54" ry="26" fill="url(#lampNaturalGlowGrad)" />
           </g>
           <path d="M-36 -6 Q0 10 36 -6" fill="none" stroke="#1F1E1D" stroke-width="1.55" stroke-linecap="round" />
@@ -1341,7 +1341,7 @@
           <line x1="-8" y1="2" x2="-8" y2="10" stroke="#1F1E1D" stroke-width="1.2" />
           <line x1="8" y1="2" x2="8" y2="10" stroke="#1F1E1D" stroke-width="1.2" />
           <line x1="22" y1="-1" x2="22" y2="6" stroke="#1F1E1D" stroke-width="1.2" />
-          <g ${isInteractiveMain ? 'id="light-bulbs-starlight_garland"' : ""}>
+          <g data-part="light-bulbs-starlight_garland">
             <circle class="garland-bulb" cx="-22" cy="9" r="3.3" fill="${bulbFill}" stroke="#1F1E1D" stroke-width="1.4" />
             <circle class="garland-bulb" cx="-8" cy="13" r="3.5" fill="${bulbFill}" stroke="#1F1E1D" stroke-width="1.4" />
             <circle class="garland-bulb" cx="8" cy="13" r="3.5" fill="${bulbFill}" stroke="#1F1E1D" stroke-width="1.4" />
@@ -1379,10 +1379,10 @@
           <polygon points="-22,-7 -16,-19 16,-19 22,-7" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
           <g transform="translate(-2, -13)">
             <ellipse cx="0" cy="0" rx="12" ry="4.6" fill="#2C2A29" stroke="#1F1E1D" stroke-width="1.45" />
-            <ellipse ${isInteractiveMain ? 'id="turntable-disc-label"' : ""} cx="0" cy="0" rx="4.2" ry="1.7" fill="#E8845B" />
+            <ellipse data-part="turntable-disc-label" cx="0" cy="0" rx="4.2" ry="1.7" fill="#E8845B" />
           </g>
           <line x1="13" y1="-16" x2="5" y2="-11" stroke="#1F1E1D" stroke-width="1.45" stroke-linecap="round" />
-          <g ${isInteractiveMain ? 'id="turntable-notes"' : ""} opacity="0">
+          <g data-part="turntable-notes" opacity="0">
             <text x="-5" y="-23" fill="#D97736" font-size="10" font-weight="800" font-family="sans-serif">♪</text>
             <text x="5" y="-27" fill="#1F1E1D" font-size="9.5" font-weight="800" font-family="sans-serif">♫</text>
           </g>
@@ -1451,7 +1451,7 @@
         const glowOpacity = isLampLit ? "1" : "0";
         const flameDisplay = isLampLit ? "block" : "none";
         return `
-          <g ${isInteractiveMain ? 'id="light-glow-aroma_candle"' : ""} class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
+          <g data-part="light-glow-aroma_candle" class="lamp-light-effect" style="opacity:${glowOpacity}; pointer-events:none;">
             <circle cx="0" cy="-23" r="28" fill="url(#lampNaturalGlowGrad)" />
             <circle cx="0" cy="-23" r="13" fill="url(#lampCoreGlowGrad)" />
           </g>
@@ -1459,7 +1459,7 @@
           <rect x="-8" y="-18" width="16" height="15.5" rx="2" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.65" />
           <rect x="-5" y="-12.5" width="10" height="5.5" rx="1" fill="#F6D5C1" stroke="#1F1E1D" stroke-width="1.2" />
           <line x1="0" y1="-18" x2="0" y2="-20.5" stroke="#1F1E1D" stroke-width="1.35" stroke-linecap="round" />
-          <path ${isInteractiveMain ? 'id="candle-flame-aroma_candle"' : ""} d="M0 -28 C-3.2 -24, -2.5 -20.5, 0 -20.5 C2.5 -20.5, 3.2 -24, 0 -28 Z" fill="#FFB347" stroke="#1F1E1D" stroke-width="1.3" stroke-linejoin="round" style="display:${flameDisplay};" />
+          <path data-part="candle-flame-aroma_candle" d="M0 -28 C-3.2 -24, -2.5 -20.5, 0 -20.5 C2.5 -20.5, 3.2 -24, 0 -28 Z" fill="#FFB347" stroke="#1F1E1D" stroke-width="1.3" stroke-linejoin="round" style="display:${flameDisplay};" />
         `;
       }
 
@@ -1487,13 +1487,13 @@
 
       case "sparkle_snow_globe":
         return `
-          <g ${isInteractiveMain ? 'id="snow-globe-wrap"' : ""}>
+          <g data-part="snow-globe-wrap">
             <path d="M-13 0 L13 0 L10 -6 L-10 -6 Z" fill="#E9DAC6" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
             <circle cx="0" cy="-18" r="14" fill="#F3FAFD" stroke="#1F1E1D" stroke-width="1.65" />
             <polygon points="0,-25 -5,-15 5,-15" fill="#CFE0BC" stroke="#1F1E1D" stroke-width="1.4" stroke-linejoin="round" />
             <line x1="0" y1="-15" x2="0" y2="-11" stroke="#1F1E1D" stroke-width="1.4" />
             <path d="M-11 -11 Q0 -13 11 -11" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.25" />
-            <g ${isInteractiveMain ? 'id="snow-globe-flakes"' : ""}>
+            <g data-part="snow-globe-flakes">
               <circle cx="-6" cy="-23" r="1.25" fill="#D97736" />
               <circle cx="6" cy="-21" r="1.25" fill="#D97736" />
               <circle cx="-2" cy="-28" r="1.15" fill="#1F1E1D" />
@@ -1680,48 +1680,7 @@
 
         <!-- ================= [손그림 크로키 화풍 강아지 캐릭터 레이어 (하단 그림자 없음)] ================= -->
         <g id="dog-character" class="draggable-prop" data-item-id="living_room_dog" style="cursor:grab; display:none; touch-action:none; pointer-events:auto;">
-          <g id="dog-visual">
-            <!-- [A] 걷기 / 대기 / 배 깔고 앞발 꼼지락 / 기지개 포즈 그룹 -->
-            <g id="dog-pose-active">
-              <g id="dog-body-anim-wrap">
-                <line id="dog-leg-bl" x1="-12" y1="4" x2="-14" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line id="dog-leg-br" x1="-6" y1="4" x2="-4" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line id="dog-leg-fl" x1="10" y1="4" x2="8" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-                <line id="dog-leg-fr" x1="16" y1="4" x2="18" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-
-                <path id="dog-tail" d="M-19 -6 C-27 -12, -29 -19, -23 -21" fill="none" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-
-                <path id="dog-torso" d="M-20 -4 C-21 -14, -8 -16, 8 -14 C18 -13, 22 -5, 20 3 C18 8, -17 8, -20 -4 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" stroke-linejoin="round" />
-
-                <g id="dog-head" transform="translate(18, -14)">
-                  <circle cx="2" cy="-2" r="12.5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
-                  <path id="dog-ear" d="M-5 -10 C-11 -9, -13 1, -7 4 C-3 5, -2 -3, -4 -8" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
-                  <circle id="dog-eye" cx="7" cy="-4" r="1.7" fill="#1F1E1D" />
-                  <ellipse cx="14" cy="-1.5" rx="2.5" ry="1.9" fill="#1F1E1D" />
-                  <path d="M10 2.5 Q12 5 14 2.5" fill="none" stroke="#1F1E1D" stroke-width="1.4" stroke-linecap="round" />
-                  <ellipse cx="5" cy="1" rx="2.8" ry="1.6" fill="#F2B8A2" opacity="0.7" />
-                </g>
-
-                <path d="M10 -12 C12 -6, 16 -4, 19 -5" fill="none" stroke="#D97736" stroke-width="2" stroke-linecap="round" />
-                <circle cx="16" cy="-4" r="2.2" fill="#F4C065" stroke="#1F1E1D" stroke-width="1.1" />
-              </g>
-            </g>
-
-            <!-- [B] 휴식(rest) 및 집중 진행 시 동그랗게 웅크려 잠자는 포즈 그룹 -->
-            <g id="dog-pose-sleep" style="display:none;">
-              <path d="M-24 12 C-26 -2, -12 -10, 8 -9 C23 -8, 29 2, 25 12 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" stroke-linejoin="round" />
-              <path d="M4 12 C2 2, 9 -5, 19 -4 C27 -3, 30 5, 26 12 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
-              <path d="M10 -2 C5 0, 5 9, 10 10 C14 10, 14 2, 10 -2 Z" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.6" />
-              <path d="M18 3 Q21 5.5 24 3" fill="none" stroke="#1F1E1D" stroke-width="1.5" stroke-linecap="round" />
-              <circle cx="27.5" cy="6" r="2" fill="#1F1E1D" />
-              <ellipse cx="18" cy="7" rx="2.8" ry="1.5" fill="#F2B8A2" opacity="0.75" />
-              <path d="M-23 9 C-29 7, -30 2, -25 1" fill="none" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
-            </g>
-          </g>
-          <g id="dog-sleep-zzz" style="display:none;">
-            <text x="26" y="-10" fill="#1F1E1D" font-size="10" font-weight="600" font-family="sans-serif">z</text>
-            <text x="34" y="-19" fill="#D97736" font-size="13" font-weight="700" font-family="sans-serif">Z</text>
-          </g>
+          ${this.getDuplicateDogMarkup()}
         </g>
 
         <!-- 동일 아이템 2~3번째 중복 배치 인스턴스 전용 레이어 (독립 드래그/시차 애니메이션/좌우 반전 지원) -->
@@ -2073,37 +2032,42 @@
       }
       if (!this.svg) return;
 
-      if (itemId === "stand_lamp") {
-        const glowGroup = this.svg.querySelector("#lamp-glow-group");
-        const shadePath = this.svg.querySelector("#lamp-shade-path");
-        if (glowGroup) glowGroup.style.opacity = lit ? "1" : "0";
-        if (shadePath) shadePath.setAttribute("fill", lit ? "#FFECB8" : "#FEF9F1");
-        return;
-      }
+      const roots = this.svg.querySelectorAll(`[data-item-id="${itemId}"]`);
+      if (!roots || roots.length === 0) return;
 
-      const glowEl = this.svg.querySelector(`#light-glow-${itemId}`);
-      if (glowEl) {
-        glowEl.style.opacity = lit ? "1" : "0";
-      }
+      roots.forEach((root) => {
+        if (itemId === "stand_lamp") {
+          const glowGroup = root.querySelector('[data-part="lamp-glow-group"]');
+          const shadePath = root.querySelector('[data-part="lamp-shade-path"]');
+          if (glowGroup) glowGroup.style.opacity = lit ? "1" : "0";
+          if (shadePath) shadePath.setAttribute("fill", lit ? "#FFECB8" : "#FEF9F1");
+          return;
+        }
 
-      if (itemId === "cloud_wall_lamp") {
-        const body = this.svg.querySelector("#light-body-cloud_wall_lamp");
-        if (body) body.setAttribute("fill", lit ? "#FFF3C8" : "#FEF9F1");
-      } else if (itemId === "crescent_mood_lamp") {
-        const body = this.svg.querySelector("#light-body-crescent_mood_lamp");
-        if (body) body.setAttribute("fill", lit ? "#FFE79B" : "#FEF9F1");
-      } else if (itemId === "mushroom_stand_lamp") {
-        const body = this.svg.querySelector("#light-body-mushroom_stand_lamp");
-        if (body) body.setAttribute("fill", lit ? "#FFECB8" : "#FEF9F1");
-      } else if (itemId === "starlight_garland") {
-        const bulbsGroup = this.svg.querySelector("#light-bulbs-starlight_garland");
-        bulbsGroup?.querySelectorAll(".garland-bulb").forEach((b) => {
-          b.setAttribute("fill", lit ? "#FFE688" : "#FEF9F1");
-        });
-      } else if (itemId === "aroma_candle") {
-        const flame = this.svg.querySelector("#candle-flame-aroma_candle");
-        if (flame) flame.style.display = lit ? "block" : "none";
-      }
+        const glowEl = root.querySelector(`[data-part="light-glow-${itemId}"]`);
+        if (glowEl) {
+          glowEl.style.opacity = lit ? "1" : "0";
+        }
+
+        if (itemId === "cloud_wall_lamp") {
+          const body = root.querySelector('[data-part="light-body-cloud_wall_lamp"]');
+          if (body) body.setAttribute("fill", lit ? "#FFF3C8" : "#FEF9F1");
+        } else if (itemId === "crescent_mood_lamp") {
+          const body = root.querySelector('[data-part="light-body-crescent_mood_lamp"]');
+          if (body) body.setAttribute("fill", lit ? "#FFE79B" : "#FEF9F1");
+        } else if (itemId === "mushroom_stand_lamp") {
+          const body = root.querySelector('[data-part="light-body-mushroom_stand_lamp"]');
+          if (body) body.setAttribute("fill", lit ? "#FFECB8" : "#FEF9F1");
+        } else if (itemId === "starlight_garland") {
+          const bulbsGroup = root.querySelector('[data-part="light-bulbs-starlight_garland"]');
+          bulbsGroup?.querySelectorAll(".garland-bulb").forEach((b) => {
+            b.setAttribute("fill", lit ? "#FFE688" : "#FEF9F1");
+          });
+        } else if (itemId === "aroma_candle") {
+          const flame = root.querySelector('[data-part="candle-flame-aroma_candle"]');
+          if (flame) flame.style.display = lit ? "block" : "none";
+        }
+      });
     }
 
     syncAllLightsFromStorage() {
@@ -2486,22 +2450,48 @@
 
     getDuplicateDogMarkup() {
       return `
-        <line x1="-12" y1="4" x2="-14" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-        <line x1="-6" y1="4" x2="-4" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-        <line x1="10" y1="4" x2="8" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-        <line x1="16" y1="4" x2="18" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-        <path d="M-19 -6 C-27 -12, -29 -19, -23 -21" fill="none" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
-        <path d="M-20 -4 C-21 -14, -8 -16, 8 -14 C18 -13, 22 -5, 20 3 C18 8, -17 8, -20 -4 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" stroke-linejoin="round" />
-        <g transform="translate(18, -14)">
-          <circle cx="2" cy="-2" r="12.5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
-          <path d="M-5 -10 C-11 -9, -13 1, -7 4 C-3 5, -2 -3, -4 -8" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
-          <circle cx="7" cy="-4" r="1.7" fill="#1F1E1D" />
-          <ellipse cx="14" cy="-1.5" rx="2.5" ry="1.9" fill="#1F1E1D" />
-          <path d="M10 2.5 Q12 5 14 2.5" fill="none" stroke="#1F1E1D" stroke-width="1.4" stroke-linecap="round" />
-          <ellipse cx="5" cy="1" rx="2.8" ry="1.6" fill="#F2B8A2" opacity="0.7" />
+        <g data-part="dog-visual">
+          <!-- [A] 걷기 / 대기 / 배 깔고 앞발 꼼지락 / 기지개 포즈 그룹 -->
+          <g data-part="dog-pose-active">
+            <g data-part="dog-body-anim-wrap">
+              <line data-part="dog-leg-bl" x1="-12" y1="4" x2="-14" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+              <line data-part="dog-leg-br" x1="-6" y1="4" x2="-4" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+              <line data-part="dog-leg-fl" x1="10" y1="4" x2="8" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+              <line data-part="dog-leg-fr" x1="16" y1="4" x2="18" y2="17" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+
+              <path data-part="dog-tail" d="M-19 -6 C-27 -12, -29 -19, -23 -21" fill="none" stroke="#1F1E1D" stroke-width="1.8" stroke-linecap="round" />
+
+              <path data-part="dog-torso" d="M-20 -4 C-21 -14, -8 -16, 8 -14 C18 -13, 22 -5, 20 3 C18 8, -17 8, -20 -4 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" stroke-linejoin="round" />
+
+              <g data-part="dog-head" transform="translate(18, -14)">
+                <circle cx="2" cy="-2" r="12.5" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
+                <path data-part="dog-ear" d="M-5 -10 C-11 -9, -13 1, -7 4 C-3 5, -2 -3, -4 -8" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.65" stroke-linejoin="round" />
+                <circle data-part="dog-eye" cx="7" cy="-4" r="1.7" fill="#1F1E1D" />
+                <ellipse cx="14" cy="-1.5" rx="2.5" ry="1.9" fill="#1F1E1D" />
+                <path d="M10 2.5 Q12 5 14 2.5" fill="none" stroke="#1F1E1D" stroke-width="1.4" stroke-linecap="round" />
+                <ellipse cx="5" cy="1" rx="2.8" ry="1.6" fill="#F2B8A2" opacity="0.7" />
+              </g>
+
+              <path d="M10 -12 C12 -6, 16 -4, 19 -5" fill="none" stroke="#D97736" stroke-width="2" stroke-linecap="round" />
+              <circle cx="16" cy="-4" r="2.2" fill="#F4C065" stroke="#1F1E1D" stroke-width="1.1" />
+            </g>
+          </g>
+
+          <!-- [B] 휴식(rest) 및 집중 진행 시 동그랗게 웅크려 잠자는 포즈 그룹 -->
+          <g data-part="dog-pose-sleep" style="display:none;">
+            <path d="M-24 12 C-26 -2, -12 -10, 8 -9 C23 -8, 29 2, 25 12 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" stroke-linejoin="round" />
+            <path d="M4 12 C2 2, 9 -5, 19 -4 C27 -3, 30 5, 26 12 Z" fill="#FEF9F1" stroke="#1F1E1D" stroke-width="1.75" />
+            <path d="M10 -2 C5 0, 5 9, 10 10 C14 10, 14 2, 10 -2 Z" fill="#EAE0D0" stroke="#1F1E1D" stroke-width="1.6" />
+            <path d="M18 3 Q21 5.5 24 3" fill="none" stroke="#1F1E1D" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="27.5" cy="6" r="2" fill="#1F1E1D" />
+            <ellipse cx="18" cy="7" rx="2.8" ry="1.5" fill="#F2B8A2" opacity="0.75" />
+            <path d="M-23 9 C-29 7, -30 2, -25 1" fill="none" stroke="#1F1E1D" stroke-width="1.7" stroke-linecap="round" />
+          </g>
         </g>
-        <path d="M10 -12 C12 -6, 16 -4, 19 -5" fill="none" stroke="#D97736" stroke-width="2" stroke-linecap="round" />
-        <circle cx="16" cy="-4" r="2.2" fill="#F4C065" stroke="#1F1E1D" stroke-width="1.1" />
+        <g data-part="dog-sleep-zzz" style="display:none;">
+          <text x="26" y="-10" fill="#1F1E1D" font-size="10" font-weight="600" font-family="sans-serif">z</text>
+          <text x="34" y="-19" fill="#D97736" font-size="13" font-weight="700" font-family="sans-serif">Z</text>
+        </g>
       `;
     }
 
@@ -2558,7 +2548,7 @@
 
       extraInstances.forEach(({ inst, copyIndex }) => {
         const isPet = ALL_LIVING_PETS.has(inst.itemId);
-        const isAnimatedPet = isPet && inst.itemId !== "goldfish_bowl";
+        const isMovingPet = isPet && inst.itemId !== "goldfish_bowl";
         const isLit = appStorage.getLampLit(inst.itemId);
         const isCurrentlyDragging =
           this.dragState &&
@@ -2568,8 +2558,8 @@
 
         const existingEl = existingById.get(inst.instanceId);
         if (existingEl) {
-          // 자율 이동 중인 복제 동물은 실시간 좌표를 유지하고, 정적 소품만 저장 좌표 동기화
-          if (!isCurrentlyDragging && !(isAnimatedPet && this.extraAnimalStates.has(inst.instanceId))) {
+          // 자율 이동 중인 복제 동물은 실시간 좌표를 유지하고, 정적 소품·어항만 저장 좌표 동기화
+          if (!isCurrentlyDragging && !(isMovingPet && this.extraAnimalStates.has(inst.instanceId))) {
             const nextTransform = `translate(${inst.x}, ${inst.y})`;
             if (existingEl.getAttribute("transform") !== nextTransform) {
               existingEl.setAttribute("transform", nextTransform);
@@ -2590,15 +2580,12 @@
         }
 
         const flipSign = isPet && inst.flipX ? -1 : 1;
-        const delaySec = Number.isFinite(Number(inst.animDelay))
-          ? Number(inst.animDelay)
-          : Number((copyIndex * 1.15).toFixed(2));
         const innerMarkup =
           inst.itemId === "living_room_dog"
             ? this.getDuplicateDogMarkup()
             : getItemLocalSVGMarkup(inst.itemId, false, isLit);
 
-        const initPos = isAnimatedPet
+        const initPos = isMovingPet
           ? this.resolveValidLandingPosition(inst.x, inst.y, inst.itemId)
           : { x: inst.x, y: inst.y };
 
@@ -2622,10 +2609,7 @@
         hitAreaEl.setAttribute("pointer-events", "all");
 
         const innerEl = document.createElementNS(SVG_NS, "g");
-        innerEl.setAttribute("class", `extra-instance-inner ${isPet && !isAnimatedPet ? "extra-pet-bob" : ""}`);
-        if (!isAnimatedPet) {
-          innerEl.setAttribute("style", `--inst-flip:${flipSign}; animation-delay:-${delaySec}s;`);
-        }
+        innerEl.setAttribute("class", "extra-instance-inner");
         innerEl.innerHTML = innerMarkup;
 
         groupEl.appendChild(hitAreaEl);
@@ -2633,19 +2617,63 @@
         layer.appendChild(groupEl);
         this.bindExtraInstanceDrag(groupEl);
 
-        // 복제 동물(instanceId) 전용 독립 AI·애니메이션 상태 초기화 (개체별 랜덤 오프셋으로 자연스러운 분산)
-        if (isAnimatedPet && !this.extraAnimalStates.has(inst.instanceId)) {
-          const speed = (EXTRA_PET_SPEEDS[inst.itemId] || 42) * (0.9 + Math.random() * 0.22);
-          const aiState = this.createAnimalState(initPos.x, initPos.y, flipSign, speed);
-          aiState.itemId = inst.itemId;
-          aiState.instanceId = inst.instanceId;
-          aiState.animSeed = Math.random() * Math.PI * 2 + copyIndex * 1.9;
-          aiState.stateTimer = 0.6 + copyIndex * 0.85 + Math.random() * 1.4;
-          aiState.userHoldTimer = 0;
-          aiState.reactTimer = 0;
-          aiState.el = groupEl;
-          aiState.innerEl = innerEl;
-          this.extraAnimalStates.set(inst.instanceId, aiState);
+        // 복제 동물(이동형·고정형 전 종 포함) 고유 instanceId 기반 독립 상태 초기화
+        if (isPet && !this.extraAnimalStates.has(inst.instanceId)) {
+          if (inst.itemId === "goldfish_bowl") {
+            this.extraAnimalStates.set(inst.instanceId, {
+              itemId: "goldfish_bowl",
+              instanceId: inst.instanceId,
+              x: initPos.x,
+              y: initPos.y,
+              state: "walk",
+              stateTimer: 1.8 + copyIndex * 1.1 + Math.random() * 2.5,
+              swimPhase: Math.random() * Math.PI * 2 + copyIndex * 2.1,
+              bubbleTimer: 0,
+              animSeed: Math.random() * Math.PI * 2,
+              el: groupEl,
+              innerEl
+            });
+          } else if (inst.itemId === "living_room_dog") {
+            this.extraAnimalStates.set(inst.instanceId, {
+              itemId: "living_room_dog",
+              instanceId: inst.instanceId,
+              x: initPos.x,
+              baseY: initPos.y,
+              y: initPos.y,
+              targetX: initPos.x,
+              targetY: initPos.y,
+              moveDir: flipSign,
+              state: "idle",
+              stateTimer: 0.7 + copyIndex * 0.9 + Math.random() * 1.5,
+              playSubMode: Math.random() < 0.5 ? "patter" : "bow",
+              walkCycle: Math.random() * 6,
+              tailPhase: Math.random() * 6,
+              blinkTimer: 1.5 + Math.random() * 3.0,
+              reactTimer: 0,
+              userHoldTimer: 0,
+              settleActive: false,
+              settleStartX: initPos.x,
+              settleStartY: initPos.y,
+              settleTargetX: initPos.x,
+              settleTargetY: initPos.y,
+              settleProgress: 0,
+              animSeed: Math.random() * Math.PI * 2 + copyIndex * 1.7,
+              el: groupEl,
+              innerEl
+            });
+          } else {
+            const speed = (EXTRA_PET_SPEEDS[inst.itemId] || 42) * (0.9 + Math.random() * 0.22);
+            const aiState = this.createAnimalState(initPos.x, initPos.y, flipSign, speed);
+            aiState.itemId = inst.itemId;
+            aiState.instanceId = inst.instanceId;
+            aiState.animSeed = Math.random() * Math.PI * 2 + copyIndex * 1.9;
+            aiState.stateTimer = 0.6 + copyIndex * 0.85 + Math.random() * 1.4;
+            aiState.userHoldTimer = 0;
+            aiState.reactTimer = 0;
+            aiState.el = groupEl;
+            aiState.innerEl = innerEl;
+            this.extraAnimalStates.set(inst.instanceId, aiState);
+          }
         }
       });
     }
@@ -2729,6 +2757,7 @@
           if (liveState) {
             liveState.x = snapped.x;
             liveState.y = snapped.y;
+            if (liveState.baseY !== undefined) liveState.baseY = snapped.y;
             liveState.targetX = snapped.x;
             liveState.targetY = snapped.y;
             liveState.state = "idle";
@@ -2772,6 +2801,7 @@
             if (liveState) {
               liveState.x = landPos.x;
               liveState.y = landPos.y;
+              if (liveState.baseY !== undefined) liveState.baseY = landPos.y;
               liveState.targetX = landPos.x;
               liveState.targetY = landPos.y;
               liveState.userHoldTimer = 2.0;
@@ -3314,8 +3344,8 @@
     /**
      * 강아지의 5단계 행동 상태(walk, idle, play, rest, react + 베이지 방석 낮잠 연동) 전환
      */
-    pickNextDogState() {
-      const d = this.dog;
+    pickNextDogState(targetDog = this.dog) {
+      const d = targetDog || this.dog;
       const roll = Math.random();
       const hasCushion = this.placedItems.has("beige_cushion");
 
@@ -3794,167 +3824,104 @@
     }
 
     /**
-     * 복제 크로키 강아지(#2/#3) 전용 독립 목적지/휴식 선택
+     * 어항 속 금붕어(goldfish_bowl) 단일 인스턴스(1번·2번·3번 공통) 8자 유영·꼬리·물방울 업데이트
      */
-    pickNextExtraDogState(a) {
-      const bounds = this.getStageSvgBounds();
-      const btn = this.getFocusButtonSvgMetrics();
-      const roll = Math.random();
+    updateGoldfishInstance(rootEl, gf, dt, elapsedSec) {
+      if (!rootEl || !gf) return;
+      const swimmer = rootEl.querySelector('[data-part="goldfish-swimmer"]');
+      const fishTail = rootEl.querySelector('[data-part="goldfish-tail"]');
+      const bubbles = rootEl.querySelector('[data-part="goldfish-bubbles"]');
+      const phaseOffset = gf.animSeed || 0;
 
-      if (this.focusMode === "running") {
-        if (roll < 0.72) {
-          a.state = "rest";
-          a.stateTimer = 4.5 + Math.random() * 3.5;
-          return;
+      gf.stateTimer -= dt;
+      if (gf.stateTimer <= 0) {
+        const r = Math.random();
+        if (r < 0.55) {
+          gf.state = "walk"; // 8자 곡선 유영
+          gf.stateTimer = 4.5 + Math.random() * 3.5;
+        } else if (r < 0.82) {
+          gf.state = "play"; // 수면 가까이 올라와 뻐끔거리며 작은 물방울 생성
+          gf.bubbleTimer = 1.8;
+          gf.stateTimer = 2.6;
+        } else {
+          gf.state = "rest"; // 어항 바닥 근처에서 잔잔히 휴식
+          gf.stateTimer = 3.5 + Math.random() * 2.5;
         }
       }
 
-      if (roll < 0.64) {
-        const minX = Math.max(bounds.minX + 36, 48);
-        const maxX = Math.min(bounds.maxX - 36, 332);
-        const minY = 266;
-        const maxY = Math.max(minY + 24, Math.min(bounds.maxY - 30, btn.topY - 26));
+      const speedMult = gf.state === "rest" ? 0.65 : 1.75;
+      gf.swimPhase += dt * speedMult;
 
-        let tx = minX + Math.random() * Math.max(20, maxX - minX);
-        let ty = minY + Math.random() * Math.max(16, maxY - minY);
-        const clamped = this.clampPositionForItem(tx, ty, "living_room_dog");
-        tx = clamped.x;
-        ty = clamped.y;
+      let swimX = Math.sin(gf.swimPhase) * 6.0;
+      let swimY = -11 + Math.sin(gf.swimPhase * 2) * 2.4; // 부드러운 8자(Lissajous) 궤적
+      let tiltDeg = 0;
 
-        if (Math.hypot(tx - a.x, ty - a.y) < 18) {
-          tx = this.clampPositionForItem(a.x + (a.x > 190 ? -64 : 64), ty, "living_room_dog").x;
+      if (gf.state === "play") {
+        swimY = -15.5 + Math.sin(elapsedSec * 7 + phaseOffset) * 0.9;
+        tiltDeg = -14;
+      } else if (gf.state === "rest") {
+        swimY = -7.8 + Math.sin(elapsedSec * 2 + phaseOffset) * 0.5;
+      }
+
+      const fishDir = Math.cos(gf.swimPhase) >= 0 ? 1 : -1;
+      if (swimmer) {
+        swimmer.setAttribute(
+          "transform",
+          `translate(${swimX.toFixed(1)}, ${swimY.toFixed(1)}) scale(${fishDir}, 1) rotate(${tiltDeg})`
+        );
+      }
+      if (fishTail) {
+        const wagFreq = gf.state === "rest" ? 6 : 14;
+        const tailWag = Math.sin(elapsedSec * wagFreq + phaseOffset) * 1.7;
+        fishTail.setAttribute(
+          "d",
+          `M-6.5 0 L-11.5 ${(-3.8 + tailWag).toFixed(1)} L-10.5 ${(3.8 + tailWag).toFixed(1)} Z`
+        );
+      }
+
+      if (gf.bubbleTimer > 0) {
+        gf.bubbleTimer = Math.max(0, gf.bubbleTimer - dt);
+        const p = 1 - gf.bubbleTimer / 1.8;
+        const riseY = -p * 11;
+        const alpha = Math.sin(p * Math.PI);
+        if (bubbles) {
+          bubbles.setAttribute("opacity", alpha.toFixed(2));
+          bubbles.setAttribute("transform", `translate(0, ${riseY.toFixed(1)})`);
         }
-        a.targetX = tx;
-        a.targetY = ty;
-        a.moveDir = tx >= a.x ? 1 : -1;
-        a.state = "walk";
-        a.stateTimer = 4.5 + Math.random() * 3.0;
-      } else if (roll < 0.86) {
-        a.state = "idle";
-        a.stateTimer = 2.0 + Math.random() * 2.4;
-      } else {
-        a.state = "rest";
-        a.stateTimer = 2.8 + Math.random() * 2.8;
+      } else if (bubbles) {
+        bubbles.setAttribute("opacity", "0");
       }
     }
 
     /**
-     * 중복 배치된 복제 동물(#2/#3)들의 고유 instanceId 기반 독립 자율 이동·점프·터치 반응 루프
+     * 중복 배치된 복제 동물(#2/#3 전 종) 고유 instanceId 기반 통합 세부 행동·애니메이션 루프
+     * - 1번 원본과 동일한 상태 머신(걷기·눕기·자기·꼬리·날개·헤엄·반응)을 각 개체 DOM 스코프에서 독립 실행
      */
     updateExtraPets(dt, elapsedSec) {
       if (!this.extraAnimalStates || this.extraAnimalStates.size === 0) return;
 
       this.extraAnimalStates.forEach((a, instanceId) => {
         const el = a.el;
-        const innerEl = a.innerEl;
         if (!el || !el.isConnected) return;
 
-        // 현재 이 instanceId 개체가 드래그 중이면 물리 루프 일시 정지
-        if (
-          this.dragState &&
+        const isThisDragging =
+          Boolean(this.dragState) &&
           this.dragState.isExtraInstance &&
           this.dragState.isDragging &&
-          this.dragState.instanceId === instanceId
-        ) {
-          return;
-        }
+          this.dragState.instanceId === instanceId;
 
-        if ((a.userHoldTimer || 0) > 0) {
-          a.userHoldTimer = Math.max(0, a.userHoldTimer - dt);
-        }
-
-        let bobY = 0;
-        let tiltDeg = 0;
-        let scaleY = 1;
-        const flipX = a.moveDir < 0 ? -1 : 1;
-
-        if (a.state === "react") {
-          a.reactTimer = Math.max(0, (a.reactTimer || 0) - dt);
-          const totalDur = a.itemId === "little_turtle" ? 1.8 : 1.15;
-          const p = 1 - a.reactTimer / Math.max(0.1, totalDur);
-          const hopHeight = a.itemId === "little_turtle" ? 5 : 13;
-          bobY = -Math.abs(Math.sin(p * Math.PI * 2)) * hopHeight;
-          tiltDeg = Math.sin(p * Math.PI * 4) * 6.5;
-          scaleY = 1 + Math.sin(p * Math.PI * 2) * 0.06;
-
-          if (a.reactTimer <= 0) {
-            a.state = "idle";
-            a.stateTimer = 1.6 + Math.random() * 2.0;
-          }
-        } else if (a.state === "fly" || a.state === "jump_arc") {
-          const dur = Math.max(0.28, a.jumpDuration || (a.state === "fly" ? 0.65 : 0.45));
-          a.jumpProgress = Math.min(1, (a.jumpProgress || 0) + dt / dur);
-          const t = a.jumpProgress;
-          const easeT = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-          const arcH = a.state === "fly" ? 30 : 22;
-
-          a.x = a.startX + (a.targetX - a.startX) * easeT;
-          a.y = a.startY + (a.targetY - a.startY) * easeT - Math.sin(t * Math.PI) * arcH;
-          if (Math.abs(a.targetX - a.startX) > 2) {
-            a.moveDir = a.targetX >= a.startX ? 1 : -1;
-          }
-          tiltDeg = Math.sin(t * Math.PI) * (a.moveDir > 0 ? -6 : 6);
-
-          if (a.jumpProgress >= 1) {
-            a.x = a.targetX;
-            a.y = a.targetY;
-            a.jumpProgress = 0;
-            a.state = "idle";
-            a.stateTimer = 2.0 + Math.random() * 2.5;
-          }
-        } else if (a.state === "walk") {
-          const dx = a.targetX - a.x;
-          const dy = a.targetY - a.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 2.2) {
-            a.x = a.targetX;
-            a.y = a.targetY;
-            a.state = "idle";
-            a.stateTimer = 1.8 + Math.random() * 2.6;
-          } else {
-            const step = Math.min(dist, (a.speed || 42) * dt);
-            a.x += (dx / dist) * step;
-            a.y += (dy / dist) * step;
-            if (Math.abs(dx) > 1.2) {
-              a.moveDir = dx >= 0 ? 1 : -1;
-            }
-            const phaseSpeed = a.itemId === "little_turtle" ? 4.5 : 10.5;
-            a.walkPhase = (a.walkPhase || 0) + dt * phaseSpeed;
-            const hopAmp = a.itemId === "white_rabbit" ? 7.5 : a.itemId === "little_turtle" ? 1.0 : 3.2;
-            bobY = -Math.abs(Math.sin(a.walkPhase)) * hopAmp;
-            tiltDeg = Math.sin(a.walkPhase) * (a.itemId === "little_turtle" ? 1.5 : 3.2);
-          }
+        if (a.itemId === "goldfish_bowl") {
+          this.updateGoldfishInstance(el, a, dt, elapsedSec);
+        } else if (a.itemId === "living_room_dog") {
+          this.updateDogInstance(el, a, dt, elapsedSec, isThisDragging);
         } else {
-          // idle / rest / play: 잔잔한 호흡 모션 + 타이머 만료 시 다음 행동 독립 결정
-          const breathSpeed = a.state === "rest" ? 1.8 : 2.6;
-          scaleY = 1 + Math.sin(elapsedSec * breathSpeed + (a.animSeed || 0)) * 0.028;
-          bobY = Math.sin(elapsedSec * breathSpeed + (a.animSeed || 0)) * 0.8;
-
-          if ((a.userHoldTimer || 0) <= 0) {
-            a.stateTimer -= dt;
-            if (a.stateTimer <= 0) {
-              if (a.itemId === "living_room_dog") {
-                this.pickNextExtraDogState(a);
-              } else {
-                this.pickNextAnimalState(a.itemId, a);
-              }
-            }
-          }
-        }
-
-        el.setAttribute("transform", `translate(${a.x.toFixed(1)}, ${a.y.toFixed(1)})`);
-        if (innerEl) {
-          const finalFlipX = a.moveDir < 0 ? -1 : 1;
-          innerEl.setAttribute(
-            "transform",
-            `translate(0, ${bobY.toFixed(1)}) rotate(${tiltDeg.toFixed(1)}) scale(${finalFlipX}, ${scaleY.toFixed(3)})`
-          );
+          this.updateSingleCompanionPet(a.itemId, el, a, dt, elapsedSec, isThisDragging);
         }
       });
     }
 
     /**
-     * 동물 9종의 프레임별 상태 머신 및 디테일 애니메이션 업데이트
+     * 동물 9종(1번 원본)의 프레임별 상태 머신 및 디테일 애니메이션 업데이트
      */
     updateCompanionPets(dt, elapsedSec) {
       const isDraggingId =
@@ -3962,78 +3929,13 @@
           ? this.dragState.itemId
           : null;
 
-      // -------------------------------------------------------------------------
-      // 1. 어항 속 금붕어 (goldfish_bowl): 8자 곡선 유영 + 꼬리지느러미 살랑임 + 수면 뻐끔 물방울
-      // -------------------------------------------------------------------------
+      // 1. 어항 속 금붕어 (1번 원본)
       if (this.placedItems.has("goldfish_bowl")) {
-        const swimmer = this.svg.querySelector("#goldfish-swimmer");
-        const fishTail = this.svg.querySelector("#goldfish-tail");
-        const bubbles = this.svg.querySelector("#goldfish-bubbles");
-        const gf = this.animals.goldfish_bowl;
-
-        gf.stateTimer -= dt;
-        if (gf.stateTimer <= 0) {
-          const r = Math.random();
-          if (r < 0.55) {
-            gf.state = "walk"; // 8자 곡선 유영
-            gf.stateTimer = 4.5 + Math.random() * 3.5;
-          } else if (r < 0.82) {
-            gf.state = "play"; // 수면 가까이 올라와 뻐끔거리며 작은 물방울 생성
-            gf.bubbleTimer = 1.8;
-            gf.stateTimer = 2.6;
-          } else {
-            gf.state = "rest"; // 어항 바닥 근처에서 잔잔히 휴식
-            gf.stateTimer = 3.5 + Math.random() * 2.5;
-          }
-        }
-
-        const speedMult = gf.state === "rest" ? 0.65 : 1.75;
-        gf.swimPhase += dt * speedMult;
-
-        let swimX = Math.sin(gf.swimPhase) * 6.0;
-        let swimY = -11 + Math.sin(gf.swimPhase * 2) * 2.4; // 부드러운 8자(Lissajous) 궤적
-        let tiltDeg = 0;
-
-        if (gf.state === "play") {
-          swimY = -15.5 + Math.sin(elapsedSec * 7) * 0.9; // 수면 가까이 올라와 뻐끔
-          tiltDeg = -14;
-        } else if (gf.state === "rest") {
-          swimY = -7.8 + Math.sin(elapsedSec * 2) * 0.5;
-        }
-
-        const fishDir = Math.cos(gf.swimPhase) >= 0 ? 1 : -1;
-        if (swimmer) {
-          swimmer.setAttribute(
-            "transform",
-            `translate(${swimX.toFixed(1)}, ${swimY.toFixed(1)}) scale(${fishDir}, 1) rotate(${tiltDeg})`
-          );
-        }
-        if (fishTail) {
-          const wagFreq = gf.state === "rest" ? 6 : 14;
-          const tailWag = Math.sin(elapsedSec * wagFreq) * 1.7;
-          fishTail.setAttribute(
-            "d",
-            `M-6.5 0 L-11.5 ${(-3.8 + tailWag).toFixed(1)} L-10.5 ${(3.8 + tailWag).toFixed(1)} Z`
-          );
-        }
-
-        if (gf.bubbleTimer > 0) {
-          gf.bubbleTimer = Math.max(0, gf.bubbleTimer - dt);
-          const p = 1 - gf.bubbleTimer / 1.8;
-          const riseY = -p * 11;
-          const alpha = Math.sin(p * Math.PI);
-          if (bubbles) {
-            bubbles.setAttribute("opacity", alpha.toFixed(2));
-            bubbles.setAttribute("transform", `translate(0, ${riseY.toFixed(1)})`);
-          }
-        } else if (bubbles) {
-          bubbles.setAttribute("opacity", "0");
-        }
+        const bowlEl = this.svg.querySelector("#prop-goldfish_bowl");
+        this.updateGoldfishInstance(bowlEl, this.animals.goldfish_bowl, dt, elapsedSec);
       }
 
-      // -------------------------------------------------------------------------
-      // 2. 이동형 동물 8종 공통 위치 업데이트 + 종별 디테일 모션
-      // -------------------------------------------------------------------------
+      // 2. 이동형 동물 8종 (1번 원본)
       const movingPetIds = [
         "window_cat",
         "tuxedo_cat",
@@ -4049,9 +3951,16 @@
         if (!this.placedItems.has(id)) return;
         const el = this.svg.querySelector(`#prop-${id}`);
         if (!el) return;
-        const a = this.animals[id];
+        this.updateSingleCompanionPet(id, el, this.animals[id], dt, elapsedSec, isDraggingId === id);
+      });
+    }
 
-        if (isDraggingId === id) return;
+    /**
+     * 이동형 동물 8종 단일 인스턴스(1번·2번·3번 공통) 위치 업데이트 + 종별 세부 파츠 모션
+     */
+    updateSingleCompanionPet(id, el, a, dt, elapsedSec, isDragging) {
+      if (!el || !a) return;
+      if (isDragging) return;
 
         if (a.userHoldTimer > 0) {
           a.userHoldTimer = Math.max(0, a.userHoldTimer - dt);
@@ -4229,28 +4138,30 @@
           `translate(${a.x.toFixed(1)}, ${(a.y + rootOffsetY).toFixed(1)})`
         );
 
-        // 각 동물별 세부 파츠 애니메이션 적용
-        this.applySpeciesDetailAnimation(id, a, elapsedSec);
-      });
+        // 각 동물별 세부 파츠 애니메이션 적용 (해당 인스턴스 DOM 루트 스코프)
+        this.applySpeciesDetailAnimation(id, a, elapsedSec, el);
     }
 
     /**
      * 동물 8종별 사실적인 고유 모션 디테일 적용 (방향 전환 Flip + 숨쉬기 + 걸음걸이 + 장난 + 휴식)
      */
-    applySpeciesDetailAnimation(id, a, elapsedSec) {
+    applySpeciesDetailAnimation(id, a, elapsedSec, rootEl = null) {
+      const root = rootEl || this.svg?.querySelector(`#prop-${id}`);
+      if (!root) return;
+      const seed = a.animSeed || 0;
       const scaleX = this.getScaleXForDir(id, a.moveDir);
       // 기본 호흡(idle/rest 시 미세한 상하 호흡)
-      const breathSy = 1 + Math.sin(elapsedSec * 3.2 + a.x) * 0.024;
-      const isBlink = Math.sin(elapsedSec * 1.9 + a.y) > 0.95;
+      const breathSy = 1 + Math.sin(elapsedSec * 3.2 + a.x + seed) * 0.024;
+      const isBlink = Math.sin(elapsedSec * 1.9 + a.y + seed) > 0.95;
 
       // 1) 기존 창가 고양이 (window_cat)
       if (id === "window_cat") {
-        const visual = this.svg.querySelector("#wcat-visual");
-        const legs = this.svg.querySelector("#wcat-walk-legs");
-        const groomPaw = this.svg.querySelector("#wcat-groom-paw");
-        const head = this.svg.querySelector("#wcat-head");
-        const tail = this.svg.querySelector("#cat-tail-path");
-        const zzz = this.svg.querySelector("#cat-zzz");
+        const visual = root.querySelector('[data-part="wcat-visual"]');
+        const legs = root.querySelector('[data-part="wcat-walk-legs"]');
+        const groomPaw = root.querySelector('[data-part="wcat-groom-paw"]');
+        const head = root.querySelector('[data-part="wcat-head"]');
+        const tail = root.querySelector('[data-part="cat-tail-path"]');
+        const zzz = root.querySelector('[data-part="cat-zzz"]');
 
         let sx = scaleX;
         let sy = breathSy;
@@ -4277,10 +4188,10 @@
           if (a.state === "walk") {
             legs.style.display = "block";
             const s = Math.sin(a.walkPhase * 1.6) * 2.8;
-            this.svg.querySelector("#wcat-leg-fl")?.setAttribute("x2", String(-14 + s));
-            this.svg.querySelector("#wcat-leg-fr")?.setAttribute("x2", String(-8 - s));
-            this.svg.querySelector("#wcat-leg-bl")?.setAttribute("x2", String(10 - s));
-            this.svg.querySelector("#wcat-leg-br")?.setAttribute("x2", String(16 + s));
+            root.querySelector('[data-part="wcat-leg-fl"]')?.setAttribute("x2", String(-14 + s));
+            root.querySelector('[data-part="wcat-leg-fr"]')?.setAttribute("x2", String(-8 - s));
+            root.querySelector('[data-part="wcat-leg-bl"]')?.setAttribute("x2", String(10 - s));
+            root.querySelector('[data-part="wcat-leg-br"]')?.setAttribute("x2", String(16 + s));
           } else {
             legs.style.display = "none";
           }
@@ -4318,14 +4229,14 @@
 
       // 2) 턱시도 고양이 (tuxedo_cat)
       if (id === "tuxedo_cat") {
-        const visual = this.svg.querySelector("#tuxedo-visual");
-        const legs = this.svg.querySelector("#tuxedo-walk-legs");
-        const groomPaw = this.svg.querySelector("#tuxedo-groom-paw");
-        const head = this.svg.querySelector("#tuxedo-head");
-        const eyesOpen = this.svg.querySelector("#tuxedo-eyes-open");
-        const eyesClosed = this.svg.querySelector("#tuxedo-eyes-closed");
-        const tail = this.svg.querySelector("#tuxedo-tail");
-        const zzz = this.svg.querySelector("#tuxedo-zzz");
+        const visual = root.querySelector('[data-part="tuxedo-visual"]');
+        const legs = root.querySelector('[data-part="tuxedo-walk-legs"]');
+        const groomPaw = root.querySelector('[data-part="tuxedo-groom-paw"]');
+        const head = root.querySelector('[data-part="tuxedo-head"]');
+        const eyesOpen = root.querySelector('[data-part="tuxedo-eyes-open"]');
+        const eyesClosed = root.querySelector('[data-part="tuxedo-eyes-closed"]');
+        const tail = root.querySelector('[data-part="tuxedo-tail"]');
+        const zzz = root.querySelector('[data-part="tuxedo-zzz"]');
 
         let sx = scaleX;
         let sy = breathSy;
@@ -4348,10 +4259,10 @@
           if (a.state === "walk") {
             legs.style.display = "block";
             const s = Math.sin(a.walkPhase * 1.6) * 2.6;
-            this.svg.querySelector("#tux-leg-fl")?.setAttribute("x2", String(-12 + s));
-            this.svg.querySelector("#tux-leg-fr")?.setAttribute("x2", String(-5 - s));
-            this.svg.querySelector("#tux-leg-bl")?.setAttribute("x2", String(7 - s));
-            this.svg.querySelector("#tux-leg-br")?.setAttribute("x2", String(13 + s));
+            root.querySelector('[data-part="tux-leg-fl"]')?.setAttribute("x2", String(-12 + s));
+            root.querySelector('[data-part="tux-leg-fr"]')?.setAttribute("x2", String(-5 - s));
+            root.querySelector('[data-part="tux-leg-bl"]')?.setAttribute("x2", String(7 - s));
+            root.querySelector('[data-part="tux-leg-br"]')?.setAttribute("x2", String(13 + s));
           } else {
             legs.style.display = "none";
           }
@@ -4388,14 +4299,14 @@
 
       // 3) 해바라기씨 햄스터 (hamster_friend)
       if (id === "hamster_friend") {
-        const visual = this.svg.querySelector("#ham-visual");
-        const eyesOpen = this.svg.querySelector("#ham-eyes-open");
-        const eyesClosed = this.svg.querySelector("#ham-eyes-closed");
-        const handsSeed = this.svg.querySelector("#ham-hands-seed");
-        const seed = this.svg.querySelector("#ham-seed");
-        const footL = this.svg.querySelector("#ham-foot-l");
-        const footR = this.svg.querySelector("#ham-foot-r");
-        const zzz = this.svg.querySelector("#ham-zzz");
+        const visual = root.querySelector('[data-part="ham-visual"]');
+        const eyesOpen = root.querySelector('[data-part="ham-eyes-open"]');
+        const eyesClosed = root.querySelector('[data-part="ham-eyes-closed"]');
+        const handsSeed = root.querySelector('[data-part="ham-hands-seed"]');
+        const seed = root.querySelector('[data-part="ham-seed"]');
+        const footL = root.querySelector('[data-part="ham-foot-l"]');
+        const footR = root.querySelector('[data-part="ham-foot-r"]');
+        const zzz = root.querySelector('[data-part="ham-zzz"]');
 
         let sx = scaleX;
         let sy = breathSy;
@@ -4454,12 +4365,12 @@
 
       // 4) 왕관앵무 (cockatiel_bird)
       if (id === "cockatiel_bird") {
-        const visual = this.svg.querySelector("#cockatiel-visual");
-        const head = this.svg.querySelector("#cockatiel-head");
-        const wing = this.svg.querySelector("#cockatiel-wing");
-        const footL = this.svg.querySelector("#cockatiel-foot-l");
-        const footR = this.svg.querySelector("#cockatiel-foot-r");
-        const zzz = this.svg.querySelector("#cockatiel-zzz");
+        const visual = root.querySelector('[data-part="cockatiel-visual"]');
+        const head = root.querySelector('[data-part="cockatiel-head"]');
+        const wing = root.querySelector('[data-part="cockatiel-wing"]');
+        const footL = root.querySelector('[data-part="cockatiel-foot-l"]');
+        const footR = root.querySelector('[data-part="cockatiel-foot-r"]');
+        const zzz = root.querySelector('[data-part="cockatiel-zzz"]');
 
         if (visual) {
           visual.setAttribute("transform", `scale(${scaleX}, ${breathSy.toFixed(3)})`);
@@ -4509,14 +4420,14 @@
 
       // 5) 웰시코기 (welsh_corgi)
       if (id === "welsh_corgi") {
-        const visual = this.svg.querySelector("#corgi-visual");
-        const poseNormal = this.svg.querySelector("#corgi-pose-normal");
-        const poseBelly = this.svg.querySelector("#corgi-pose-belly");
-        const legsGroup = this.svg.querySelector("#corgi-legs-group");
-        const rump = this.svg.querySelector("#corgi-rump");
-        const eyeOpen = this.svg.querySelector("#corgi-eye-open");
-        const eyeClosed = this.svg.querySelector("#corgi-eye-closed");
-        const zzz = this.svg.querySelector("#corgi-zzz");
+        const visual = root.querySelector('[data-part="corgi-visual"]');
+        const poseNormal = root.querySelector('[data-part="corgi-pose-normal"]');
+        const poseBelly = root.querySelector('[data-part="corgi-pose-belly"]');
+        const legsGroup = root.querySelector('[data-part="corgi-legs-group"]');
+        const rump = root.querySelector('[data-part="corgi-rump"]');
+        const eyeOpen = root.querySelector('[data-part="corgi-eye-open"]');
+        const eyeClosed = root.querySelector('[data-part="corgi-eye-closed"]');
+        const zzz = root.querySelector('[data-part="corgi-zzz"]');
 
         if (a.state === "play") {
           // 바닥에 배를 보이고 뒤집어져 데굴데굴 장난치기
@@ -4526,10 +4437,10 @@
             const rollDeg = Math.sin(elapsedSec * 7.5) * 11;
             poseBelly.setAttribute("transform", `rotate(${rollDeg.toFixed(1)} 0 -8)`);
             const pad = Math.sin(elapsedSec * 20) * 2.5;
-            this.svg.querySelector("#corgi-paw-up-1")?.setAttribute("y2", String(-21 + pad));
-            this.svg.querySelector("#corgi-paw-up-2")?.setAttribute("y2", String(-21 - pad));
-            this.svg.querySelector("#corgi-paw-up-3")?.setAttribute("y2", String(-21 - pad));
-            this.svg.querySelector("#corgi-paw-up-4")?.setAttribute("y2", String(-21 + pad));
+            root.querySelector('[data-part="corgi-paw-up-1"]')?.setAttribute("y2", String(-21 + pad));
+            root.querySelector('[data-part="corgi-paw-up-2"]')?.setAttribute("y2", String(-21 - pad));
+            root.querySelector('[data-part="corgi-paw-up-3"]')?.setAttribute("y2", String(-21 - pad));
+            root.querySelector('[data-part="corgi-paw-up-4"]')?.setAttribute("y2", String(-21 + pad));
           }
           if (visual) visual.setAttribute("transform", `scale(${scaleX}, 1)`);
           if (zzz) zzz.style.display = "none";
@@ -4561,10 +4472,10 @@
         if (a.state === "walk") {
           // 짧은 다리로 빠르게 총총 달리기 + 엉덩이 실룩거림
           const swing = Math.sin(a.walkPhase * 1.4) * 2.8;
-          this.svg.querySelector("#corgi-leg-bl")?.setAttribute("x2", String(-16 + swing));
-          this.svg.querySelector("#corgi-leg-br")?.setAttribute("x2", String(-9 - swing));
-          this.svg.querySelector("#corgi-leg-fl")?.setAttribute("x2", String(9 - swing));
-          this.svg.querySelector("#corgi-leg-fr")?.setAttribute("x2", String(16 + swing));
+          root.querySelector('[data-part="corgi-leg-bl"]')?.setAttribute("x2", String(-16 + swing));
+          root.querySelector('[data-part="corgi-leg-br"]')?.setAttribute("x2", String(-9 - swing));
+          root.querySelector('[data-part="corgi-leg-fl"]')?.setAttribute("x2", String(9 - swing));
+          root.querySelector('[data-part="corgi-leg-fr"]')?.setAttribute("x2", String(16 + swing));
           if (rump) {
             const wig = Math.sin(a.walkPhase * 2) * 2.2;
             rump.setAttribute("transform", `translate(0, ${wig.toFixed(1)})`);
@@ -4575,10 +4486,10 @@
             rump.setAttribute("transform", `translate(0, ${wig.toFixed(1)})`);
           }
         } else {
-          this.svg.querySelector("#corgi-leg-bl")?.setAttribute("x2", "-16");
-          this.svg.querySelector("#corgi-leg-br")?.setAttribute("x2", "-9");
-          this.svg.querySelector("#corgi-leg-fl")?.setAttribute("x2", "9");
-          this.svg.querySelector("#corgi-leg-fr")?.setAttribute("x2", "16");
+          root.querySelector('[data-part="corgi-leg-bl"]')?.setAttribute("x2", "-16");
+          root.querySelector('[data-part="corgi-leg-br"]')?.setAttribute("x2", "-9");
+          root.querySelector('[data-part="corgi-leg-fl"]')?.setAttribute("x2", "9");
+          root.querySelector('[data-part="corgi-leg-fr"]')?.setAttribute("x2", "16");
           if (rump) rump.setAttribute("transform", "translate(0, 0)");
         }
 
@@ -4591,13 +4502,13 @@
 
       // 6) 꼬마 거북이 (little_turtle)
       if (id === "little_turtle") {
-        const visual = this.svg.querySelector("#turtle-visual");
-        const limbs = this.svg.querySelector("#turtle-limbs");
-        const bodyWrap = this.svg.querySelector("#turtle-body-wrap");
-        const headGroup = this.svg.querySelector("#turtle-head-group");
-        const legBl = this.svg.querySelector("#turtle-leg-bl");
-        const legFl = this.svg.querySelector("#turtle-leg-fl");
-        const zzz = this.svg.querySelector("#turtle-zzz");
+        const visual = root.querySelector('[data-part="turtle-visual"]');
+        const limbs = root.querySelector('[data-part="turtle-limbs"]');
+        const bodyWrap = root.querySelector('[data-part="turtle-body-wrap"]');
+        const headGroup = root.querySelector('[data-part="turtle-head-group"]');
+        const legBl = root.querySelector('[data-part="turtle-leg-bl"]');
+        const legFl = root.querySelector('[data-part="turtle-leg-fl"]');
+        const zzz = root.querySelector('[data-part="turtle-zzz"]');
 
         if (visual) {
           visual.setAttribute("transform", `scale(${scaleX}, ${breathSy.toFixed(3)})`);
@@ -4640,13 +4551,13 @@
 
       // 7) 고슴도치 (hedgehog_friend)
       if (id === "hedgehog_friend") {
-        const visual = this.svg.querySelector("#hedgehog-visual");
-        const normal = this.svg.querySelector("#hedgehog-normal");
-        const ball = this.svg.querySelector("#hedgehog-ball");
-        const snout = this.svg.querySelector("#hedgehog-snout");
-        const footL = this.svg.querySelector("#hedge-foot-l");
-        const footR = this.svg.querySelector("#hedge-foot-r");
-        const zzz = this.svg.querySelector("#hedgehog-zzz");
+        const visual = root.querySelector('[data-part="hedgehog-visual"]');
+        const normal = root.querySelector('[data-part="hedgehog-normal"]');
+        const ball = root.querySelector('[data-part="hedgehog-ball"]');
+        const snout = root.querySelector('[data-part="hedgehog-snout"]');
+        const footL = root.querySelector('[data-part="hedge-foot-l"]');
+        const footR = root.querySelector('[data-part="hedge-foot-r"]');
+        const zzz = root.querySelector('[data-part="hedgehog-zzz"]');
 
         if (visual) {
           visual.setAttribute("transform", `scale(${scaleX}, ${breathSy.toFixed(3)})`);
@@ -4694,12 +4605,12 @@
 
       // 8) 하얀 토끼 (white_rabbit)
       if (id === "white_rabbit") {
-        const visual = this.svg.querySelector("#rabbit-visual");
-        const bodyGroup = this.svg.querySelector("#rabbit-body-group");
-        const ears = this.svg.querySelector("#rabbit-ears");
-        const eyeOpen = this.svg.querySelector("#rabbit-eye-open");
-        const eyeClosed = this.svg.querySelector("#rabbit-eye-closed");
-        const zzz = this.svg.querySelector("#rabbit-zzz");
+        const visual = root.querySelector('[data-part="rabbit-visual"]');
+        const bodyGroup = root.querySelector('[data-part="rabbit-body-group"]');
+        const ears = root.querySelector('[data-part="rabbit-ears"]');
+        const eyeOpen = root.querySelector('[data-part="rabbit-eye-open"]');
+        const eyeClosed = root.querySelector('[data-part="rabbit-eye-closed"]');
+        const zzz = root.querySelector('[data-part="rabbit-zzz"]');
 
         let sx = scaleX;
         let sy = breathSy;
@@ -4743,118 +4654,119 @@
     update(dt, elapsedSec) {
       if (!this.svg) return;
 
-      // 1. 테니스공 통통 튀기 애니메이션
+      // 1. 테니스공 통통 튀기 애니메이션 (모든 인스턴스 대응)
       if (this.ballBounce > 0) {
         this.ballBounce = Math.max(0, this.ballBounce - dt * 1.8);
         const bounceY = Math.abs(Math.sin(elapsedSec * 14)) * 16 * this.ballBounce;
-        const ballBody = this.svg.querySelector("#ball-body");
-        if (ballBody) {
+        this.svg.querySelectorAll('[data-part="ball-body"]').forEach((ballBody) => {
           ballBody.setAttribute("transform", `translate(0, ${-bounceY.toFixed(1)})`);
-        }
+        });
       }
 
-      // 1-B. 신규 인터랙티브 소품 애니메이션 (오리 삑삑이, 햄스터 쳇바퀴, 빈티지 턴테이블, 아로마 캔들, 반짝 스노우볼)
+      // 1-B. 인터랙티브 소품 애니메이션 (오리 삑삑이, 햄스터 쳇바퀴, 빈티지 턴테이블, 아로마 캔들, 반짝 스노우볼 — 모든 중복 인스턴스 공통)
       if (this.duckSqueakTimer > 0) {
         this.duckSqueakTimer = Math.max(0, this.duckSqueakTimer - dt * 1.9);
-        const duckBody = this.svg.querySelector("#duck-toy-body");
-        if (duckBody) {
-          const p = this.duckSqueakTimer;
-          const jumpY = -Math.abs(Math.sin(elapsedSec * 18)) * 7 * p;
-          const sx = 1 + Math.sin(elapsedSec * 24) * 0.14 * p;
-          const sy = 1 - Math.sin(elapsedSec * 24) * 0.14 * p;
+        const p = this.duckSqueakTimer;
+        const jumpY = -Math.abs(Math.sin(elapsedSec * 18)) * 7 * p;
+        const sx = 1 + Math.sin(elapsedSec * 24) * 0.14 * p;
+        const sy = 1 - Math.sin(elapsedSec * 24) * 0.14 * p;
+        this.svg.querySelectorAll('[data-part="duck-toy-body"]').forEach((duckBody) => {
           duckBody.setAttribute(
             "transform",
             `translate(0, ${jumpY.toFixed(1)}) scale(${sx.toFixed(2)}, ${sy.toFixed(2)})`
           );
-        }
+        });
       }
 
       if (this.wheelSpinTimer > 0) {
         this.wheelSpinTimer = Math.max(0, this.wheelSpinTimer - dt);
         this.wheelSpinAngle = (this.wheelSpinAngle + dt * 420 * Math.min(1, this.wheelSpinTimer)) % 360;
-        const rotor = this.svg.querySelector("#hamster-wheel-rotor");
-        if (rotor) {
+        this.svg.querySelectorAll('[data-part="hamster-wheel-rotor"]').forEach((rotor) => {
           rotor.setAttribute("transform", `rotate(${this.wheelSpinAngle.toFixed(1)})`);
-        }
+        });
       }
 
       if (this.turntablePlayTimer > 0) {
         this.turntablePlayTimer = Math.max(0, this.turntablePlayTimer - dt);
-        const discLabel = this.svg.querySelector("#turntable-disc-label");
-        const notes = this.svg.querySelector("#turntable-notes");
-        if (discLabel) {
-          const pulse = 1 + Math.sin(elapsedSec * 12) * 0.08;
+        const pulse = 1 + Math.sin(elapsedSec * 12) * 0.08;
+        const floatY = -((3.2 - this.turntablePlayTimer) * 4.2) % 12;
+        const swayX = Math.sin(elapsedSec * 6) * 2.5;
+        const alpha = Math.min(1, this.turntablePlayTimer * 1.2);
+        this.svg.querySelectorAll('[data-part="turntable-disc-label"]').forEach((discLabel) => {
           discLabel.setAttribute("transform", `scale(${pulse.toFixed(2)}, 1)`);
-        }
-        if (notes) {
-          const floatY = -((3.2 - this.turntablePlayTimer) * 4.2) % 12;
-          const swayX = Math.sin(elapsedSec * 6) * 2.5;
-          const alpha = Math.min(1, this.turntablePlayTimer * 1.2);
+        });
+        this.svg.querySelectorAll('[data-part="turntable-notes"]').forEach((notes) => {
           notes.setAttribute("opacity", alpha.toFixed(2));
           notes.setAttribute("transform", `translate(${swayX.toFixed(1)}, ${floatY.toFixed(1)})`);
-        }
+        });
       } else {
-        const notes = this.svg.querySelector("#turntable-notes");
-        if (notes && notes.getAttribute("opacity") !== "0") {
-          notes.setAttribute("opacity", "0");
-        }
+        this.svg.querySelectorAll('[data-part="turntable-notes"]').forEach((notes) => {
+          if (notes.getAttribute("opacity") !== "0") {
+            notes.setAttribute("opacity", "0");
+          }
+        });
       }
 
       if (this.placedItems.has("aroma_candle")) {
-        const flame = this.svg.querySelector("#candle-flame-aroma_candle");
-        if (flame && flame.style.display !== "none") {
-          const flickerRot = Math.sin(elapsedSec * 11) * 4;
-          const flickerSy = 1 + Math.sin(elapsedSec * 15) * 0.07;
-          flame.setAttribute(
-            "transform",
-            `translate(0, -20.5) rotate(${flickerRot.toFixed(1)}) scale(1, ${flickerSy.toFixed(2)}) translate(0, 20.5)`
-          );
-        }
+        this.svg.querySelectorAll('[data-part="candle-flame-aroma_candle"]').forEach((flame, idx) => {
+          if (flame.style.display !== "none") {
+            const phase = idx * 1.7;
+            const flickerRot = Math.sin(elapsedSec * 11 + phase) * 4;
+            const flickerSy = 1 + Math.sin(elapsedSec * 15 + phase) * 0.07;
+            flame.setAttribute(
+              "transform",
+              `translate(0, -20.5) rotate(${flickerRot.toFixed(1)}) scale(1, ${flickerSy.toFixed(2)}) translate(0, 20.5)`
+            );
+          }
+        });
       }
 
       if (this.snowGlobeShakeTimer > 0) {
         this.snowGlobeShakeTimer = Math.max(0, this.snowGlobeShakeTimer - dt);
-        const flakes = this.svg.querySelector("#snow-globe-flakes");
-        const wrap = this.svg.querySelector("#snow-globe-wrap");
-        if (wrap) {
-          const shakeX = this.snowGlobeShakeTimer > 1.8 ? Math.sin(elapsedSec * 36) * 2.2 : 0;
+        const shakeX = this.snowGlobeShakeTimer > 1.8 ? Math.sin(elapsedSec * 36) * 2.2 : 0;
+        const swirlX = Math.sin(elapsedSec * 10) * 2.4;
+        const swirlY = Math.cos(elapsedSec * 8) * 2.4;
+        this.svg.querySelectorAll('[data-part="snow-globe-wrap"]').forEach((wrap) => {
           wrap.setAttribute("transform", `translate(${shakeX.toFixed(1)}, 0)`);
-        }
-        if (flakes) {
-          const swirlX = Math.sin(elapsedSec * 10) * 2.4;
-          const swirlY = Math.cos(elapsedSec * 8) * 2.4;
+        });
+        this.svg.querySelectorAll('[data-part="snow-globe-flakes"]').forEach((flakes) => {
           flakes.setAttribute("transform", `translate(${swirlX.toFixed(1)}, ${swirlY.toFixed(1)})`);
-        }
+        });
       }
 
-      // 2. 동물 9종 상태 머신 및 고유 모션 업데이트
+      // 2. 동물 9종(1번 원본) 상태 머신 및 고유 모션 업데이트
       this.updateCompanionPets(dt, elapsedSec);
 
-      // 2-1. 중복 배치된 복제 동물(#2/#3) instanceId별 독립 자율 이동·반응 업데이트
+      // 2-1. 중복 배치된 복제 동물(#2/#3 전 종) instanceId별 통합 세부 행동·모션 업데이트
       this.updateExtraPets(dt, elapsedSec);
 
-      // 3. 기본 강아지(living_room_dog) 5단계 상태 머신 업데이트
-      if (!this.placedItems.has("living_room_dog")) return;
-
-      const d = this.dog;
-      const dogGroup = this.svg.querySelector("#dog-character");
-      const dogVisual = this.svg.querySelector("#dog-visual");
-      const poseActive = this.svg.querySelector("#dog-pose-active");
-      const bodyAnimWrap = this.svg.querySelector("#dog-body-anim-wrap");
-      const poseSleep = this.svg.querySelector("#dog-pose-sleep");
-      const sleepZzz = this.svg.querySelector("#dog-sleep-zzz");
-      const dogHead = this.svg.querySelector("#dog-head");
-      const dogEye = this.svg.querySelector("#dog-eye");
-      const tailEl = this.svg.querySelector("#dog-tail");
-
-      if (
-        this.dragState &&
-        !this.dragState.isExtraInstance &&
-        this.dragState.itemId === "living_room_dog" &&
-        this.dragState.isDragging
-      ) {
-        return;
+      // 3. 기본 강아지(1번 원본) 5단계 상태 머신 업데이트
+      if (this.placedItems.has("living_room_dog")) {
+        const dogGroup = this.svg.querySelector("#dog-character");
+        const isPrimaryDogDragging =
+          Boolean(this.dragState) &&
+          !this.dragState.isExtraInstance &&
+          this.dragState.itemId === "living_room_dog" &&
+          this.dragState.isDragging;
+        this.updateDogInstance(dogGroup, this.dog, dt, elapsedSec, isPrimaryDogDragging);
       }
+    }
+
+    /**
+     * 크로키 강아지(living_room_dog) 단일 인스턴스(1번·2번·3번 공통) 5단계 행동·파츠 모션 업데이트
+     */
+    updateDogInstance(dogGroup, d, dt, elapsedSec, isDragging) {
+      if (!dogGroup || !d || isDragging) return;
+
+      const dogVisual = dogGroup.querySelector('[data-part="dog-visual"]');
+      const poseActive = dogGroup.querySelector('[data-part="dog-pose-active"]');
+      const bodyAnimWrap = dogGroup.querySelector('[data-part="dog-body-anim-wrap"]');
+      const poseSleep = dogGroup.querySelector('[data-part="dog-pose-sleep"]');
+      const sleepZzz = dogGroup.querySelector('[data-part="dog-sleep-zzz"]');
+      const dogHead = dogGroup.querySelector('[data-part="dog-head"]');
+      const dogEye = dogGroup.querySelector('[data-part="dog-eye"]');
+      const tailEl = dogGroup.querySelector('[data-part="dog-tail"]');
+      const seed = d.animSeed || 0;
 
       if (d.userHoldTimer > 0) {
         d.userHoldTimer = Math.max(0, d.userHoldTimer - dt);
@@ -4900,7 +4812,7 @@
           d.x += (dx / dist) * 46 * dt;
           d.baseY += (dy / dist) * 46 * dt;
           d.walkCycle += dt * 9;
-          this.setDogLegs(Math.sin(d.walkCycle) * 4.5);
+          this.setDogLegs(Math.sin(d.walkCycle) * 4.5, dogGroup);
           if (poseActive) poseActive.style.display = "block";
           if (poseSleep) poseSleep.style.display = "none";
           if (sleepZzz) sleepZzz.style.display = "none";
@@ -4917,7 +4829,7 @@
           if (sleepZzz) sleepZzz.style.display = "block";
           if (d.userHoldTimer <= 0) {
             d.stateTimer -= dt;
-            if (d.stateTimer <= 0) this.pickNextDogState();
+            if (d.stateTimer <= 0) this.pickNextDogState(d);
           }
         } else {
           if (poseActive) poseActive.style.display = "block";
@@ -4944,7 +4856,7 @@
                 d.state = "idle";
                 d.stateTimer = 2.8 + Math.random() * 2.5;
               }
-              this.setDogLegs(0);
+              this.setDogLegs(0, dogGroup);
             } else {
               if (Math.abs(dx) > 0.8) {
                 d.moveDir = dx >= 0 ? 1 : -1;
@@ -4953,69 +4865,69 @@
               d.x += (dx / dist) * speed * dt;
               d.baseY += (dy / dist) * speed * dt;
               d.walkCycle += dt * 10;
-              this.setDogLegs(Math.sin(d.walkCycle) * 4.8);
+              this.setDogLegs(Math.sin(d.walkCycle) * 4.8, dogGroup);
             }
           } else if (d.state === "play" || d.state === "react") {
             if (d.playSubMode === "patter" && d.state !== "react") {
               // 바닥에 배 깔고 엎드려 앞발 꼼지락 장난치기
               if (bodyAnimWrap) bodyAnimWrap.setAttribute("transform", "translate(0, 6)");
-              const patter = Math.sin(elapsedSec * 22) * 3.5;
-              this.svg.querySelector("#dog-leg-bl")?.setAttribute("x2", "-16");
-              this.svg.querySelector("#dog-leg-bl")?.setAttribute("y2", "11");
-              this.svg.querySelector("#dog-leg-br")?.setAttribute("x2", "-8");
-              this.svg.querySelector("#dog-leg-br")?.setAttribute("y2", "11");
-              this.svg.querySelector("#dog-leg-fl")?.setAttribute("x2", (19 + patter).toFixed(1));
-              this.svg.querySelector("#dog-leg-fl")?.setAttribute("y2", "11");
-              this.svg.querySelector("#dog-leg-fr")?.setAttribute("x2", (23 - patter).toFixed(1));
-              this.svg.querySelector("#dog-leg-fr")?.setAttribute("y2", "11");
+              const patter = Math.sin(elapsedSec * 22 + seed) * 3.5;
+              dogGroup.querySelector('[data-part="dog-leg-bl"]')?.setAttribute("x2", "-16");
+              dogGroup.querySelector('[data-part="dog-leg-bl"]')?.setAttribute("y2", "11");
+              dogGroup.querySelector('[data-part="dog-leg-br"]')?.setAttribute("x2", "-8");
+              dogGroup.querySelector('[data-part="dog-leg-br"]')?.setAttribute("y2", "11");
+              dogGroup.querySelector('[data-part="dog-leg-fl"]')?.setAttribute("x2", (19 + patter).toFixed(1));
+              dogGroup.querySelector('[data-part="dog-leg-fl"]')?.setAttribute("y2", "11");
+              dogGroup.querySelector('[data-part="dog-leg-fr"]')?.setAttribute("x2", (23 - patter).toFixed(1));
+              dogGroup.querySelector('[data-part="dog-leg-fr"]')?.setAttribute("y2", "11");
               if (dogHead) {
-                const dip = Math.sin(elapsedSec * 8) * 2;
+                const dip = Math.sin(elapsedSec * 8 + seed) * 2;
                 dogHead.setAttribute("transform", `translate(19, ${(-12 + dip).toFixed(1)})`);
               }
             } else {
               // 기지개 켜기 (Play Bow)
-              const bowAngle = -8 + Math.sin(elapsedSec * 5) * 2.5;
+              const bowAngle = -8 + Math.sin(elapsedSec * 5 + seed) * 2.5;
               if (bodyAnimWrap) {
                 bodyAnimWrap.setAttribute("transform", `translate(0, 2) rotate(${bowAngle.toFixed(1)})`);
               }
-              this.svg.querySelector("#dog-leg-fl")?.setAttribute("x2", "20");
-              this.svg.querySelector("#dog-leg-fr")?.setAttribute("x2", "24");
-              this.svg.querySelector("#dog-leg-fl")?.setAttribute("y2", "16");
-              this.svg.querySelector("#dog-leg-fr")?.setAttribute("y2", "16");
-              this.svg.querySelector("#dog-leg-bl")?.setAttribute("y2", "17");
-              this.svg.querySelector("#dog-leg-br")?.setAttribute("y2", "17");
+              dogGroup.querySelector('[data-part="dog-leg-fl"]')?.setAttribute("x2", "20");
+              dogGroup.querySelector('[data-part="dog-leg-fr"]')?.setAttribute("x2", "24");
+              dogGroup.querySelector('[data-part="dog-leg-fl"]')?.setAttribute("y2", "16");
+              dogGroup.querySelector('[data-part="dog-leg-fr"]')?.setAttribute("y2", "16");
+              dogGroup.querySelector('[data-part="dog-leg-bl"]')?.setAttribute("y2", "17");
+              dogGroup.querySelector('[data-part="dog-leg-br"]')?.setAttribute("y2", "17");
             }
 
             if (d.state === "play" && d.userHoldTimer <= 0) {
               d.stateTimer -= dt;
               if (d.stateTimer <= 0) {
-                this.resetDogPoseNeutral();
-                this.pickNextDogState();
+                this.resetDogPoseNeutral(dogGroup);
+                this.pickNextDogState(d);
               }
             }
           } else {
             // 'idle': 숨쉬기 + 눈 깜빡임 + 꼬리 살랑이기
-            this.resetDogPoseNeutral();
+            this.resetDogPoseNeutral(dogGroup);
             if (d.userHoldTimer <= 0) {
               d.stateTimer -= dt;
               if (d.stateTimer <= 0) {
-                this.pickNextDogState();
+                this.pickNextDogState(d);
               }
             }
           }
         }
       }
 
-      // 강아지 눈 깜빡임
+      // 강아지 눈 깜빡임 (개체별 시드 분산)
       if (dogEye) {
-        const blink = Math.sin(elapsedSec * 2.1) > 0.96;
+        const blink = Math.sin(elapsedSec * 2.1 + seed) > 0.96;
         dogEye.setAttribute("ry", blink ? "0.35" : "1.7");
       }
 
-      // 강아지 꼬리 살랑임
+      // 강아지 꼬리 살랑임 (개체별 시드 분산)
       if (tailEl) {
         const wagFreq = d.state === "play" || d.state === "react" ? 18 : 7.5;
-        const wag = Math.sin(elapsedSec * wagFreq) * 3.8;
+        const wag = Math.sin(elapsedSec * wagFreq + seed) * 3.8;
         tailEl.setAttribute(
           "d",
           `M-19 -6 C-27 ${-12 + wag}, -29 ${-19 + wag}, -23 ${-21 + wag}`
@@ -5023,13 +4935,13 @@
       }
 
       if (sleepZzz) {
-        const zFloat = Math.sin(elapsedSec * 2.5) * 3;
+        const zFloat = Math.sin(elapsedSec * 2.5 + seed) * 3;
         sleepZzz.setAttribute("transform", `translate(0, ${zFloat.toFixed(1)})`);
       }
 
       // 강아지 방향 전환(Flip) 및 미세 호흡 적용
       const dogScaleX = this.getScaleXForDir("living_room_dog", d.moveDir);
-      const dogBreathSy = 1 + Math.sin(elapsedSec * 3.2) * 0.022;
+      const dogBreathSy = 1 + Math.sin(elapsedSec * 3.2 + seed) * 0.022;
       if (dogVisual) {
         dogVisual.setAttribute("transform", `scale(${dogScaleX}, ${dogBreathSy.toFixed(3)})`);
       }
@@ -5043,19 +4955,23 @@
       }
     }
 
-    resetDogPoseNeutral() {
-      const bodyAnimWrap = this.svg?.querySelector("#dog-body-anim-wrap");
-      const dogHead = this.svg?.querySelector("#dog-head");
+    resetDogPoseNeutral(rootEl = null) {
+      const root = rootEl || this.svg?.querySelector("#dog-character");
+      if (!root) return;
+      const bodyAnimWrap = root.querySelector('[data-part="dog-body-anim-wrap"]');
+      const dogHead = root.querySelector('[data-part="dog-head"]');
       if (bodyAnimWrap) bodyAnimWrap.setAttribute("transform", "translate(0, 0)");
       if (dogHead) dogHead.setAttribute("transform", "translate(18, -14)");
-      this.setDogLegs(0);
+      this.setDogLegs(0, root);
     }
 
-    setDogLegs(swing) {
-      const bl = this.svg?.querySelector("#dog-leg-bl");
-      const br = this.svg?.querySelector("#dog-leg-br");
-      const fl = this.svg?.querySelector("#dog-leg-fl");
-      const fr = this.svg?.querySelector("#dog-leg-fr");
+    setDogLegs(swing, rootEl = null) {
+      const root = rootEl || this.svg?.querySelector("#dog-character");
+      if (!root) return;
+      const bl = root.querySelector('[data-part="dog-leg-bl"]');
+      const br = root.querySelector('[data-part="dog-leg-br"]');
+      const fl = root.querySelector('[data-part="dog-leg-fl"]');
+      const fr = root.querySelector('[data-part="dog-leg-fr"]');
       if (!bl || !br || !fl || !fr) return;
 
       bl.setAttribute("x2", String(-14 + swing));
